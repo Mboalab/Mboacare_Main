@@ -41,7 +41,7 @@ class EditTextForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       // decoration: BoxDecoration(
       //   border: Border.all(
