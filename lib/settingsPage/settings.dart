@@ -64,7 +64,7 @@ class SettingsPage extends StatelessWidget {
                           Text(
                             'Janet Dolittle',
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 17,
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.textColor2),
                           ),
