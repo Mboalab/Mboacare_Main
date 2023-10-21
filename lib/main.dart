@@ -81,6 +81,10 @@ class MyApp extends StatelessWidget {
         return supportedLocales.first;
       },
       home: const SplashScreen(),
+      routes: {
+        '/themeScreen': (context) => ThemeScreen(),
+        '/deleteDialog': (context) => DeleteAccountDialog(),
+      },
     ); //MaterialApp
   }
 }

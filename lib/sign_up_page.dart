@@ -172,16 +172,14 @@ class _SignUpPageState extends State<SignUpPage> {
                 SizedBox(height: AppFontSizes.fontSize18),
                 AppButton(
                   onPressed: () {
-                    provider.signUpWithEmailAndPassword(
-                      onSuccessNavigate: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const RegisterPage(),
-                          ),
-                        );
-                      }
-                    );
+                    provider.signUpWithEmailAndPassword(onSuccessNavigate: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterPage(),
+                        ),
+                      );
+                    });
                   },
                   title: "Register",
                   enabled: provider.isValidRegister,
@@ -197,16 +195,14 @@ class _SignUpPageState extends State<SignUpPage> {
                 SizedBox(height: AppFontSizes.fontSize1),
                 AppBorderButton(
                   onPressed: () {
-                    provider.signUpWithGoogle(
-                      onSuccessNavigate: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const RegisterPage(),
-                          ),
-                        );
-                      }
-                    );
+                    provider.signUpWithGoogle(onSuccessNavigate: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterPage(),
+                        ),
+                      );
+                    });
                   },
                   title: "Register with Google",
                   showImage: true,
