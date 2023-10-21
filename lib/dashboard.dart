@@ -1,22 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mboacare/login.dart';
-import 'package:mboacare/register.dart';
+import 'package:mboacare/sign_up_page.dart';
 import 'package:mboacare/settingsPage/language.dart';
 import 'colors.dart';
 import 'settingsPage/settings.dart';
-import 'profile.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'hospitaldashboard.dart';
-import 'login.dart';
 
 class DashboardScreen extends StatefulWidget {
   final String userName;
 
-  DashboardScreen({required this.userName, Key? key}) : super(key: key);
+  const DashboardScreen({required this.userName, Key? key}) : super(key: key);
 
   @override
-  _DashboardScreenState createState() => _DashboardScreenState();
+  State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
@@ -48,18 +46,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _navigateToLoginPage() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => LoginScreen(title: 'Login')),
+      MaterialPageRoute(builder: (_) => const LoginScreen(title: 'Login')),
     );
   }
 
   void _initializeScreens(BuildContext context) {
     _screens = [
-      DashboardContent(),
-      HospitalDashboard(),
-      Language(context: context),
-      ProfilePage(
-        userName: widget.userName,
-      ),
+      const DashboardContent(),
+      const HospitalDashboard(),
+      SettingsPage(context: context),
+      SettingsPage(context: context),
     ];
   }
 
@@ -88,20 +84,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
         onTap: _onTabTapped,
         selectedItemColor: AppColors.buttonColor,
         unselectedItemColor: AppColors.navbar,
-        items: [
-          const BottomNavigationBarItem(
+        items: const [
+          BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.local_hospital),
             label: 'Hospital Dashbord',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Settings',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
@@ -112,6 +108,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 }
 
 class DashboardContent extends StatelessWidget {
+  const DashboardContent({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -154,13 +152,13 @@ class DashboardContent extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const LoginScreen(
-                                    title: 'mboacare',
+                              builder: (context) => const SignUpPage(
+                                  //title: 'mboacare',
                                   )));
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: AppColors.cardbg,
-                      onPrimary: Colors.white,
+                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.cardbg,
                       minimumSize: const Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
@@ -178,8 +176,8 @@ class DashboardContent extends StatelessWidget {
                       await launchUrl(uri);
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                      onPrimary: Colors.black,
+                      foregroundColor: Colors.black,
+                      backgroundColor: Colors.white,
                       minimumSize: const Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),

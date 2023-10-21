@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:mboacare/settingsPage/language.dart';
 import 'package:mboacare/settingsPage/settings.dart';
 import 'package:mboacare/settingsPage/theme.dart';
+import 'package:mboacare/colors.dart';
 import 'package:mboacare/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:mboacare/user_provider.dart';
+import 'package:mboacare/user_test_data.dart';
+import 'package:mboacare/view_model/signup_view_model.dart';
 import 'package:provider/provider.dart';
 import 'hospital_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -18,9 +22,12 @@ void main() async {
     providers: [
       ChangeNotifierProvider(create: (_) => HospitalProvider()),
       ChangeNotifierProvider(create: (_) => LocaleProvider()),
+      ChangeNotifierProvider(create: (_) => SignUpProvider()),
+      ChangeNotifierProvider(
+          create: (_) => UserDataProvider(TestData.getTestUser())),
       // Add other providers here if needed.
     ],
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 
@@ -33,18 +40,33 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        // This is the theme of your application.
+        //
+        // TRY THIS: Try running your application with "flutter run". You'll see
+        // the application has a blue toolbar. Then, without quitting the app,
+        // try changing the seedColor in the colorScheme below to Colors.green
+        // and then invoke "hot reload" (save your changes or press the "hot
+        // reload" button in a Flutter-supported IDE, or press "r" if you used
+        // the command line to start the app).
+        //
+        // Notice that the counter didn't reset back to zero; the application
+        // state is not lost during the reload. To reset the state, use hot
+        // restart instead.
+        //
+        // This works for code too, not just values: Most code changes can be
+        // tested with just a hot reload.
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
         useMaterial3: true,
       ),
       // Add supported locales and localizations delegates
-      supportedLocales: [
+      supportedLocales: const [
         Locale('en', 'US'), // English
         Locale('hi', 'IN'), // Hindi
         Locale('es', 'ES'), // Spanish
         Locale('fr', 'FR'), // French
         // Add more locales here for other languages
       ],
-      localizationsDelegates: [
+      localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -58,11 +80,7 @@ class MyApp extends StatelessWidget {
         }
         return supportedLocales.first;
       },
-      home: SettingsPage(),
-      routes: {
-        '/themeScreen': (context) => ThemeScreen(),
-        '/deleteDialog': (context) => DeleteAccountDialog(),
-      },
+      home: const SplashScreen(),
     ); //MaterialApp
   }
 }

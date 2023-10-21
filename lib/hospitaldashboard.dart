@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mboacare/chip_widget.dart';
@@ -7,19 +6,21 @@ import 'package:provider/provider.dart';
 import 'hospital_model.dart';
 import 'hospital_provider.dart';
 import 'colors.dart';
-import 'package:url_launcher/url_launcher.dart' as url_launcher;
+import 'dart:developer' as devtools show log;
 
 class HospitalDashboard extends StatefulWidget {
+  const HospitalDashboard({super.key});
+
   @override
-  _HospitalDashboardState createState() => _HospitalDashboardState();
+  State<HospitalDashboard> createState() => _HospitalDashboardState();
 }
 
 class _HospitalDashboardState extends State<HospitalDashboard> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   String _selectedFilter = 'View All'; // Initialize with 'View All'
   String _selectedDropdownFilter = 'View All'; // Initialize with 'View All'
   late List<HospitalData> filteredHospitals;
-  FocusNode _searchFocusNode = FocusNode();
+  final FocusNode _searchFocusNode = FocusNode();
 
   @override
   void dispose() {
@@ -27,26 +28,28 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
     super.dispose();
   }
 
+  // Defined but not referenced
+  // Uncomment to use the code below
   // Function to launch the website URL
-  Future<void> _launchURL(String url) async {
-    print('Launching URL: $url');
+  // Future<void> _launchURL(String url) async {
+  //   devtools.log('Launching URL: $url');
 
-    if (url.isNotEmpty &&
-        (url.startsWith('http://') || url.startsWith('https://'))) {
-      try {
-        final Uri uri = Uri.parse(url);
-        if (await url_launcher.canLaunch(url)) {
-          await url_launcher.launch(url);
-        } else {
-          print('Could not launch $url');
-        }
-      } catch (e) {
-        print('Error launching URL: $e');
-      }
-    } else {
-      print('Invalid URL: $url');
-    }
-  }
+  //   if (url.isNotEmpty &&
+  //       (url.startsWith('http://') || url.startsWith('https://'))) {
+  //     try {
+  //       final Uri uri = Uri.parse(url);
+  //       if (await url_launcher.canLaunchUrl(uri)) {
+  //         await url_launcher.launchUrl(uri);
+  //       } else {
+  //         devtools.log('Could not launch $url');
+  //       }
+  //     } catch (e) {
+  //       devtools.log('Error launching URL: $e');
+  //     }
+  //   } else {
+  //     devtools.log('Invalid URL: $url');
+  //   }
+  // }
 
   Future<void> _refreshData() async {
     //final hospitalProvider = Provider.of<HospitalProvider>(context);
@@ -80,7 +83,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                   children: [
                     RichText(
                       textAlign: TextAlign.center,
-                      text: TextSpan(
+                      text: const TextSpan(
                         children: [
                           TextSpan(
                             text: 'Connecting',
@@ -106,8 +109,8 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 8.0),
-                    Text(
+                    const SizedBox(height: 8.0),
+                    const Text(
                       'Effortlessly Access a Network of Hospitals Worldwide',
                       style: TextStyle(
                         fontSize: 16,
@@ -122,7 +125,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Container(
+                child: SizedBox(
                   height: 50, // Set the height of the search bar
                   child: TextField(
                     controller: _searchController,
@@ -131,7 +134,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                       _searchFocusNode.requestFocus(); // Add this line
                     },
                     onChanged: (query) {
-                      print('Search query: $query');
+                      devtools.log('Search query: $query');
                       hospitalProvider.filterHospitals(query);
                     },
                     decoration: InputDecoration(
@@ -194,7 +197,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                     setState(() {
                       _selectedDropdownFilter = newValue!;
                       _selectedFilter =
-                          newValue!; // Set the filter tab value based on dropdown selection
+                          newValue; // Set the filter tab value based on dropdown selection
                       hospitalProvider.setSelectedFilter(_selectedFilter);
                       Future.delayed(const Duration(milliseconds: 500))
                           .then((_) {
@@ -246,7 +249,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                         itemCount: hospitalProvider.filteredHospitals.length,
                         itemBuilder: (context, index) {
                           // var hospital = hospitalProvider.hospitals[index];
-                          // print(hospital.hospitalImageUrl);
+                          // devtools.log(hospital.hospitalImageUrl);
                           return Container(
                             margin: const EdgeInsets.only(bottom: 16.0),
                             padding: const EdgeInsets.all(16.0),
@@ -339,7 +342,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                                                       )));
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          primary: AppColors.buttonColor,
+                                          backgroundColor: AppColors.buttonColor,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10.0),

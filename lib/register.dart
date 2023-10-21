@@ -3,19 +3,18 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'colors.dart';
-import 'hospital_provider.dart';
-import 'hospital_model.dart';
 import 'package:http/http.dart' as http;
 import 'hospitaldashboard.dart';
 import 'dashboard.dart';
+import 'dart:developer' as devtools show log;
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
@@ -53,12 +52,12 @@ class _RegisterPageState extends State<RegisterPage> {
           .get();
       if (documentSnapshot.exists) {
         apiKeySG = documentSnapshot.get(fieldName);
-        print(apiKeySG);
+        devtools.log(apiKeySG);
       } else {
-        print('Document not found');
+        devtools.log('Document not found');
       }
     } catch (error) {
-      print('Error fetching data: $error');
+      devtools.log('Error fetching data: $error');
     }
   }
 
@@ -114,13 +113,13 @@ The Mboacare Team
     );
 
     if (response.statusCode == 202) {
-      print('Email sent successfully');
+      devtools.log('Email sent successfully');
     } else {
-      print('Failed to send email. Status code: ${response.statusCode}');
+      devtools.log('Failed to send email. Status code: ${response.statusCode}');
     }
   }
 
-  ImagePicker _imagePicker = ImagePicker();
+  final ImagePicker _imagePicker = ImagePicker();
   File? _selectedImage;
 
   Future<void> _pickImage() async {
@@ -230,12 +229,12 @@ The Mboacare Team
       appBar: AppBar(
         title: const Text('Hospital Sign Up'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // Navigate back to the dashboard page
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                  builder: (context) => DashboardScreen(
+                  builder: (context) => const DashboardScreen(
                         userName: '',
                       )),
             );
@@ -777,7 +776,7 @@ The Mboacare Team
       };
 
       // CollectionReference for the hospitals collection in Cloud Firestore
-      final CollectionReference _hospitalsRef =
+      final CollectionReference hospitalsRef =
           FirebaseFirestore.instance.collection('hospitals');
 
       try {
@@ -809,33 +808,35 @@ The Mboacare Team
           if (uploadTask.snapshot.state == TaskState.success) {
             final String downloadUrl =
                 await storageTaskSnapshot.ref.getDownloadURL();
-            print("Download URL: $downloadUrl");
+            devtools.log("Download URL: $downloadUrl");
 
             hospitalDataMap['hospitalImageUrl'] = downloadUrl;
             // Add other data to hospitalDataMap
 
             // Save hospital data to Cloud Firestore
-            await _hospitalsRef.add(hospitalDataMap);
+            await hospitalsRef.add(hospitalDataMap);
 
-            print("Hospital data saved successfully.");
+            devtools.log("Hospital data saved successfully.");
           } else {
-            print("Image upload task failed.");
+            devtools.log("Image upload task failed.");
           }
         } else {
           // Save hospital data to Cloud Firestore
           hospitalDataMap['hospitalImageUrl'] = '';
-          await _hospitalsRef.add(hospitalDataMap);
+          await hospitalsRef.add(hospitalDataMap);
         }
         if (_hospitalEmail!.isNotEmpty) {
           sendRegisterSuccessEmail(_hospitalEmail!, _hospitalName!);
         }
-        // Show a snackbar indicating successful form submission
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Form submitted successfully'),
-            duration: Duration(seconds: 2),
-          ),
-        );
+        if (mounted) {
+          // Show a snackbar indicating successful form submission
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Form submitted successfully'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
 
         // Clear the form fields and selected image after successful submission
         _formKey.currentState!.reset();
@@ -857,19 +858,21 @@ The Mboacare Team
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => HospitalDashboard(),
+              builder: (context) => const HospitalDashboard(),
             ),
           );
         });
       } catch (e) {
-        print('Error saving data to Cloud Firestore: $e');
-        // Show an error message if there's an issue with data saving
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Error saving data. Please try again.'),
-            duration: Duration(seconds: 2),
-          ),
-        );
+        devtools.log('Error saving data to Cloud Firestore: $e');
+        if (mounted) {
+          // Show an error message if there's an issue with data saving
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Error saving data. Please try again.'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
       }
     }
   }

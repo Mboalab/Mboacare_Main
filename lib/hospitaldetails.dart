@@ -4,15 +4,25 @@ import 'package:mboacare/colors.dart';
 import 'package:mboacare/hospital_model.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
-class HospitalDetailsPage extends StatelessWidget {
+import 'dart:developer' as devtools show log;
+
+class HospitalDetailsPage extends StatefulWidget {
   final HospitalData hospital;
-  HospitalDetailsPage({super.key, required this.hospital});
+  const HospitalDetailsPage({super.key, required this.hospital});
+
+  @override
+  State<HospitalDetailsPage> createState() => _HospitalDetailsPageState();
+}
+
+class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
   String email = 'Email';
+
   String phone = 'Phone';
+
   String address = 'Address';
 
   Future<void> _launchURL(String url) async {
-    print('Launching URL: $url');
+    devtools.log('Launching URL: $url');
 
     if (url.isNotEmpty &&
         (url.startsWith('http://') || url.startsWith('https://'))) {
@@ -24,31 +34,31 @@ class HospitalDetailsPage extends StatelessWidget {
         //   print('Could not launch $url');
         // }
       } catch (e) {
-        print('Error launching URL: $e');
+        devtools.log('Error launching URL: $e');
       }
     } else {
-      print('Invalid URL: $url');
+      devtools.log('Invalid URL: $url');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    address = hospital.hospitalAddress;
-    email = hospital.hospitalEmail ?? '';
-    phone = hospital.hospitalPhone ?? '';
-    final specalities = hospital.hospitalSpecialities
+    address = widget.hospital.hospitalAddress;
+    email = widget.hospital.hospitalEmail ?? '';
+    phone = widget.hospital.hospitalPhone ?? '';
+    final specalities = widget.hospital.hospitalSpecialities
         .split(',')
         .map((item) => item.trim())
         .toList();
-    final facilities = hospital.hospitalFacilities
+    final facilities = widget.hospital.hospitalFacilities
+        .split(',')
+        .map((item) => item.trim())
+        .toList();
+    final emergency = widget.hospital.hospitalEmergencyServices
         ?.split(',')
         .map((item) => item.trim())
         .toList();
-    final emergency = hospital.hospitalEmergencyServices
-        ?.split(',')
-        .map((item) => item.trim())
-        .toList();
-    final bedCapacity = hospital.hospitalBedCapacity;
+    final bedCapacity = widget.hospital.hospitalBedCapacity;
     return Scaffold(
       appBar: AppBar(title: const Text("Hospital Details")),
       body: SafeArea(
@@ -63,11 +73,11 @@ class HospitalDetailsPage extends StatelessWidget {
                       height: 200,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.0),
-                          image: hospital.hospitalImageUrl != ''
+                          image: widget.hospital.hospitalImageUrl != ''
                               ? DecorationImage(
                                   fit: BoxFit.cover,
                                   image: NetworkImage(
-                                    hospital.hospitalImageUrl,
+                                    widget.hospital.hospitalImageUrl,
                                   ),
                                 )
                               : const DecorationImage(
@@ -82,8 +92,8 @@ class HospitalDetailsPage extends StatelessWidget {
                     bottom: 20,
                     left: MediaQuery.sizeOf(context).width * .3,
                     child: GestureDetector(
-                        onTap: () => _launchURL(hospital.hospitalWebsite!),
-                        child: hospital.hospitalWebsite != ''
+                        onTap: () => _launchURL(widget.hospital.hospitalWebsite!),
+                        child: widget.hospital.hospitalWebsite != ''
                             ? Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
@@ -120,7 +130,7 @@ class HospitalDetailsPage extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                hospital.hospitalName,
+                widget.hospital.hospitalName,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: AppColors.text,
@@ -298,11 +308,11 @@ class HospitalDetailsPage extends StatelessWidget {
               ),
               Padding(
                   padding: const EdgeInsets.all(5.0),
-                  child: facilities?.length != 0
+                  child: facilities.isNotEmpty
                       ? Wrap(
                           runSpacing: 5,
                           spacing: 5,
-                          children: facilities!.map((item) {
+                          children: facilities.map((item) {
                             return ChipWidget(item);
                           }).toList())
                       : Container()),
@@ -326,11 +336,11 @@ class HospitalDetailsPage extends StatelessWidget {
               ),
               Padding(
                   padding: const EdgeInsets.all(5.0),
-                  child: emergency?.length != 0
+                  child: emergency!.isNotEmpty
                       ? Wrap(
                           runSpacing: 5,
                           spacing: 5,
-                          children: emergency!.map((item) {
+                          children: emergency.map((item) {
                             return ChipWidget(item);
                           }).toList())
                       : Container()),

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'hospital_model.dart';
+import 'dart:developer' as devtools show log;
 
 class HospitalProvider with ChangeNotifier {
   List<HospitalData> _hospitals = [];
@@ -22,7 +23,7 @@ class HospitalProvider with ChangeNotifier {
     return FirebaseFirestore.instance.collection('hospitals').snapshots().map(
       (querySnapshot) {
         List<HospitalData> hospitals = [];
-        querySnapshot.docs.forEach((doc) {
+        for (var doc in querySnapshot.docs) {
           final hospital = HospitalData(
             hospitalName: doc.get('hospitalName') ?? '',
             hospitalAddress: doc.get('hospitalAddress') ?? '',
@@ -37,16 +38,16 @@ class HospitalProvider with ChangeNotifier {
                 doc.get('hospitalEmergencyServices') ?? '',
             // Add other fields if needed
           );
-          //print(hospital.hospitalImageUrl);
+          //devtools.log(hospital.hospitalImageUrl);
           hospitals.add(hospital);
-        });
+        }
         return hospitals;
       },
     );
   }
 
   void filterHospitals(String query) {
-    print('Filtering hospitals with query: $query');
+    devtools.log('Filtering hospitals with query: $query');
     _filteredHospitals = applyFilters(_hospitals, query, _selectedFilter);
     notifyListeners();
   }
@@ -110,7 +111,7 @@ class HospitalProvider with ChangeNotifier {
 
       notifyListeners();
     } catch (e) {
-      print('Error saving data to Cloud Firestore: $e');
+      devtools.log('Error saving data to Cloud Firestore: $e');
     }
   }
 
@@ -120,7 +121,7 @@ class HospitalProvider with ChangeNotifier {
           await FirebaseFirestore.instance.collection('hospitals').get();
 
       _hospitals = [];
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
         final hospital = HospitalData(
           hospitalName: doc.get('hospitalName') ?? '',
           hospitalAddress: doc.get('hospitalAddress') ?? '',
@@ -135,18 +136,18 @@ class HospitalProvider with ChangeNotifier {
           // Add other fields if needed
         );
         _hospitals.add(hospital);
-      });
+      }
 
       // Set filteredHospitals to all hospitals initially
       _filteredHospitals = _hospitals;
 
-      // Print the first hospital's image URL to check if it's retrieved correctly
+      // devtools.log the first hospital's image URL to check if it's retrieved correctly
       if (_hospitals.isNotEmpty) {
-        print('First hospital image URL: ${_hospitals[0].hospitalImageUrl}');
+        devtools.log('First hospital image URL: ${_hospitals[0].hospitalImageUrl}');
       }
       notifyListeners();
     } catch (e) {
-      print('Error fetching data from Cloud Firestore: $e');
+      devtools.log('Error fetching data from Cloud Firestore: $e');
     }
   }
 
@@ -173,7 +174,7 @@ class HospitalProvider with ChangeNotifier {
               .toLowerCase()
               .contains(_selectedFilter.toLowerCase()))
           .toList();
-      print('Drop : ${_filteredHospitals.length}');
+      devtools.log('Drop : ${_filteredHospitals.length}');
     }
     notifyListeners();
   }

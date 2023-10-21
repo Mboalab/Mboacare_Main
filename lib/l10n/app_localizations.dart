@@ -28,18 +28,18 @@ class AppLocalizations {
   }
 
   // Translations for Hindi
-  String get settingsPageTitle_hi {
+  String get settingsPageTitleHi {
     return Intl.message('सेटिंग्स पेज', name: 'settingsPageTitle_hi');
   }
 
   // Translations for Spanish
-  String get settingsPageTitle_es {
+  String get settingsPageTitleEs {
     return Intl.message('Página de configuración',
         name: 'settingsPageTitle_es');
   }
 
   // Translations for French
-  String get settingsPageTitle_fr {
+  String get settingsPageTitleFr {
     return Intl.message('Page de paramètres', name: 'settingsPageTitle_fr');
   }
 

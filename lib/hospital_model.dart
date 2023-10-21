@@ -1,4 +1,3 @@
-import 'dart:io';
 
 class HospitalData {
   final String hospitalName;

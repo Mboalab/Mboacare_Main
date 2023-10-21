@@ -41,7 +41,7 @@ dependencies:
   flutter_form_builder: ^9.1.0
   image_picker: ^0.8.4+2
   file_picker: ^4.0.0
-  provider: ^5.0.0-nullsafety.5
+  provider: ^6.0.5
   cloud_firestore: ^4.8.4
   firebase_storage: ^11.2.5
   flutter_localization: ^0.1.13
@@ -49,7 +49,8 @@ dependencies:
   intl: ^0.18.0
   http: ^1.1.0
   iconsax: ^0.0.8
-  
+  google_fonts: ^6.1.0
+  flutter_svg: ^2.0.7
   
 
 
@@ -57,6 +58,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   shared_preferences: ^2.2.0
+  flutter_localizations:
+    sdk: flutter
+  cached_network_image: ^3.3.0
 
 dev_dependencies:
   flutter_test:
