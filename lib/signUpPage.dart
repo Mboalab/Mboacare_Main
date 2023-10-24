@@ -116,7 +116,7 @@ The Mboacare Team
   void _signUpWithEmailAndPassword() async {
     bool isConnected = await _checkConnectivity();
     if (!isConnected) {
-      _showMessage("No internet connection. Please check your connection.");
+      _showMessage("No internet connection. Please check your connection and try again.");
       return;
     }
     try {
@@ -176,7 +176,7 @@ The Mboacare Team
   Future<void> _signUpWithGoogle() async {
     bool isConnected = await _checkConnectivity();
     if (!isConnected) {
-      _showMessage("No internet connection. Please check your connection.");
+      _showMessage("No internet connection. Please check your connection and try again.");
       return;
     }
     GoogleSignIn _googleSignIn = GoogleSignIn();

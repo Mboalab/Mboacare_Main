@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _signInWithEmailAndPassword() async {
     bool isConnected = await _checkConnectivity();
     if (!isConnected) {
-      _showMessage("No internet connection. Please check your connection.");
+      _showMessage("No internet connection. Please check your connection and try again.");
       return;
     }
 
@@ -94,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _signInWithGoogle() async {
     bool isConnected = await _checkConnectivity();
     if (!isConnected) {
-      _showMessage("No internet connection. Please check your connection.");
+      _showMessage("No internet connection. Please check your connection and try again.");
       return;
     }
     try {
