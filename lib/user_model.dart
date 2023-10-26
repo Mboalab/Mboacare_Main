@@ -1,30 +1,36 @@
 class UserModel {
-  final String userID;
+  final String uid;
   final String email;
-  final String firstName;
-  final String lastName;
-  String? profilePicURL;
+  final bool emailVerified;
+  String? phoneNumber;
+  final String displayName;
+  final String? photoURL;
 
   UserModel({
-    required this.userID,
-    required this.firstName,
-    required this.lastName,
-    this.profilePicURL,
+    required this.uid,
     required this.email,
+    required this.emailVerified,
+    this.phoneNumber,
+    required this.displayName,
+    this.photoURL,
   });
 
   UserModel copyWith({
-    required String userID,
-    required String email,
-    String? profilePicURL,
-    required String firstName,
-    required String lastName,
+    String? uid,
+    String? email,
+    bool? emailVerified,
+    String? phoneNumber,
+    String? displayName,
+    String? password,
+    String? photoURL,
   }) {
     return UserModel(
-        userID: userID,
-        email: email,
-        profilePicURL: profilePicURL ?? this.profilePicURL,
-        firstName: firstName,
-        lastName: lastName);
+      uid: uid ?? this.uid,
+      email: email ?? this.email,
+      emailVerified: emailVerified ?? this.emailVerified,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      displayName: displayName ?? this.displayName,
+      photoURL: photoURL ?? this.photoURL,
+    );
   }
 }

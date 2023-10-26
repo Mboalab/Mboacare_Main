@@ -57,14 +57,18 @@ class ChangePasswordScreen extends StatelessWidget {
                   controller: userDataProvider.confirmNewPasswordController,
                   isPasswordVisible: userDataProvider.isConfirmPasswordVisible,
                   togglePasswordVisibility: () {
-                    userDataProvider.toggleNewPasswordVisibility();
+                    userDataProvider.toggleConfirmPasswordVisibility();
                   },
                 ),
                 const SizedBox(height: 24),
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      // Handle the save button click
+                      userDataProvider.saveNewPassword(
+                          context,
+                          userDataProvider.currentPasswordController.text,
+                          userDataProvider.newPasswordController.text,
+                          userDataProvider.confirmNewPasswordController.text);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.buttonColor,
@@ -74,14 +78,31 @@ class ChangePasswordScreen extends StatelessWidget {
                       minimumSize: const Size(340, 45),
                     ),
                     child: !userDataProvider.savingData
-                        ? const Text('Save',
+                        ? const Text('Update',
                             style: TextStyle(
                                 fontSize: 17, color: AppColors.whiteColor))
-                        : const Text('Saving...',
+                        : const Text('Updating...',
                             style: TextStyle(
                                 fontSize: 17, color: AppColors.whiteColor)),
                   ),
                 ),
+                Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Center(
+                        child: TextButton(
+                      onPressed: () {
+                        userDataProvider.sendPasswordResetEmail(context);
+                      },
+                      child: !userDataProvider.sendingResetEmail
+                          ? const Text(
+                              'Forgot password?',
+                              style: TextStyle(
+                                  fontSize: 16, color: AppColors.primaryColor),
+                            )
+                          : const Text('Sending...',
+                              style: TextStyle(
+                                  fontSize: 17, color: AppColors.primaryColor)),
+                    )))
               ],
             ),
           ),

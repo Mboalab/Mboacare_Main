@@ -43,18 +43,20 @@ class PickAddressPage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             InkWell(
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => SearchFacilitiesPage()));
+                        builder: (context) => const SearchFacilitiesPage()));
               },
               child: Row(
                 children: [
                   SvgPicture.asset('lib/assests/icons/location_search.svg'),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
                   const Text(

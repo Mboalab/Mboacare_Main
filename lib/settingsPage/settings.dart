@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:mboacare/colors.dart';
-import 'package:mboacare/settingsPage/settingsWidget.dart';
+import 'package:mboacare/settingsPage/settings_widget.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});

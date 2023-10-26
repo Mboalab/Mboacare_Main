@@ -106,3 +106,5 @@ TextStyle dialogActionButtonTextStyle() {
     color: AppColors.primaryColor,
   );
 }
+
+const String baseUrl = "https://us-central1-mboacare-api-v1.cloudfunctions.net/api/";

@@ -32,7 +32,7 @@ class FacilitiesWidget extends StatelessWidget {
                   Container(
                     height: MediaQuery.sizeOf(context).height * .18,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(16.0),
                         topRight: Radius.circular(16.0),
                       ),
@@ -52,12 +52,12 @@ class FacilitiesWidget extends StatelessWidget {
                           children: [
                             Text(
                               facilitiesModel.name,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.w700),
                             ),
                             Text(
                               facilitiesModel.address,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
                                   color: AppColors.grey),

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mboacare/user_color_avatar.dart';
+import 'package:mboacare/user_avatar.dart';
 import 'package:mboacare/colors.dart';
-import 'package:mboacare/user_password_change.dart';
+import 'package:mboacare/user_password_update.dart';
+import 'package:mboacare/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'user_model.dart';
 import 'user_provider.dart';
+import 'utils/validator.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -14,6 +16,87 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final userDataProvider = Provider.of<UserDataProvider>(context);
     final UserModel user = userDataProvider.currentUser;
+
+    void showEditDialog(BuildContext context, String hint, String item,
+        UserDataProvider userDataProvider) {
+      String textFieldValue = '';
+      String errorText = '';
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              contentPadding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+              content: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    TextField(
+                      onChanged: (value) {
+                        textFieldValue = value;
+                      },
+                      decoration: InputDecoration(hintText: hint),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      errorText,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: !userDataProvider.savingData
+                      ? Text(
+                          'SAVE',
+                          style: dialogActionButtonTextStyle(),
+                        )
+                      : Text('SAVING...', style: dialogActionButtonTextStyle()),
+                  onPressed: () async {
+                    setState(() {
+                      userDataProvider.savingData;
+                    });
+                    if (item == 'email') {
+                      if (UserInfoValidator.isEmailValid(textFieldValue)) {
+                        await userDataProvider.updateUserEmail(
+                            context, textFieldValue);
+                        setState(() {
+                          errorText = ''; // Clear error message.
+                        });
+                        if (!context.mounted) return;
+                        Navigator.of(context).pop();
+                      } else {
+                        setState(() {
+                          errorText =
+                              'Invalid email format'; // Set error message
+                        });
+                      }
+                    } else if (item == 'name' && textFieldValue != '') {
+                      await userDataProvider.updateUserDisplayName(
+                          context, textFieldValue);
+                      if (!context.mounted) return;
+
+                      Navigator.of(context).pop();
+                    } else if (item == 'phone' && textFieldValue != '') {
+                      await userDataProvider.updateUserPhoneNumber(
+                          context, textFieldValue);
+                      if (!context.mounted) return;
+                      Navigator.of(context).pop();
+                    }
+                  },
+                )
+              ],
+            );
+          });
+        },
+      );
+    }
 
     return Scaffold(
         appBar: AppBar(
@@ -48,9 +131,9 @@ class ProfilePage extends StatelessWidget {
                                   height: 130,
                                   fit: BoxFit.cover,
                                 )
-                              : user.profilePicURL != ''
+                              : user.photoURL != ''
                                   ? CachedNetworkImage(
-                                      imageUrl: user.profilePicURL!,
+                                      imageUrl: user.photoURL!,
                                       width: 130,
                                       height: 130,
                                       fit: BoxFit.cover,
@@ -60,7 +143,7 @@ class ProfilePage extends StatelessWidget {
                                           const Icon(Icons.error),
                                     )
                                   : RandomColorAvatar(
-                                      username: user.firstName,
+                                      username: user.displayName,
                                       fontSize: 50,
                                       avatarSize: 65,
                                     ),
@@ -75,7 +158,7 @@ class ProfilePage extends StatelessWidget {
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      userDataProvider.updateProfilePic();
+                      userDataProvider.updateProfilePic(context);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.buttonColor,
@@ -83,13 +166,21 @@ class ProfilePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: const Text(
-                      'Change Photo',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: !userDataProvider.savingImage
+                        ? const Text(
+                            'Change Photo',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text(
+                            'Uploading...',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                 ),
               ),
@@ -98,15 +189,15 @@ class ProfilePage extends StatelessWidget {
                   Icons.person_4_outlined,
                   color: AppColors.primaryColor,
                 ),
-                title: const Text('First Name'),
+                title: const Text('Name'),
                 trailing: const Icon(
                   Icons.edit_square,
                   size: 19,
                 ),
-                subtitle: Text(user.firstName),
+                subtitle: Text(user.displayName),
                 onTap: () {
-                  userDataProvider.showEditDialog(
-                      context, user.firstName, 'firstname');
+                  showEditDialog(
+                      context, user.displayName, 'name', userDataProvider);
                 },
               ),
               const Divider(
@@ -114,18 +205,20 @@ class ProfilePage extends StatelessWidget {
               ),
               ListTile(
                 leading: const Icon(
-                  Icons.person_2_outlined,
+                  Icons.phone,
                   color: AppColors.primaryColor,
                 ),
-                title: const Text('Last Name'),
+                title: const Text('Phone number'),
                 trailing: const Icon(
                   Icons.edit_square,
                   size: 19,
                 ),
-                subtitle: Text(user.lastName),
+                subtitle: user.phoneNumber != ''
+                    ? Text(user.phoneNumber!)
+                    : const Text('Add phone number'),
                 onTap: () {
-                  userDataProvider.showEditDialog(
-                      context, user.lastName, 'lastname');
+                  showEditDialog(
+                      context, user.phoneNumber!, 'phone', userDataProvider);
                 },
               ),
               const Divider(
@@ -145,7 +238,8 @@ class ProfilePage extends StatelessWidget {
                 ),
                 subtitle: Text(user.email),
                 onTap: () {
-                  userDataProvider.showEditDialog(context, user.email, 'email');
+                  showEditDialog(
+                      context, user.email, 'email', userDataProvider);
                 },
               ),
               const Divider(

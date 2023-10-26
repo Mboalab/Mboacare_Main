@@ -158,11 +158,12 @@ class _AddFacilitiesPageState extends State<AddFacilitiesPage> {
                 height: 20,
               ),
               InkWell(
-                 onTap: () {
+                onTap: () {
                   Navigator.push(
                       context,
                       (MaterialPageRoute(
-                          builder: (context) => PickAddressPage())));},
+                          builder: (context) => const PickAddressPage())));
+                },
                 child: const Text(
                   'Hospital Address *',
                   style: TextStyle(
@@ -179,7 +180,7 @@ class _AddFacilitiesPageState extends State<AddFacilitiesPage> {
                   Navigator.push(
                       context,
                       (MaterialPageRoute(
-                          builder: (context) => PickAddressPage())));
+                          builder: (context) => const PickAddressPage())));
                 },
                 child: CustomTextField(
                   prefixIcon: Padding(

@@ -1,17 +1,33 @@
 import 'dart:io';
-import 'dart:typed_data';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mboacare/colors.dart';
+import 'package:mboacare/user_data.dart';
 import 'package:mboacare/utils/constants.dart';
 import 'package:mboacare/utils/validator.dart';
+import 'dart:convert';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:http/http.dart' as http;
 
 import 'user_model.dart';
 
 class UserDataProvider with ChangeNotifier {
-  UserModel _currentUser = UserModel(
-      userID: '', firstName: '', lastName: '', email: '', profilePicURL: '');
+  UserDataProvider() {
+    fetchAndUpdateUserData();
+  }
 
+  UserModel _currentUser = UserModel(
+    uid: '',
+    displayName: '',
+    email: '',
+    phoneNumber: '',
+    emailVerified: false,
+    photoURL: '',
+  );
+
+  String baseURL =
+      'https://us-central1-mboacare-api-v1.cloudfunctions.net/api/auth';
   TextEditingController currentPasswordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
@@ -40,8 +56,6 @@ class UserDataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  UserDataProvider(this._currentUser);
-
   UserModel get currentUser => _currentUser;
 
   set currentUser(UserModel user) {
@@ -51,22 +65,13 @@ class UserDataProvider with ChangeNotifier {
 
   Uint8List? memoryImage;
   bool _savingImage = false;
+  bool sendingResetEmail = false;
 
   Uint8List? get image => memoryImage;
   bool get savingImage => _savingImage;
   bool savingData = false;
 
-  void updateUserProfile(UserModel userModel) {
-    currentUser = userModel;
-  }
-
-  void updateUsername(String newFirstName) {
-    _currentUser = _currentUser.copyWith(
-        firstName: newFirstName, lastName: '', userID: '', email: '');
-    notifyListeners();
-  }
-
-  Future<void> updateProfilePic() async {
+  Future<void> updateProfilePic(BuildContext context) async {
     final picker = ImagePicker();
     final img = await picker.pickImage(source: ImageSource.gallery);
     final imageFile = File(img!.path);
@@ -76,104 +81,221 @@ class UserDataProvider with ChangeNotifier {
     memoryImage = imageFile.readAsBytesSync();
     notifyListeners();
 
-    // String? profilePicURL =
-    //     await uploadUserProfilePicToFirestorage(currentUserID, imageFile);
-
+    String? profilePicURL =
+        await uploadUserProfilePicToFirestorage(currentUserID, imageFile);
+    if (!context.mounted) return;
+    await updateUserProfilePic(context, currentUser.uid, profilePicURL!);
     _savingImage = false;
     notifyListeners();
   }
 
-  void showEditDialog(BuildContext context, String hint, String item) {
-    String textFieldValue = '';
-    String errorText = '';
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, setState) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            contentPadding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
-            content: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  TextField(
-                    onChanged: (value) {
-                      textFieldValue = value;
-                    },
-                    decoration: InputDecoration(hintText: hint),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    errorText,
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: !savingData
-                    ? Text(
-                        'SAVE',
-                        style: dialogActionButtonTextStyle(),
-                      )
-                    : Text('SAVING...', style: dialogActionButtonTextStyle()),
-                onPressed: () async {
-                  if (item == 'email') {
-                    if (UserInfoValidator.isEmailValid(textFieldValue)) {
-                      savingData = true;
-                      notifyListeners();
-                      //await updateUserEmail(currentUserID, textFieldValue);
-                      updateUserProfile(currentUser);
-                      savingData = false;
-                      setState(() {
-                        errorText = ''; // Clear error message.
-                      });
-                      Navigator.of(context).pop();
-                    } else {
-                      setState(() {
-                        errorText = 'Invalid email format'; // Set error message
-                      });
-                    }
-                  } else if (item == 'firstname' && textFieldValue != '') {
-                    savingData = true;
-                    //await updateUserFirstName(currentUserID, textFieldValue);
-                    updateUserProfile(currentUser);
-                    savingData = false;
-                    Navigator.of(context).pop();
-                  } else if (item == 'lastname' && textFieldValue != '') {
-                    savingData = true;
-                    //await updateUserLastName(currentUserID, textFieldValue);
-                    updateUserProfile(currentUser);
-                    savingData = false;
-                    Navigator.of(context).pop();
-                  }
-                },
-              )
-            ],
-          );
-        });
-      },
-    );
-  }
-
   void saveNewPassword(BuildContext context, String currentPassword,
-      String newPassword, String confirmNewPassword) {
+      String newPassword, String confirmNewPassword) async {
     if (UserInfoValidator.validatePassword(newPassword)) {
       if (newPassword != confirmNewPassword) {
       } else {
         savingData = true;
         notifyListeners();
-        // await changeUserPassword(currentUserID, currentPassword, newPassword);
+
+        // TODO:  When password update endpoint is ready
+        // await updateUserPassword(context, currentPassword, newPassword);
         savingData = false;
         notifyListeners();
+        if (!context.mounted) return;
         Navigator.of(context).pop();
       }
-    } else {}
+    } else {
+      showSnackbar(context, 'Weak password');
+    }
+  }
+
+  Future<void> updateUserDisplayName(
+      BuildContext context, String newDisplayName) async {
+    savingData = true;
+    notifyListeners();
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('PUT', Uri.parse('$baseURL/update-profile'));
+    request.body = json.encode({
+      "uid": currentUser.uid,
+      "displayName": newDisplayName,
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      currentUser = currentUser.copyWith(displayName: newDisplayName);
+      if (!context.mounted) return;
+      savingData = false;
+      notifyListeners();
+      showSnackbar(context, 'Display name updated successfully');
+    } else {
+      if (kDebugMode) {
+        print(response.reasonPhrase);
+      }
+      savingData = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> updateUserPhoneNumber(
+      BuildContext context, String newPhoneNumber) async {
+    savingData = true;
+    notifyListeners();
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('PUT', Uri.parse('$baseURL/update-profile'));
+    request.body = json.encode({
+      "uid": currentUser.uid,
+      "phoneNumber": newPhoneNumber,
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      currentUser = currentUser.copyWith(phoneNumber: newPhoneNumber);
+      if (!context.mounted) return;
+      savingData = false;
+      notifyListeners();
+      showSnackbar(context, 'Phone number updated successfully');
+    } else {
+      if (kDebugMode) {
+        print(response.reasonPhrase);
+      }
+      savingData = false;
+      notifyListeners();
+    }
+  }
+
+// !This needs more security safeguards
+  Future<void> updateUserEmail(BuildContext context, String newEmail) async {
+    savingData = true;
+    notifyListeners();
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('PUT', Uri.parse('$baseURL/update-profile'));
+    request.body = json.encode({
+      "uid": currentUser.uid,
+      "email": newEmail,
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      currentUser = currentUser.copyWith(email: newEmail);
+      if (!context.mounted) return;
+      savingData = false;
+      notifyListeners();
+      showSnackbar(context, 'Email updated successfully');
+    } else {
+      if (kDebugMode) {
+        print(response.reasonPhrase);
+        savingData = false;
+        notifyListeners();
+      }
+    }
+  }
+
+  Future<void> updateUserProfilePic(
+      BuildContext context, String userID, String picURL) async {
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('PUT', Uri.parse('$baseURL/update-profile'));
+    request.body = json.encode({
+      "uid": userID,
+      "photoURL": picURL,
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      if (!context.mounted) return;
+      showSnackbar(context, 'Profile picture updated successfully');
+    } else {
+      if (!context.mounted) return;
+      showSnackbar(context, 'Failed to update profile picture');
+    }
+  }
+
+  Future<void> sendPasswordResetEmail(BuildContext context) async {
+    sendingResetEmail = true;
+    notifyListeners();
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('POST', Uri.parse('$baseURL/reset-password'));
+    request.body = json.encode({"email": currentUser.email});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      if (!context.mounted) return;
+      sendingResetEmail = false;
+      notifyListeners();
+      showSnackbar(context, 'Check your email for a password reset link');
+    } else {
+      if (kDebugMode) {
+        print(response.reasonPhrase);
+      }
+      if (!context.mounted) return;
+      sendingResetEmail = false;
+      notifyListeners();
+      showSnackbar(context, 'Password reset failed, try again later');
+    }
+  }
+
+  Future<String?> uploadUserProfilePicToFirestorage(
+      String cUserID, File photoFile) async {
+    String? downloadURL;
+
+    // Create a reference to the photo in Firebase Storage
+    Reference photoRef =
+        FirebaseStorage.instance.ref().child('profilePictures').child(cUserID);
+
+    // Upload the photo to Firebase Storage
+    UploadTask uploadTask = photoRef.putFile(photoFile);
+
+    // Wait for the upload to complete
+    TaskSnapshot taskSnapshot = await uploadTask;
+
+    // Get the download URL for the photo
+    downloadURL = await taskSnapshot.ref.getDownloadURL();
+
+    return downloadURL;
+  }
+
+  Future<void> fetchAndUpdateUserData() async {
+    try {
+      await getUserInfo();
+      UserModel? user = await getUserInfo();
+      if (user != null) {
+        currentUser = user;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching and updating user data: $e');
+      }
+    }
+  }
+
+  void showSnackbar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+        style: const TextStyle(fontSize: 15, color: AppColors.whiteColor),
+      ),
+      duration: const Duration(seconds: 3),
+      backgroundColor: AppColors.primaryColor,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

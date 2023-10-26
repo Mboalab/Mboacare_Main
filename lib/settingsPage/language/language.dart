@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:mboacare/l10n/app_localizations.dart';
 import 'package:mboacare/locale_provider.dart';
 import 'package:provider/provider.dart';
+import 'dart:developer' as devtools show log;
 
 class Language extends StatefulWidget {
   final BuildContext context;
 
   const Language({super.key, required this.context});
   @override
-  _LanguageState createState() => _LanguageState();
+  State<Language> createState() => _LanguageState();
 }
 
 class _LanguageState extends State<Language> {
@@ -111,7 +112,7 @@ class _LanguageState extends State<Language> {
   // Function to change the app's language
   // Function to change the app's language
   void _changeLanguage(BuildContext context, Locale locale) {
-    print("Changing language to: ${locale.languageCode}");
+    devtools.log("Changing language to: ${locale.languageCode}");
 
     setState(() {
       Provider.of<LocaleProvider>(context, listen: false).locale = locale;
