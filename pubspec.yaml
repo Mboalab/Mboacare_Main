@@ -132,6 +132,11 @@ flutter:
     - lib/assests/images/central_park.png
     - lib/assests/images/oakville.png
     - lib/assests/images/map.png
+    - lib/assests/icons/whatsapp.svg
+    - lib/assests/icons/gmail.svg
+    - lib/assests/icons/instagram.svg
+    - lib/assests/icons/linkedin.svg
+    - lib/assests/icons/x.svg
     
     
 

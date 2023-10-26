@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mboacare/settingsPage/aboutUs/aboutUs.dart';
 import 'package:mboacare/settingsPage/settings.dart';
-import 'package:mboacare/settingsPage/theme.dart';
+import 'package:mboacare/settingsPage/theme/themeConstants.dart';
+import 'package:mboacare/settingsPage/theme/themeScreen.dart';
 import 'package:mboacare/colors.dart';
 import 'package:mboacare/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -38,41 +40,45 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
-        useMaterial3: true,
-      ),
-      // Add supported locales and localizations delegates
-      supportedLocales: const [
-        Locale('en', 'US'), // English
-        Locale('hi', 'IN'), // Hindi
-        Locale('es', 'ES'), // Spanish
-        Locale('fr', 'FR'), // French
-        // Add more locales here for other languages
-      ],
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      localeResolutionCallback: (locale, supportedLocales) {
-        for (var supportedLocale in supportedLocales) {
-          if (supportedLocale.languageCode == locale?.languageCode &&
-              supportedLocale.countryCode == locale?.countryCode) {
-            return supportedLocale;
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        theme:
+            //notifier.darkTheme ? themeLight : themeDark,
+            ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
+          useMaterial3: true,
+        ),
+        // Add supported locales and localizations delegates
+        supportedLocales: const [
+          Locale('en', 'US'), // English
+          Locale('hi', 'IN'), // Hindi
+          Locale('es', 'ES'), // Spanish
+          Locale('fr', 'FR'), // French
+          // Add more locales here for other languages
+        ],
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        localeResolutionCallback: (locale, supportedLocales) {
+          for (var supportedLocale in supportedLocales) {
+            if (supportedLocale.languageCode == locale?.languageCode &&
+                supportedLocale.countryCode == locale?.countryCode) {
+              return supportedLocale;
+            }
           }
-        }
-        return supportedLocales.first;
-      },
-      home: const SplashScreen(),
-      routes: {
-        '/themeScreen': (context) => const ThemeScreen(),
-        '/deleteDialog': (context) => const DeleteAccountDialog(),
-        '/profilePage': (context) => const ProfilePage(),
-      },
-    ); //MaterialApp
+          return supportedLocales.first;
+        },
+        home: const SplashScreen(),
+        routes: {
+          '/themeScreen': (context) => ThemeScreen(),
+          //'/deleteDialog': (context) => DeleteAccountDialog(),
+          '/profilePage': (context) => ProfilePage(),
+          '/aboutUs': (context) => AboutUs(),
+          // '/signoutDialog': (context) => SignoutDialog(),
+          // '/languageDialog': (context) => LanguageDialog(),
+        }); //MaterialApp
   }
 }
 

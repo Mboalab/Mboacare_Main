@@ -19,10 +19,10 @@ class AppColors {
   static const Color textColor2 = Color(0xFF106517);
   static const Color grey = Color(0xFF565656);
   static const Color grey100 = Color(0xFFE6EAEE);
-    static const Color grey200 = Color(0xFF817E7E);
+  static const Color grey200 = Color(0xFF817E7E);
+  static const Color dividerColor = Color(0xFFECEFF1);
   static const Color hintTextColor = Color(0xFF547F58);
   static const Color borderColor = Color(0xFFCFD4DC);
   static const Color grey300 = Color(0xFFA7A7A7);
   static const Color danger = Color(0xFFFAE8E8);
-  
 }

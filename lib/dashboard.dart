@@ -57,9 +57,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _screens = [
       const DashboardContent(),
       FacilitiesPage(),
-       HospitalDashboard(),
-      
-      const ProfilePage(),
+      HospitalDashboard(),
+      //SettingsPage(),
+      const SettingsPage(),
     ];
   }
 
@@ -290,8 +290,10 @@ class _DashboardContentState extends State<DashboardContent> {
                   setState(() {
                     selectedIndex = 1;
                   });
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const SettingsPage()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SettingsPage()));
                 },
               ),
             ),
