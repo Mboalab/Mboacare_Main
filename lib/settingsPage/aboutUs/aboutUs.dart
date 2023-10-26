@@ -119,7 +119,8 @@ class AboutUs extends StatelessWidget {
                                     shape: BoxShape.circle,
                                     color: AppColors.navbar),
                                 child: SvgPicture.asset(
-                                    'lib/assests/icons/linkedin.svg'),
+                                  'lib/assests/icons/linkedin.svg',
+                                ),
                               )),
                         ],
                       )

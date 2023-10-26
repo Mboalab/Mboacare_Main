@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:path/path.dart' as Path;
-import 'dart:ui';
+//import 'package:path/path.dart' as Path;
+import 'dart:ui' as ui;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DarkThemeColors {
   static const Color background = Color(0xFF121212);
-  static const Color cardBackground = Color.fromARGB(255, 156, 151, 151);
+  static const Color cardBackground = Color.fromARGB(255, 221, 217, 217);
   static const Color primaryText = Color(0xFFFFFFFF);
   static const Color secondaryText = Color.fromARGB(255, 233, 223, 223);
   static const Color accentText = Color(0xFF009688);
@@ -16,8 +16,7 @@ class DarkThemeColors {
 }
 
 class ThemeProvider with ChangeNotifier {
-  ThemeMode? _themeMode;
-  //= ThemeMode.system;
+  ThemeMode? _themeMode = ThemeMode.system;
 
   ThemeProvider() {
     _loadTheme();
@@ -27,18 +26,19 @@ class ThemeProvider with ChangeNotifier {
 
   void _loadTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final isDark = prefs.getBool('isDarkTheme') ?? false;
-    _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
-    notifyListeners();
-    // final isDarkTheme = prefs.getBool('isDarkTheme');
-    // final Brightness systemBrightness = ui.windows.PlatformBrightness;
-    // _themeMode = isDarkTheme == true
-    //     ? ThemeMode.dark
-    //     : isDarkTheme == false
-    //         ? ThemeMode.light
-    //         : systemBrightness == ui.Brightness.dark
-    //             ? ThemeMode.dark
-    //             : ThemeMode.light;
+    // final isDark = prefs.getBool('isDarkTheme') ?? false;
+    // _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+    // notifyListeners();
+    final isDarkTheme = prefs.getBool('isDarkTheme');
+
+    final Brightness systemBrightness = ui.window.platformBrightness;
+    _themeMode = isDarkTheme == true
+        ? ThemeMode.dark
+        : isDarkTheme == false
+            ? ThemeMode.light
+            : systemBrightness == ui.Brightness.dark
+                ? ThemeMode.dark
+                : ThemeMode.light;
   }
 
   Future<void> toggleTheme() async {
@@ -54,7 +54,7 @@ class ThemeProvider with ChangeNotifier {
     if (_themeMode == ThemeMode.dark) {
       return ThemeData.dark().copyWith(
         scaffoldBackgroundColor: DarkThemeColors.background,
-        cardColor: DarkThemeColors.cardBackground,
+        cardColor: const Color.fromARGB(255, 245, 242, 242),
         primaryColor: DarkThemeColors.primaryText,
         //accentColor: DarkThemeColors.accentColor,
         //buttonColor: DarkThemeColors.buttonBackground,

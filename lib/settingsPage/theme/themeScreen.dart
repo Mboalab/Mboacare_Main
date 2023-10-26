@@ -131,11 +131,9 @@ class _ThemeScreenState extends State<ThemeScreen> {
                               (states) => AppColors.textColor2),
                           value: ThemeMode.dark,
                           groupValue: themeMode,
-                          onChanged: (selectedTheme) {
-                            setState(() {
-                              themeProvider.toggleTheme();
-                              //clickedOption = value;
-                            });
+                          onChanged: (selectedTheme) async {
+                            await themeProvider.toggleTheme();
+                            //clickedOption = value;
                           }),
                     ],
                   )
