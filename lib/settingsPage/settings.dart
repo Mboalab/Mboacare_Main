@@ -202,6 +202,8 @@ class LanguageDialog extends StatefulWidget {
 }
 
 class _LanguageDialogState extends State<LanguageDialog> {
+  int? clickedOption;
+
   bool firstValue = false;
   bool secondValue = false;
   bool thirdValue = false;
@@ -250,37 +252,41 @@ class _LanguageDialogState extends State<LanguageDialog> {
                 //           TextStyle(fontWeight: FontWeight.w400, fontSize: 17)),
                 // )
 
-                CheckBoxTile(
-                    value: firstValue,
+                RadioTile(
+                    groupValue: clickedOption,
+                    value: 0,
                     onchanged: (value) {
                       setState(() {
-                        firstValue = value!;
+                        clickedOption = value!;
                       });
                     },
                     text: 'English'),
 
-                CheckBoxTile(
-                    value: secondValue,
+                RadioTile(
+                    value: 1,
+                    groupValue: clickedOption,
                     onchanged: (value) {
                       setState(() {
-                        secondValue = value!;
+                        clickedOption = value!;
                       });
                       //secondValue != value;
                     },
                     text: 'Hindi'),
-                CheckBoxTile(
-                    value: thirdValue,
+                RadioTile(
+                    value: 2,
+                    groupValue: clickedOption,
                     onchanged: (value) {
                       setState(() {
-                        thirdValue = value!;
+                        clickedOption = value!;
                       });
                     },
                     text: 'Espanol'),
-                CheckBoxTile(
-                    value: fourthValue,
+                RadioTile(
+                    value: 3,
+                    groupValue: clickedOption,
                     onchanged: (value) {
                       setState(() {
-                        fourthValue = value!;
+                        clickedOption = value!;
                       });
                     },
                     text: 'Francais'),
@@ -293,7 +299,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
                         onPressed: () {
                           Navigator.of(context).pop;
                         },
-                        child: Text(
+                        child: const Text(
                           'CANCEL',
                           style: TextStyle(
                               color: AppColors.deleteColor, fontSize: 17),

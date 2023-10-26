@@ -11,8 +11,6 @@ class ThemeScreen extends StatefulWidget {
 }
 
 class _ThemeScreenState extends State<ThemeScreen> {
-  int? clickedOption;
-
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(builder: (context, themeProvider, child) {
@@ -85,7 +83,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                           value: ThemeMode.system,
                           groupValue: themeMode,
                           onChanged: (selectedTheme) async {
-                            await themeProvider.toggleTheme();
+                            await themeProvider.toggleTheme(selectedTheme);
                           }),
                     ],
                   ),
@@ -110,7 +108,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                             value: ThemeMode.light,
                             groupValue: themeMode,
                             onChanged: (selectedTheme) async {
-                              await themeProvider.toggleTheme();
+                              await themeProvider.toggleTheme(selectedTheme);
                               //clickedOption = value;
                             }),
                       ]),
@@ -132,7 +130,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                           value: ThemeMode.dark,
                           groupValue: themeMode,
                           onChanged: (selectedTheme) async {
-                            await themeProvider.toggleTheme();
+                            await themeProvider.toggleTheme(selectedTheme);
                             //clickedOption = value;
                           }),
                     ],

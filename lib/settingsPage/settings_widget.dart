@@ -111,13 +111,15 @@ class DeleteAccount extends StatelessWidget {
   }
 }
 
-class CheckBoxTile extends StatelessWidget {
-  final bool value;
+class RadioTile extends StatelessWidget {
+  final int value;
+  final int? groupValue;
   // final Function(bool?)? focusNode;
-  final Function(bool?) onchanged;
+  final dynamic onchanged;
   final String text;
-  const CheckBoxTile(
+  const RadioTile(
       {required this.value,
+      required this.groupValue,
       //required this.focusNode,
       required this.onchanged,
       required this.text,
@@ -128,14 +130,24 @@ class CheckBoxTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 19),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Checkbox(
-            //focusNode: focusNode,
-            value: value,
-            onChanged: onchanged,
+          Padding(
+            padding: EdgeInsets.only(left: 4.0),
+            child: Radio(
+                fillColor: MaterialStateColor.resolveWith(
+                    (states) => AppColors.textColor2),
+                value: value,
+                groupValue: groupValue,
+                onChanged: onchanged),
           ),
-          Text(text,
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 17)),
+          Text(
+            text,
+            style: TextStyle(
+                fontWeight: FontWeight.w400,
+                // color: AppColors.textColor2,
+                fontSize: 16),
+          )
         ],
       ),
     );
