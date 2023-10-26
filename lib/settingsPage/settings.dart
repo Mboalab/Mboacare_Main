@@ -10,38 +10,68 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: AppBar(
+      //   toolbarHeight: 50,
+      //   actions: const <Widget>[
+      //     IconButton(
+      //         onPressed: null,
+      //         icon: Icon(Iconsax.notification,
+      //             color: AppColors.textColor2, size: 30))
+      //   ],
+
+      //   title: Padding(
+      //     padding: const EdgeInsets.only(left: 95),
+      //     child: SizedBox(
+      //       width: 55,
+      //       height: 65,
+      //       child: Image.asset("lib/assests/images/logo.png"),
+      //     ),
+      //   ),
+
+      //   backgroundColor: AppColors.navbar,
+      //   leading: const IconButton(
+      //     icon: Icon(
+      //       Iconsax.menu_1,
+      //       size: 30,
+      //       color: AppColors.textColor2,
+      //     ),
+      //     onPressed: null,
+      //   ),
+      //   // Color.fromARGB(255, 232, 247, 215),
+      // ), key: scaffoldKey,
       appBar: AppBar(
-        toolbarHeight: 50,
-        actions: const <Widget>[
-          IconButton(
-              onPressed: null,
-              icon: Icon(Iconsax.notification,
-                  color: AppColors.textColor2, size: 30))
+        backgroundColor: AppColors.registerCard,
+        title: Image.asset(
+          'lib/assests/images/logo.png',
+          width: 60,
+          height: 60,
+        ),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: SvgPicture.asset('lib/assests/icons/notification.svg'),
+          )
         ],
-
-        title: Padding(
-          padding: const EdgeInsets.only(left: 95),
-          child: SizedBox(
-            width: 55,
-            height: 65,
-            child: Image.asset("lib/assests/images/logo.png"),
-          ),
+        leading: Builder(
+          builder: (context) {
+            return GestureDetector(
+                onTap: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: SvgPicture.asset(
+                    'lib/assests/icons/menu.svg',
+                    width: 20,
+                  ),
+                ));
+          },
         ),
-
-        backgroundColor: AppColors.navbar,
-        leading: const IconButton(
-          icon: Icon(
-            Iconsax.menu_1,
-            size: 30,
-            color: AppColors.textColor2,
-          ),
-          onPressed: null,
-        ),
-        // Color.fromARGB(255, 232, 247, 215),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: null,
+          //physics: null,
           child: Column(
             //mainAxisAlignment: MainAxisAlignment.start,
             children: [
