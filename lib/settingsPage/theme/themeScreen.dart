@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mboacare/colors.dart';
+import 'package:mboacare/settingsPage/theme/themeConstants.dart';
+import 'package:provider/provider.dart';
 
 class ThemeScreen extends StatefulWidget {
   const ThemeScreen({super.key});
@@ -13,6 +15,8 @@ class _ThemeScreenState extends State<ThemeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    //final themeMode = themeProvider.themeMode;
     return Scaffold(
       body: SafeArea(
           child: Padding(
@@ -87,7 +91,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                 ),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    children: <Widget>[
                       const Padding(
                           padding: EdgeInsets.only(left: 4.0),
                           child: Text(
@@ -103,11 +107,12 @@ class _ThemeScreenState extends State<ThemeScreen> {
                           focusColor: MaterialStateColor.resolveWith(
                               (states) => AppColors.textColor2),
                           // toggleable: ,
-                          value: 1,
-                          groupValue: clickedOption,
-                          onChanged: (value) {
+                          value: ThemeMode.light,
+                          groupValue: themeProvider.themeMode,
+                          onChanged: (selectedTheme) {
                             setState(() {
-                              clickedOption = value;
+                              themeProvider.toggleTheme();
+                              //clickedOption = value;
                             });
                           }),
                     ]),
@@ -126,11 +131,12 @@ class _ThemeScreenState extends State<ThemeScreen> {
                     Radio(
                         fillColor: MaterialStateColor.resolveWith(
                             (states) => AppColors.textColor2),
-                        value: 2,
-                        groupValue: clickedOption,
-                        onChanged: (value) {
+                        value: ThemeMode.dark,
+                        groupValue: themeProvider.themeMode,
+                        onChanged: (selectedTheme) {
                           setState(() {
-                            clickedOption = value;
+                            themeProvider.toggleTheme();
+                            //clickedOption = value;
                           });
                         }),
                   ],

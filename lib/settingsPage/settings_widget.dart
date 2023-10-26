@@ -29,17 +29,17 @@ class SettingsPageListTiles extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                  fontSize: 19,
+                  fontSize: 16,
                   color: AppColors.textColor2,
                   fontWeight: FontWeight.w600),
             ),
             Text(subtitle,
                 style:
-                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w400)),
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
           ]),
           trailing: const Icon(
             Icons.arrow_forward_ios_outlined,
-            size: 20,
+            size: 17,
           ),
         ),
       ),
@@ -69,7 +69,7 @@ class Signout extends StatelessWidget {
           title: Text(
             title,
             style: const TextStyle(
-                fontSize: 19,
+                fontSize: 16,
                 color: AppColors.textColor2,
                 fontWeight: FontWeight.w600),
           ),
@@ -101,11 +101,42 @@ class DeleteAccount extends StatelessWidget {
           title: Text(
             title,
             style: const TextStyle(
-                fontSize: 19,
+                fontSize: 16,
                 color: Colors.redAccent,
                 fontWeight: FontWeight.w600),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CheckBoxTile extends StatelessWidget {
+  final bool value;
+  // final Function(bool?)? focusNode;
+  final Function(bool?) onchanged;
+  final String text;
+  const CheckBoxTile(
+      {required this.value,
+      //required this.focusNode,
+      required this.onchanged,
+      required this.text,
+      super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 19),
+      child: Row(
+        children: [
+          Checkbox(
+            //focusNode: focusNode,
+            value: value,
+            onChanged: onchanged,
+          ),
+          Text(text,
+              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 17)),
+        ],
       ),
     );
   }

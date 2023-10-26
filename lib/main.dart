@@ -24,6 +24,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => LocaleProvider()),
       ChangeNotifierProvider(create: (_) => SignUpProvider()),
       ChangeNotifierProvider(create: (_) => UserDataProvider()),
+      ChangeNotifierProvider(create: (context) => ThemeProvider()),
       // Add other providers here if needed.
     ],
     child: const MyApp(),
@@ -36,45 +37,54 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        theme:
-            //notifier.darkTheme ? themeLight : themeDark,
-            ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
-          useMaterial3: true,
-        ),
-        // Add supported locales and localizations delegates
-        supportedLocales: const [
-          Locale('en', 'US'), // English
-          Locale('hi', 'IN'), // Hindi
-          Locale('es', 'ES'), // Spanish
-          Locale('fr', 'FR'), // French
-          // Add more locales here for other languages
-        ],
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        localeResolutionCallback: (locale, supportedLocales) {
-          for (var supportedLocale in supportedLocales) {
-            if (supportedLocale.languageCode == locale?.languageCode &&
-                supportedLocale.countryCode == locale?.countryCode) {
-              return supportedLocale;
+    //builder: (context, child) =>
+    return Consumer<ThemeProvider>(
+        builder: (BuildContext context, themeProvider, child) {
+      final themeMode = themeProvider.themeMode;
+
+      return MaterialApp(
+          title: 'Flutter Demo',
+          debugShowCheckedModeBanner: false,
+          themeMode: themeMode,
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          //notifier.darkTheme ? themeLight : themeDark,
+          //     ThemeData(
+          //   colorScheme:
+          //       ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
+          //   useMaterial3: true,
+          // ),
+          // Add supported locales and localizations delegates
+          supportedLocales: const [
+            Locale('en', 'US'), // English
+            Locale('hi', 'IN'), // Hindi
+            Locale('es', 'ES'), // Spanish
+            Locale('fr', 'FR'), // French
+            // Add more locales here for other languages
+          ],
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          localeResolutionCallback: (locale, supportedLocales) {
+            for (var supportedLocale in supportedLocales) {
+              if (supportedLocale.languageCode == locale?.languageCode &&
+                  supportedLocale.countryCode == locale?.countryCode) {
+                return supportedLocale;
+              }
             }
-          }
-          return supportedLocales.first;
-        },
-        home: const SplashScreen(),
-        routes: {
-          '/themeScreen': (context) => ThemeScreen(),
-          //'/deleteDialog': (context) => DeleteAccountDialog(),
-          '/profilePage': (context) => ProfilePage(),
-          '/aboutUs': (context) => AboutUs(),
-          // '/signoutDialog': (context) => SignoutDialog(),
-          // '/languageDialog': (context) => LanguageDialog(),
-        }); //MaterialApp
+            return supportedLocales.first;
+          },
+          home: const SplashScreen(),
+          routes: {
+            '/themeScreen': (context) => ThemeScreen(),
+            //'/deleteDialog': (context) => DeleteAccountDialog(),
+            '/profilePage': (context) => ProfilePage(),
+            '/aboutUs': (context) => AboutUs(),
+            // '/signoutDialog': (context) => SignoutDialog(),
+            // '/languageDialog': (context) => LanguageDialog(),
+          });
+    });
   }
 }
