@@ -39,25 +39,29 @@ class ThemeProvider with ChangeNotifier {
             : systemBrightness == ui.Brightness.dark
                 ? ThemeMode.dark
                 : ThemeMode.light;
+    notifyListeners();
   }
 
   Future<void> toggleTheme(ThemeMode? selectedTheme) async {
     if (selectedTheme == ThemeMode.system) {
       // Set the theme based on system brightness
-      final systemBrightness = ui.window.platformBrightness;
-      _themeMode = systemBrightness == ui.Brightness.dark
-          ? ThemeMode.dark
-          : ThemeMode.light;
+
+      _themeMode = ThemeMode.light;
+      // final systemBrightness = ui.window.platformBrightness;
+      // _themeMode = systemBrightness == ui.Brightness.dark
+      //     ? ThemeMode.dark
+      //     : ThemeMode.light;
     } else {
       // Set the theme based on the selected option
       _themeMode = selectedTheme;
     }
-
     notifyListeners();
-
+//initially themeMode.system
     if (selectedTheme != ThemeMode.system) {
       final prefs = await SharedPreferences.getInstance();
-      prefs.setBool('isDarkTheme', _themeMode == ThemeMode.dark);
+
+      prefs.setBool('isDarkTheme', selectedTheme == ThemeMode.dark);
+      notifyListeners();
     }
     // _themeMode =
     //     _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
@@ -68,10 +72,17 @@ class ThemeProvider with ChangeNotifier {
   }
 
   ThemeData getThemeData() {
+    // if (_themeMode == ThemeMode.system) {
+    //   final systemBrightness = ui.window.platformBrightness;
+    //   return systemBrightness == ui.Brightness.dark
+    //       ? ThemeData.dark()
+    //       : ThemeData.light();
+    // }
     if (_themeMode == ThemeMode.dark) {
       return ThemeData.dark().copyWith(
+        // Apply dark theme colors here
         scaffoldBackgroundColor: DarkThemeColors.background,
-        cardColor: const Color.fromARGB(255, 245, 242, 242),
+        cardColor: DarkThemeColors.cardBackground,
         primaryColor: DarkThemeColors.primaryText,
         //accentColor: DarkThemeColors.accentColor,
         //buttonColor: DarkThemeColors.buttonBackground,

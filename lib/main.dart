@@ -24,7 +24,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => LocaleProvider()),
       ChangeNotifierProvider(create: (_) => SignUpProvider()),
       ChangeNotifierProvider(create: (_) => UserDataProvider()),
-      ChangeNotifierProvider(create: (context) => ThemeProvider()),
+      ChangeNotifierProvider(create: (_) => ThemeProvider()),
       // Add other providers here if needed.
     ],
     child: const MyApp(),

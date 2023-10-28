@@ -213,7 +213,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
     return Dialog(
         child: Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.4,
+            height: MediaQuery.of(context).size.height * 0.45,
             //constraints: const BoxConstraints(maxHeight: 500, maxWidth: 500),
             decoration: BoxDecoration(
               color: AppColors.googleButtonColor,
