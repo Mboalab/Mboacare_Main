@@ -51,12 +51,9 @@ dependencies:
   flutter_svg: ^2.0.7
   iconsax: ^0.0.8
   google_fonts: ^6.1.0
-
-  
-
   connectivity_plus: ^5.0.1
-  
-  
+  intl_phone_number_input: ^0.7.3+1
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -94,6 +91,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - lib/assests/images/
     - lib/assests/images/logo.png
     - lib/assests/images/google-icon.png
     - lib/assests/images/aiims.jpg
@@ -141,6 +139,8 @@ flutter:
     - lib/assests/icons/x.svg
     
     
+    - lib/assests/images/icon.svg
+
 
   #   - images/a_dot_ham.jpeg
 

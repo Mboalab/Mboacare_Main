@@ -93,18 +93,28 @@ class UserDataProvider with ChangeNotifier {
       String newPassword, String confirmNewPassword) async {
     if (UserInfoValidator.validatePassword(newPassword)) {
       if (newPassword != confirmNewPassword) {
+        showSnackbar(context, 'Passwords don\'t match');
       } else {
         savingData = true;
         notifyListeners();
-
-        // TODO:  When password update endpoint is ready
-        // await updateUserPassword(context, currentPassword, newPassword);
-        savingData = false;
-        notifyListeners();
-        if (!context.mounted) return;
-        Navigator.of(context).pop();
+        bool result = await checkIfUserPasswordIsCorrect();
+        if (result) {
+          if (!context.mounted) return;
+          await updateUserPassword(context, newPassword);
+          savingData = false;
+          notifyListeners();
+          if (!context.mounted) return;
+          Navigator.of(context).pop();
+        } else {
+          savingData = false;
+          notifyListeners();
+          if (!context.mounted) return;
+          showSnackbar(context, 'Wrong current password');
+        }
       }
     } else {
+      savingData = false;
+      notifyListeners();
       showSnackbar(context, 'Weak password');
     }
   }
@@ -130,13 +140,46 @@ class UserDataProvider with ChangeNotifier {
       if (!context.mounted) return;
       savingData = false;
       notifyListeners();
-      showSnackbar(context, 'Display name updated successfully');
+      showSnackbar(context, 'Name updated successfully');
     } else {
       if (kDebugMode) {
         print(response.reasonPhrase);
       }
       savingData = false;
       notifyListeners();
+    }
+  }
+
+  Future<void> updateUserPassword(
+      BuildContext context, String newPassword) async {
+    savingData = true;
+    notifyListeners();
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('PUT', Uri.parse('$baseURL/change-password'));
+    request.body = json.encode({
+      "uid": currentUser.uid,
+      "email": currentUser.email,
+      "new_password": newPassword
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      if (!context.mounted) return;
+      savingData = false;
+      notifyListeners();
+      showSnackbar(context, 'Password updated successfully');
+    } else {
+      if (kDebugMode) {
+        print(response.reasonPhrase);
+      }
+      savingData = false;
+      notifyListeners();
+      if (!context.mounted) return;
+      showSnackbar(context, 'Password update failed');
     }
   }
 

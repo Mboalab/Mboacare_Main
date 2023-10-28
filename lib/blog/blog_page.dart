@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mboacare/blog/add_blog_page.dart';
 import '../colors.dart';
 import 'dart:developer' as devtools show log;
+import '../notifications/notifications.dart';
 import 'blog_data.dart';
 
 class BlogPage extends StatefulWidget {
@@ -49,7 +51,7 @@ class _BlogPageState extends State<BlogPage> {
           color: Colors.white,
         ),
       ),
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: Column(
         children: [
           const SizedBox(height: 18.0),
@@ -88,21 +90,30 @@ class _BlogPageState extends State<BlogPage> {
   }
 }
 
-AppBar _buildAppBar() {
+AppBar _buildAppBar(BuildContext context) {
   return AppBar(
     backgroundColor: const Color(0XFFecfded),
     centerTitle: true,
-    title: const Image(
-      height: 78.0,
-      width: 78.0,
-      image: AssetImage('lib/assests/images/logo.png'),
-    ),
-    actions: [
-      IconButton(
-        onPressed: () {},
-        icon: const Icon(Icons.notifications_none,
-            size: 30.0, color: AppColors.primaryColor),
-      ),
+         title: Image.asset(
+    'lib/assests/images/logo.png',
+    width: 60,
+    height: 60,
+  ),
+
+  actions: [
+      InkWell(
+        onTap: (){
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const Notifications()));
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(right: 15),
+          child: SvgPicture.asset('lib/assests/icons/notification.svg'),
+        ),
+      )
+
     ],
   );
 }

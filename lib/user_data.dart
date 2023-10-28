@@ -34,3 +34,22 @@ Future<UserModel?> getUserInfo() async {
   }
   return null;
 }
+
+// TODO:  There should be a way to do this from server, it's more secure
+Future<bool> checkIfUserPasswordIsCorrect() async {
+  var headers = {'Content-Type': 'application/json'};
+  var request = http.Request(
+      'POST',
+      Uri.parse(
+          'https://us-central1-mboacare-api-v1.cloudfunctions.net/api/auth/sign-in'));
+  request.body =
+      json.encode({"email": "kabanda1@gmail.com", "password": "General14@#"});
+  request.headers.addAll(headers);
+
+  http.StreamedResponse response = await request.send();
+
+  if (response.statusCode == 200) {
+    return true;
+  }
+  return false;
+}

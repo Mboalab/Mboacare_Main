@@ -23,6 +23,8 @@ class AppColors {
   static const Color dividerColor = Color(0xFFECEFF1);
   static const Color hintTextColor = Color(0xFF547F58);
   static const Color borderColor = Color(0xFFCFD4DC);
+  static const redColor = Color(0xFFD93535);
+  static const greyColor = Color(0xFF565656);
   static const Color grey300 = Color(0xFFA7A7A7);
   static const Color danger = Color(0xFFFAE8E8);
 }

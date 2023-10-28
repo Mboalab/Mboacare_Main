@@ -5,16 +5,21 @@ import 'package:mboacare/settingsPage/settings.dart';
 import 'package:mboacare/settingsPage/theme/themeConstants.dart';
 import 'package:mboacare/settingsPage/theme/themeScreen.dart';
 import 'package:mboacare/colors.dart';
+import 'package:mboacare/sign_up/view_model/signup_provider.dart';
 import 'package:mboacare/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:mboacare/user_profile_page.dart';
 import 'package:mboacare/user_provider.dart';
-import 'package:mboacare/view_model/signup_view_model.dart';
+import 'package:mboacare/user_data.dart';
+import 'package:mboacare/sign_up/view_model/signup_provider.dart';
+import 'package:mboacare/utils/constants.dart';
 import 'package:provider/provider.dart';
+import 'add_hospital/add_hospital_provider.dart';
 import 'hospital_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'locale_provider.dart';
 import 'l10n/app_localizations.dart';
-import 'user_profile_page.dart';
+import 'login/login_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +29,9 @@ void main() async {
       ChangeNotifierProvider(create: (_) => HospitalProvider()),
       ChangeNotifierProvider(create: (_) => LocaleProvider()),
       ChangeNotifierProvider(create: (_) => SignUpProvider()),
+      ChangeNotifierProvider(create: (_) => LoginProvider()),
+      ChangeNotifierProvider(create: (_) => AddHospitalProvider()),
+      ChangeNotifierProvider(create: (_) => UserDataProvider()),
       ChangeNotifierProvider(create: (_) => UserDataProvider()),
       ChangeNotifierProvider(create: (_) => ThemeProvider()),
       // Add other providers here if needed.

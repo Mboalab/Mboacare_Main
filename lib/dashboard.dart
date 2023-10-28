@@ -2,11 +2,12 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mboacare/login/login.dart';
+import 'package:mboacare/notifications/notifications.dart';
+import 'package:mboacare/sign_up/sign_up_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:mboacare/blog/blog_page.dart';
-import 'package:mboacare/login.dart';
-import 'package:mboacare/sign_up_page.dart';
 import 'package:mboacare/user_profile_page.dart';
 import 'colors.dart';
 import 'facilities/view/screens/facilities_page.dart';
@@ -167,9 +168,17 @@ class _DashboardContentState extends State<DashboardContent> {
         ),
         centerTitle: true,
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 15),
-            child: SvgPicture.asset('lib/assests/icons/notification.svg'),
+          InkWell(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const Notifications()));
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: SvgPicture.asset('lib/assests/icons/notification.svg'),
+            ),
           )
         ],
         leading: Builder(

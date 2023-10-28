@@ -155,20 +155,26 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                   )),
               const SizedBox(height: 10),
               // Email Box
-              SizedBox(
-                width: 350,
-                height: 50,
-                child: TextField(
-                  enabled: false,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.email_outlined),
-                    prefixIconColor: AppColors.text,
-                    hintText: email,
-                    hintStyle: const TextStyle(color: AppColors.text),
-                    labelStyle: const TextStyle(color: AppColors.primaryColor),
-                    border: const OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: AppColors.primaryColor, width: 2),
+              InkWell(
+                onTap: (){
+                  final Uri mail = Uri(path: email, scheme: 'mailto');
+                  url_launcher.launchUrl(mail);
+                },
+                child: SizedBox(
+                  width: 350,
+                  height: 50,
+                  child: TextField(
+                    enabled: false,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.email_outlined),
+                      prefixIconColor: AppColors.text,
+                      hintText: email,
+                      hintStyle: const TextStyle(color: AppColors.text),
+                      labelStyle: const TextStyle(color: AppColors.primaryColor),
+                      border: const OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.primaryColor, width: 2),
+                      ),
                     ),
                   ),
                 ),
@@ -190,20 +196,28 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                   )),
               const SizedBox(height: 10),
               // Phone Box
-              SizedBox(
-                width: 350,
-                height: 50,
-                child: TextField(
-                  enabled: false,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.phone),
-                    prefixIconColor: AppColors.text,
-                    hintText: phone,
-                    hintStyle: const TextStyle(color: AppColors.text),
-                    labelStyle: const TextStyle(color: AppColors.primaryColor),
-                    border: const OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: AppColors.primaryColor, width: 2),
+              InkWell(
+                onTap: ()async{
+                  final Uri tel = Uri(scheme:'tel', path: phone);
+                  if(await url_launcher.canLaunchUrl(tel)){
+                    await url_launcher.launchUrl(tel);
+                  }
+                },
+                child: SizedBox(
+                  width: 350,
+                  height: 50,
+                  child: TextField(
+                    enabled: false,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.phone),
+                      prefixIconColor: AppColors.text,
+                      hintText: phone,
+                      hintStyle: const TextStyle(color: AppColors.text),
+                      labelStyle: const TextStyle(color: AppColors.primaryColor),
+                      border: const OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.primaryColor, width: 2),
+                      ),
                     ),
                   ),
                 ),
@@ -225,20 +239,30 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                   )),
               const SizedBox(height: 10),
               // Address Box
-              SizedBox(
-                width: 350,
-                height: 50,
-                child: TextField(
-                  enabled: false,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.location_on_outlined),
-                    prefixIconColor: AppColors.text,
-                    hintText: address,
-                    hintStyle: const TextStyle(color: AppColors.text),
-                    labelStyle: const TextStyle(color: AppColors.primaryColor),
-                    border: const OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: AppColors.primaryColor, width: 2),
+              InkWell(
+                onTap: ()async{
+                  String query = Uri.encodeComponent(address);
+                  final Uri mapAddress = Uri.parse("https://www.google.com/maps/search/?api=1&query=$query");
+                  if( await url_launcher.canLaunchUrl(mapAddress)){
+                    await url_launcher.launchUrl(mapAddress);
+                  }
+
+                },
+                child: SizedBox(
+                  width: 350,
+                  height: 50,
+                  child: TextField(
+                    enabled: false,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.location_on_outlined),
+                      prefixIconColor: AppColors.text,
+                      hintText: address,
+                      hintStyle: const TextStyle(color: AppColors.text),
+                      labelStyle: const TextStyle(color: AppColors.primaryColor),
+                      border: const OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.primaryColor, width: 2),
+                      ),
                     ),
                   ),
                 ),
