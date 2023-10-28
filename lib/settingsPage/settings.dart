@@ -3,6 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:mboacare/colors.dart';
 import 'package:mboacare/settingsPage/settings_widget.dart';
+import 'package:mboacare/view_model/signup_view_model.dart';
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -311,11 +313,17 @@ class _LanguageDialogState extends State<LanguageDialog> {
   }
 }
 
-class SignoutDialog extends StatelessWidget {
+class SignoutDialog extends StatefulWidget {
   const SignoutDialog({super.key});
 
   @override
+  State<SignoutDialog> createState() => _SignoutDialogState();
+}
+
+class _SignoutDialogState extends State<SignoutDialog> {
+  @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<SignUpProvider>(context);
     return Dialog(
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -379,7 +387,10 @@ class SignoutDialog extends StatelessWidget {
               height: 25,
             ),
             InkWell(
-              onTap: null,
+              onTap: () {
+                provider.signOut();
+                Navigator.pushNamed(context, '/home');
+              },
               child: Container(
                 width: MediaQuery.of(context).size.height * 0.34,
                 height:

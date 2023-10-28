@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mboacare/dashboard.dart';
 import 'package:mboacare/settingsPage/aboutUs/aboutUs.dart';
 import 'package:mboacare/settingsPage/settings.dart';
 import 'package:mboacare/settingsPage/theme/themeConstants.dart';
@@ -95,8 +96,7 @@ class MyApp extends StatelessWidget {
           //'/deleteDialog': (context) => DeleteAccountDialog(),
           '/profilePage': (context) => const ProfilePage(),
           '/aboutUs': (context) => const AboutUs(),
-          // '/signoutDialog': (context) => SignoutDialog(),
-          // '/languageDialog': (context) => LanguageDialog(),
+          '/home': (context) => const DashboardContent()
         });
   }
 }

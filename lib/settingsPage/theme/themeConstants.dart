@@ -26,9 +26,7 @@ class ThemeProvider with ChangeNotifier {
 
   void _loadTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // final isDark = prefs.getBool('isDarkTheme') ?? false;
-    // _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
-    // notifyListeners();
+
     final isDarkTheme = prefs.getBool('isDarkTheme');
 
     final Brightness systemBrightness = ui.window.platformBrightness;
@@ -63,12 +61,6 @@ class ThemeProvider with ChangeNotifier {
       prefs.setBool('isDarkTheme', selectedTheme == ThemeMode.dark);
       notifyListeners();
     }
-    // _themeMode =
-    //     _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-    // notifyListeners();
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setBool('isDarkTheme', _themeMode == ThemeMode.dark);
-    // notifyListeners();
   }
 
   ThemeData getThemeData() {

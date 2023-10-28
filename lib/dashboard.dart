@@ -133,7 +133,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 label: 'Account',
                 activeIcon: SvgPicture.asset(
-                  'lib/assests/icons/selected_user.svg',
+                  'lib/assests/icons/sett.svg',
                   width: 35,
                   height: 35,
                 )),
@@ -350,7 +350,7 @@ class _DashboardContentState extends State<DashboardContent> {
                   color: selectedIndex == 3 ? Colors.white : Colors.black,
                 ),
                 title: Text(
-                  'Account',
+                  'Settings',
                   style: TextStyle(
                       color: selectedIndex == 3 ? Colors.white : Colors.black,
                       fontWeight: FontWeight.w700,
@@ -363,7 +363,7 @@ class _DashboardContentState extends State<DashboardContent> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const HospitalDashboard()));
+                          builder: (context) => const SettingsPage()));
                 },
               ),
             ),
