@@ -3,7 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:mboacare/colors.dart';
 import 'package:mboacare/settingsPage/settings_widget.dart';
-import 'package:mboacare/view_model/signup_view_model.dart';
+import 'package:mboacare/sign_up/view_model/signup_provider.dart';
+//import 'package:mboacare/view_model/signup_view_model.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPage extends StatelessWidget {

@@ -133,7 +133,7 @@ class RadioTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(left: 4.0),
+            padding: const EdgeInsets.only(left: 4.0),
             child: Radio(
                 fillColor: MaterialStateColor.resolveWith(
                     (states) => AppColors.textColor2),
@@ -143,7 +143,7 @@ class RadioTile extends StatelessWidget {
           ),
           Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 // color: AppColors.textColor2,
                 fontSize: 16),
