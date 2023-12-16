@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mboacare/appStyles.dart';
 import 'package:mboacare/colors.dart';
 import 'package:mboacare/facilities/provider/facilities_provider.dart';
 import 'package:mboacare/facilities/view/screens/map_screen.dart';
@@ -73,17 +74,19 @@ class _AddFacilitiesPageState extends State<AddFacilitiesPage> {
     final facilitiesProvider = Provider.of<FacilitiesProvider>(context);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColors.registerCard,
         leading: IconButton(
+            color: AppColors.secondaryTextColor,
             onPressed: () {
               Navigator.pop(context);
             },
             icon: const Icon(
               Icons.arrow_back,
             )),
-        title: const Text(
+        title: Text(
           'Back',
-          style: TextStyle(
-              fontSize: 18, fontWeight: FontWeight.w500, color: AppColors.grey),
+          style: AppTextStyles.bodyOne.copyWith(
+              fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.grey),
         ),
       ),
       body: Form(

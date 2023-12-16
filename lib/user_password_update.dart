@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mboacare/appStyles.dart';
 import 'package:mboacare/user_provider.dart';
 import 'package:mboacare/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -14,10 +15,12 @@ class ChangePasswordScreen extends StatelessWidget {
       create: (context) => userDataProvider,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
+          backgroundColor: AppColors.registerCard,
+          title: Text(
             "Change password",
-            style: TextStyle(
-              fontSize: 17,
+            style: AppTextStyles.bodyOne.copyWith(
+              fontSize: 16,
+              color: AppColors.secondaryTextColor,
               fontWeight: FontWeight.bold,
             ),
           ),

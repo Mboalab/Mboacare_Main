@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mboacare/appStyles.dart';
 import 'package:mboacare/blog/add_blog_page.dart';
 import '../colors.dart';
 import 'dart:developer' as devtools show log;
@@ -384,7 +385,8 @@ class Categories extends StatelessWidget {
       child: Center(
         child: Text(
           categoryTitle,
-          style: TextStyle(
+          style: AppTextStyles.bodyOne.copyWith(
+              fontSize: 16.0,
               color: isSelected ? AppColors.primaryColor : Colors.black,
               fontWeight: FontWeight.w600),
         ),
@@ -508,10 +510,10 @@ class BottomCard extends StatelessWidget {
             children: [
               Text(
                 blogTitle,
-                style: const TextStyle(
-                    color: Colors.black,
+                style: AppTextStyles.bodyOne.copyWith(
+                    color: AppColors.primaryColor,
                     overflow: TextOverflow.clip,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w800,
                     fontSize: 16.0),
               ),
               const SizedBox(height: 10.0),
@@ -530,12 +532,13 @@ class BottomCard extends StatelessWidget {
                     children: [
                       Text(
                         authorName,
-                        style: const TextStyle(
+                        style: AppTextStyles.bodyOne.copyWith(
                             color: Colors.black, fontWeight: FontWeight.w500),
                       ),
                       Text(
                         blogTime,
-                        style: const TextStyle(color: Colors.grey),
+                        style: AppTextStyles.bodyOne
+                            .copyWith(color: AppColors.dividerColor),
                       ),
                     ],
                   )

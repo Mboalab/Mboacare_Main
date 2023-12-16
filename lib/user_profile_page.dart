@@ -100,9 +100,21 @@ class ProfilePage extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: AppColors.registerCard,
+          leading: IconButton(
+              color: AppColors.secondaryTextColor,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.arrow_back,
+              )),
           title: const Text(
             'Personal info',
-            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 17,
+                color: AppColors.secondaryTextColor,
+                fontWeight: FontWeight.bold),
           ),
         ),
         body: SingleChildScrollView(

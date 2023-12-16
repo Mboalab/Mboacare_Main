@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mboacare/appStyles.dart';
 import 'package:mboacare/login/login.dart';
 import 'package:mboacare/notifications/notifications.dart';
 import 'package:mboacare/sign_up/sign_up_page.dart';
@@ -35,7 +36,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     _initializeScreens(context); // Call the method to initialize _screens
-     _checkUserVerificationStatus(); // Check user verification status
+    _checkUserVerificationStatus(); // Check user verification status
   }
 
   void _checkUserVerificationStatus() async {
@@ -62,7 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _initializeScreens(BuildContext context) {
     _screens = [
       const DashboardContent(),
-      const FacilitiesPage(),
+      const HospitalDashboard(),
       const BlogPage(),
       const SettingsPage(),
     ];
@@ -142,7 +143,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           currentIndex: _currentIndex,
           onTap: _onTabTapped,
           selectedItemColor: AppColors.buttonColor,
-          iconSize: 20.0,
+          iconSize: iconSize,
           unselectedItemColor: AppColors.grey,
           selectedLabelStyle:
               const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
@@ -190,7 +191,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   width: 20.0,
                   height: 20.0,
                 ),
-                label: 'Account',
+                label: 'Settings',
                 activeIcon: SvgPicture.asset(
                   'lib/assests/icons/selected_user.svg',
                   width: 20.0,
@@ -230,24 +231,22 @@ class _DashboardContentState extends State<DashboardContent> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
+                    Text(
                       'Your Health, Simplified.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'Inter',
-                        color: AppColors.textColor2,
-                      ),
+                      style: AppTextStyles.headerOne.copyWith(
+                          color: AppColors.textColor2, fontSize: 35.0),
+                      // TextStyle(
+                      //   fontSize: 36,
+                      //   fontWeight: FontWeight.w700,
+                      //   fontFamily: 'Inter',
+                      //   color: AppColors.textColor2,
+                      // ),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
+                    Text(
                       'Discover a world of medical facilities at your fingertips with Mboacare. Connect globally, collaborate effortlessly, and improve healthcare outcomes. Join now and revolutionize the way medical professionals connect and deliver care.',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Inter',
-                        color: AppColors.textColor2,
-                      ),
+                      style: AppTextStyles.bodyThree.copyWith(fontSize: 16.0),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 33.0),
@@ -261,7 +260,8 @@ class _DashboardContentState extends State<DashboardContent> {
                         fontWeight: FontWeight.w700,
                         shadows: [
                           Shadow(
-                            color: Colors.black87,
+                            color: AppColors.secondaryTextColor,
+                            //Colors.black87,
                             blurRadius: 10.0,
                             offset: Offset(0, 4.0),
                           ),
@@ -354,17 +354,19 @@ class _DashboardContentState extends State<DashboardContent> {
                   width: 150,
                 ),
               ),
-              const Expanded(
+              Expanded(
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text(
-                    'Join the network and make a global impact in Healthcare!',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontFamily: 'Inter',
-                    ),
-                  ),
+                      'Join the network and make a global impact in Healthcare!',
+                      style: AppTextStyles.bodyOne
+                          .copyWith(fontSize: 16, color: AppColors.colorWhite)
+                      // TextStyle(
+                      //   color: Colors.white,
+                      //   fontSize: 18,
+                      //   fontFamily: 'Inter',
+                      // ),
+                      ),
                 ),
               ),
             ],

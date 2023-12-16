@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mboacare/appStyles.dart';
 import 'package:mboacare/colors.dart';
 import 'package:mboacare/sign_up/sign_up_page.dart';
 
@@ -33,7 +34,7 @@ class HomeNavigationItems extends StatelessWidget {
           ),
           colorFilter: ColorFilter.mode(
             // AppColors.primaryColor,
-            Colors.green,
+            AppColors.greenColor,
             BlendMode.color,
           ),
         ),
@@ -45,29 +46,28 @@ class HomeNavigationItems extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 8.0),
           child: Text(
             title,
-            style: const TextStyle(
-              color: Colors.white,
-            ),
+            style: AppTextStyles.bodyOne
+                .copyWith(fontSize: 16, color: AppColors.colorWhite),
           ),
         ),
         subtitle: Text(
           subtitle,
-          style: const TextStyle(
-            fontSize: 10.0,
-            color: Colors.white,
-          ),
+          style: AppTextStyles.bodyThree
+              .copyWith(fontSize: 12.0, color: AppColors.colorWhite),
         ),
         onTap: onTap,
         leading: CircleAvatar(
           backgroundColor: Colors.white,
           child: SvgPicture.asset(
             iconImage,
+
             // 'lib/assests/icons/hospital.svg',
           ),
         ),
         trailing: const Icon(
           Icons.arrow_forward_ios,
-          color: Colors.white,
+          size: iconSize,
+          color: AppColors.colorWhite,
         ),
       ),
     );

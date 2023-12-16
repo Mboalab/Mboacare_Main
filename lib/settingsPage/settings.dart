@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:mboacare/appStyles.dart';
 import 'package:mboacare/colors.dart';
 import 'package:mboacare/settingsPage/settings_widget.dart';
 import 'package:mboacare/sign_up/view_model/signup_provider.dart';
@@ -72,7 +73,7 @@ class SettingsPage extends StatelessWidget {
                   icon: const Icon(
                     Iconsax.profile_add,
                     color: AppColors.textColor2,
-                    size: 25,
+                    size: iconSize,
                   ),
                   title: 'Account',
                   subtitle: 'Profile',
@@ -86,7 +87,7 @@ class SettingsPage extends StatelessWidget {
                   icon: const Icon(
                     Iconsax.global_edit,
                     color: AppColors.textColor2,
-                    size: 25,
+                    size: iconSize,
                   ),
                   title: 'Language',
                   subtitle: 'English',
@@ -102,7 +103,7 @@ class SettingsPage extends StatelessWidget {
                   icon: const Icon(
                     Iconsax.moon,
                     color: AppColors.textColor2,
-                    size: 25,
+                    size: iconSize,
                   ),
                   title: 'Theme',
                   subtitle: 'System',
@@ -113,9 +114,8 @@ class SettingsPage extends StatelessWidget {
               SettingsPageListTiles(
                   icon: SvgPicture.asset(
                     'lib/assests/icons/hospital.svg',
-
                     color: AppColors.textColor2,
-                    //size: 25,
+                    // size: iconSize,
                   ),
                   title: 'Facilities',
                   subtitle: 'Manage Facilities',
@@ -127,7 +127,7 @@ class SettingsPage extends StatelessWidget {
                   icon: const Icon(
                     Iconsax.info_circle,
                     color: AppColors.textColor2,
-                    size: 25,
+                    size: iconSize,
                   ),
                   title: 'About Us',
                   subtitle: 'Contact us',
@@ -137,7 +137,7 @@ class SettingsPage extends StatelessWidget {
                   }),
               Signout(
                   icon: const Icon(Iconsax.logout,
-                      color: AppColors.textColor2, size: 25),
+                      color: AppColors.textColor2, size: iconSize),
                   title: 'Signout',
                   onTap: () {
                     showDialog(
@@ -150,6 +150,7 @@ class SettingsPage extends StatelessWidget {
                   //iconColor: Colors.redAccent,
                   icon: const Icon(
                     Iconsax.trash,
+                    size: iconSize,
                     color: Colors.redAccent,
                   ),
                   //color: AppColors.textColor2, size: 25),
@@ -200,13 +201,13 @@ class _LanguageDialogState extends State<LanguageDialog> {
                 const SizedBox(
                   height: 15,
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(left: 30.0),
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Text('Select language',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 17)),
+                        style: AppTextStyles.bodyOne.copyWith(
+                            fontWeight: FontWeight.bold, fontSize: 16)),
                   ),
                 ),
                 const Divider(
@@ -274,10 +275,12 @@ class _LanguageDialogState extends State<LanguageDialog> {
                         onPressed: () {
                           Navigator.of(context).pop;
                         },
-                        child: const Text(
+                        child: Text(
                           'CANCEL',
-                          style: TextStyle(
-                              color: AppColors.deleteColor, fontSize: 17),
+                          style: AppTextStyles.bodyTwo.copyWith(
+                              // fontWeight: FontWeight.w3,
+                              color: AppColors.deleteColor,
+                              fontSize: 16),
                         )),
                   ),
                 )
@@ -335,24 +338,26 @@ class _SignoutDialogState extends State<SignoutDialog> {
               child: const Icon(
                 Iconsax.logout,
                 color: AppColors.textColor2,
-                size: 30,
+                size: iconSize,
               ),
             ),
             const SizedBox(
               height: 15,
             ),
-            const Text(
+            Text(
               'Sign Out',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              style: AppTextStyles.headerThree
+                  .copyWith(fontWeight: FontWeight.bold, fontSize: 16.0),
             ),
             const SizedBox(
               height: 20,
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(left: 20, right: 20),
               child: Text(
                 'You are about to log out from the Mboacare app',
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+                style: AppTextStyles.bodyTwo
+                    .copyWith(fontWeight: FontWeight.w400, fontSize: 16.0),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -372,11 +377,11 @@ class _SignoutDialogState extends State<SignoutDialog> {
                 decoration: BoxDecoration(
                     color: AppColors.deleteColor,
                     borderRadius: BorderRadius.circular(35)),
-                child: const Center(
+                child: Center(
                   child: Text(
                     'Sign out',
-                    style: TextStyle(
-                        fontSize: 15,
+                    style: AppTextStyles.bodyOne.copyWith(
+                        fontSize: 16.0,
                         fontWeight: FontWeight.w700,
                         color: Colors.white),
                     //textAlign: TextAlign.center,
@@ -434,24 +439,26 @@ class DeleteAccountDialog extends StatelessWidget {
               child: const Icon(
                 Iconsax.trash,
                 color: Colors.red,
-                size: 30,
+                size: iconSize,
               ),
             ),
             const SizedBox(
               height: 15,
             ),
-            const Text(
+            Text(
               'Delete account',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              style: AppTextStyles.bodyTwo
+                  .copyWith(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             const SizedBox(
               height: 20,
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(left: 20, right: 20),
               child: Text(
                 'If your account is deleted, all your data willl be lost.',
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+                style: AppTextStyles.bodyTwo
+                    .copyWith(fontWeight: FontWeight.w400, fontSize: 16),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -468,11 +475,11 @@ class DeleteAccountDialog extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: AppColors.deleteColor,
                     borderRadius: BorderRadius.circular(35)),
-                child: const Center(
+                child: Center(
                   child: Text(
                     'Delete my account',
-                    style: TextStyle(
-                        fontSize: 15,
+                    style: AppTextStyles.bodyOne.copyWith(
+                        fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: Colors.white),
                     //textAlign: TextAlign.center,

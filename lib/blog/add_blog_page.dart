@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:mboacare/appStyles.dart';
 import 'package:mboacare/colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:iconsax/iconsax.dart';
@@ -45,9 +46,9 @@ class _AddBlogPageState extends State<AddBlogPage> {
                 color: AppColors.primaryColor,
               )),
           centerTitle: true,
-          title: const Text(
+          title: Text(
             "New Blog",
-            style: TextStyle(
+            style: AppTextStyles.headerThree.copyWith(
                 fontWeight: FontWeight.w500, color: AppColors.primaryColor),
           ),
         ),

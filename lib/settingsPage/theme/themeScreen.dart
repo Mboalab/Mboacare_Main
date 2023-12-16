@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mboacare/appStyles.dart';
 import 'package:mboacare/colors.dart';
 import 'package:mboacare/settingsPage/theme/themeConstants.dart';
 import 'package:provider/provider.dart';
@@ -115,11 +116,11 @@ class _ThemeScreenState extends State<ThemeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Padding(
+                      Padding(
                           padding: EdgeInsets.only(left: 4.0),
                           child: Text(
                             'Dark mode',
-                            style: TextStyle(
+                            style: AppTextStyles.bodyOne.copyWith(
                                 fontWeight: FontWeight.w400,
                                 // color: AppColors.textColor2,
                                 fontSize: 16),

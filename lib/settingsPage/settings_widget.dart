@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mboacare/appStyles.dart';
 import 'package:mboacare/colors.dart';
 
 class SettingsPageListTiles extends StatelessWidget {
@@ -34,8 +35,8 @@ class SettingsPageListTiles extends StatelessWidget {
                   fontWeight: FontWeight.w600),
             ),
             Text(subtitle,
-                style:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
+                style: AppTextStyles.bodyTwo
+                    .copyWith(fontSize: 15, fontWeight: FontWeight.w400)),
           ]),
           trailing: const Icon(
             Icons.arrow_forward_ios_outlined,
@@ -68,7 +69,7 @@ class Signout extends StatelessWidget {
           leading: icon,
           title: Text(
             title,
-            style: const TextStyle(
+            style: AppTextStyles.bodyTwo.copyWith(
                 fontSize: 16,
                 color: AppColors.textColor2,
                 fontWeight: FontWeight.w600),
@@ -100,7 +101,7 @@ class DeleteAccount extends StatelessWidget {
           leading: icon,
           title: Text(
             title,
-            style: const TextStyle(
+            style: AppTextStyles.bodyTwo.copyWith(
                 fontSize: 16,
                 color: Colors.redAccent,
                 fontWeight: FontWeight.w600),
@@ -143,7 +144,7 @@ class RadioTile extends StatelessWidget {
           ),
           Text(
             text,
-            style: const TextStyle(
+            style: AppTextStyles.bodyTwo.copyWith(
                 fontWeight: FontWeight.w400,
                 // color: AppColors.textColor2,
                 fontSize: 16),

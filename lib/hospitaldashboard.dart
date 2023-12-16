@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mboacare/appStyles.dart';
 import 'package:mboacare/chip_widget.dart';
 import 'package:mboacare/hospitaldetails.dart';
 import 'package:provider/provider.dart';
@@ -79,7 +80,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                 },
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: AppColors.colorWhite,
                   labelText: 'Search Hospitals',
                   // labelStyle: const TextStyle(color: AppColors.primaryColor),
                   border: OutlineInputBorder(
@@ -101,6 +102,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                   ),
                   prefixIcon: const Icon(
                     Icons.search,
+                    size: iconSize,
                     color: AppColors.primaryColor,
                   ),
                   contentPadding: const EdgeInsets.symmetric(
@@ -123,12 +125,12 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
               children: [
                 RichText(
                   // textAlign: TextAlign.center,
-                  text: const TextSpan(
+                  text: TextSpan(
                     children: [
                       TextSpan(
                         text: 'Connecting Hospitals Globally',
-                        style: TextStyle(
-                          fontSize: 28,
+                        style: AppTextStyles.headerTwo.copyWith(
+                          fontSize: 28.0,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryColor,
                           fontFamily:
@@ -139,10 +141,10 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                   ),
                 ),
                 const SizedBox(height: 16.0),
-                const Text(
+                Text(
                   'Effortlessly Access a Network of Hospitals Worldwide',
-                  style: TextStyle(
-                    fontSize: 16,
+                  style: AppTextStyles.bodyOne.copyWith(
+                    fontSize: 16.0,
                     fontWeight: FontWeight.w400,
                     color: AppColors.secondaryTextColor,
                     fontFamily:
@@ -393,12 +395,13 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                                   hospitalProvider.filteredHospitals[index]
                                               .hospitalSpecialities ==
                                           ''
-                                      ? const Padding(
+                                      ? Padding(
                                           padding: EdgeInsets.only(
                                               left: 12.0, bottom: 8.0),
                                           child: Text(
                                             'This facility has no specialties',
-                                            style: TextStyle(
+                                            style:
+                                                AppTextStyles.bodyTwo.copyWith(
                                               fontWeight: FontWeight.w600,
                                               color: Colors.red,
                                               fontFamily: 'Inter',
@@ -460,7 +463,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Text(
           filterOption,
-          style: TextStyle(
+          style: AppTextStyles.bodyOne.copyWith(
             fontSize: 16,
             color: _selectedFilter == filterOption
                 ? AppColors.primaryColor
