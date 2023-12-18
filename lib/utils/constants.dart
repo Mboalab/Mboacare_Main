@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mboacare/colors.dart';
+import 'package:mboacare/global/styles/colors.dart';
 
 import '../cache/sharedpreferences.dart';
 
@@ -140,4 +140,4 @@ TextStyle dialogActionButtonTextStyle() {
   );
 }
 
-const String baseUrl = "https://us-central1-mboacare-api-v1.cloudfunctions.net/api/";
+

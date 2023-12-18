@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mboacare/appStyles.dart';
-import 'package:mboacare/blog/blog_page.dart';
+import 'package:mboacare/global/styles/appStyles.dart';
+import 'package:mboacare/app_modules/user/screens/dashboard/blog_page.dart';
+import 'package:mboacare/app_modules/user/screens/dashboard/home.dart';
+import 'package:mboacare/global/styles/assets_string.dart';
 
-import '../colors.dart';
-import '../dashboard.dart';
-import '../hospitaldashboard.dart';
-import '../settingsPage/settings.dart';
+import '../global/styles/colors.dart';
+import '../app_modules/user/screens/dashboard/hospital.dart';
+import '../app_modules/user/screens/dashboard/settings.dart';
 
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({Key? key}) : super(key: key);
@@ -36,7 +37,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   height: 10,
                 ),
                 Image.asset(
-                  'lib/assests/images/user.png',
+                  ImageAssets.user,
                   width: 80,
                   height: 80,
                 ),
@@ -83,7 +84,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     : Colors.transparent),
             child: ListTile(
               leading: SvgPicture.asset(
-                'lib/assests/icons/home.svg',
+                ImageAssets.home,
                 color: selectedIndex == 0 ? Colors.white : Colors.black,
               ),
               title: Text(
@@ -97,10 +98,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 setState(() {
                   selectedIndex = 0;
                 });
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const DashboardContent()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Home()));
               },
             ),
           ),
@@ -114,7 +113,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     : Colors.transparent),
             child: ListTile(
               leading: SvgPicture.asset(
-                'lib/assests/icons/blog.svg',
+                ImageAssets.blog,
                 color: selectedIndex == 1 ? Colors.white : Colors.black,
               ),
               title: Text(
@@ -145,7 +144,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     : Colors.transparent),
             child: ListTile(
               leading: SvgPicture.asset(
-                'lib/assests/icons/hospital.svg',
+                ImageAssets.hospital,
                 color: selectedIndex == 2 ? Colors.white : Colors.black,
               ),
               title: Text(
@@ -174,7 +173,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     : Colors.transparent),
             child: ListTile(
               leading: SvgPicture.asset(
-                'lib/assests/icons/unselected_user.svg',
+                ImageAssets.user1,
                 color: selectedIndex == 3 ? Colors.white : Colors.black,
               ),
               title: Text(

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
-import '../colors.dart';
+import '../global/styles/colors.dart';
 import '../utils/constants.dart';
 
 class EditTextForm extends StatelessWidget {

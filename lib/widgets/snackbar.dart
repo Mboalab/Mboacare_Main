@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../colors.dart';
+import '../global/styles/colors.dart';
 import '../utils/constants.dart';
 
 final ScaffoldMessengerState?  scaffoldMessengerState = scaffoldKey.currentState;

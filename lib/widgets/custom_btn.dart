@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mboacare/widgets/extensions.dart';
 import '../../utils/constants.dart';
-import '../colors.dart';
+import '../global/styles/colors.dart';
 
 class AppButton extends StatelessWidget {
   final Function()? onPressed;
