@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mboacare/appStyles.dart';
-import 'package:mboacare/colors.dart';
-import 'package:mboacare/sign_up/sign_up_page.dart';
+import 'package:mboacare/global/styles/appStyles.dart';
+import 'package:mboacare/global/styles/colors.dart';
+import 'package:mboacare/app_modules/auth/sign_up_page.dart';
 
 class HomeNavigationItems extends StatelessWidget {
   final String title;

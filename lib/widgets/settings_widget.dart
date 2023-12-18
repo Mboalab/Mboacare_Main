@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mboacare/appStyles.dart';
-import 'package:mboacare/colors.dart';
+import 'package:mboacare/global/styles/appStyles.dart';
+import 'package:mboacare/global/styles/colors.dart';
 
 class SettingsPageListTiles extends StatelessWidget {
   final Widget icon;
