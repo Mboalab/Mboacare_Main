@@ -1,27 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:mboacare/dashboard.dart';
-import 'package:mboacare/facilities/view/screens/facilities_page.dart';
-import 'package:mboacare/settingsPage/aboutUs/aboutUs.dart';
-import 'package:mboacare/settingsPage/settings.dart';
-import 'package:mboacare/settingsPage/theme/themeConstants.dart';
-import 'package:mboacare/settingsPage/theme/themeScreen.dart';
-import 'package:mboacare/colors.dart';
-import 'package:mboacare/sign_up/view_model/signup_provider.dart';
-import 'package:mboacare/splash.dart';
+import 'package:get/get.dart';
+import 'package:mboacare/global/theme/themeConstants.dart';
+import 'package:mboacare/services/signup_provider.dart';
+import 'package:mboacare/app_modules/splashscreen/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:mboacare/user_profile_page.dart';
-import 'package:mboacare/user_provider.dart';
-import 'package:mboacare/user_data.dart';
-import 'package:mboacare/sign_up/view_model/signup_provider.dart';
-import 'package:mboacare/utils/constants.dart';
+import 'package:mboacare/services/user_provider.dart';
 import 'package:provider/provider.dart';
-import 'add_hospital/add_hospital_provider.dart';
-import 'hospital_provider.dart';
+import 'services/add_hospital_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'locale_provider.dart';
-import 'l10n/app_localizations.dart';
-import 'login/login_provider.dart';
-import 'package:mboacare/facilities/provider/facilities_provider.dart';
+import 'global/l10n/app_localizations.dart';
+import 'services/hospital_provider.dart';
+import 'services/locale_provider.dart';
+import 'services/login_provider.dart';
+import 'package:mboacare/services/facilities_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,10 +40,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Flutter Demo',
+    return GetMaterialApp(
+        title: 'Mboacare',
         debugShowCheckedModeBanner: false,
-        themeMode: Provider.of<ThemeProvider>(context).themeMode,
+       // themeMode: Provider.of<ThemeProvider>(context).themeMode,
         theme: Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
             ? ThemeData.dark().copyWith(
                 // colorScheme: ,
@@ -102,13 +93,6 @@ class MyApp extends StatelessWidget {
           return supportedLocales.first;
         },
         home: const SplashScreen(),
-        routes: {
-          '/themeScreen': (context) => const ThemeScreen(),
-          //'/deleteDialog': (context) => DeleteAccountDialog(),
-          '/profilePage': (context) => const ProfilePage(),
-          '/aboutUs': (context) => const AboutUs(),
-          '/home': (context) => const DashboardContent(),
-          '/facilities': (context) => const FacilitiesPage(),
-        });
+        );
   }
 }
