@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:mboacare/appStyles.dart';
-import 'package:mboacare/blog/add_blog_page.dart';
-import '../colors.dart';
+import 'package:mboacare/global/styles/appStyles.dart';
+import 'package:mboacare/global/styles/assets_string.dart';
+import '../../../../global/styles/colors.dart';
 import 'dart:developer' as devtools show log;
-import '../notifications/notifications.dart';
-import 'blog_data.dart';
+import '../../../../model/blog_data.dart';
 
 class BlogPage extends StatefulWidget {
   const BlogPage({super.key});
@@ -16,13 +14,6 @@ class BlogPage extends StatefulWidget {
 
 class _BlogPageState extends State<BlogPage> {
   List<BlogItem> blogItems = [];
-
-  void _navigateToAddBlogPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const AddBlogPage()),
-    );
-  }
 
   @override
   void initState() {
@@ -40,18 +31,6 @@ class _BlogPageState extends State<BlogPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primaryColor,
-        onPressed: () {
-          _navigateToAddBlogPage();
-        },
-        tooltip: 'Add blog article',
-        child: const Icon(
-          Icons.add,
-          size: 40.0,
-          color: Colors.white,
-        ),
-      ),
       body: Column(
         children: [
           const SizedBox(height: 18.0),
@@ -246,14 +225,14 @@ Widget _buildBlogList() {
     body: Padding(
         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
         child: ListView(
-          children: const [
+          children: [
             TopBlogCard(
-              imagePath: 'lib/assests/images/apollo.jpg',
+              imagePath: ImageAssets.topBlog,
               topStackCardText: 'Wellbeing tips',
               blogTitle: 'dirt morning desk ate scene fed harbor',
               authorName: 'Lula Steele',
               blogTime: '10/15/2047',
-              authorImage: 'lib/assests/images/logo.png',
+              authorImage: ImageAssets.logo,
             ),
           ],
         )),
