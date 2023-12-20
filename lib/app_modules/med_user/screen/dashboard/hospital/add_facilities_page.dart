@@ -212,6 +212,7 @@ class _AddFacilitiesPageState extends State<AddFacilitiesPage> {
                             hospitalSize: selectedSize,
                             hospitalImage: _selectedImage!);
                       }
+                      //call the routing here
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.buttonColor,
