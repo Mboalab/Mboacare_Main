@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mboacare/app_modules/user/screens/inner_screen/hospitaldetails.dart';
+import 'package:mboacare/app_modules/med_user/screen/inner_screen/hospitaldetails.dart';
+//import 'package:mboacare/app_modules/user/screens/inner_screen/hospitaldetails.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';

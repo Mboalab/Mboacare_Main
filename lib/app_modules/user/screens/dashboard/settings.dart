@@ -68,20 +68,20 @@ class SettingsPage extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              SettingsPageListTiles(
-                  icon: const Icon(
-                    Iconsax.profile_add,
-                    color: AppColors.textColor2,
-                    size: iconSize,
-                  ),
-                  title: 'Account',
-                  subtitle: 'Profile',
-                  trailingIcon: const Icon(
-                    Icons.arrow_forward_ios_outlined,
-                  ),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/profilePage');
-                  }),
+              // SettingsPageListTiles(
+              //     icon: const Icon(
+              //       Iconsax.profile_add,
+              //       color: AppColors.textColor2,
+              //       size: iconSize,
+              //     ),
+              //     title: 'Account',
+              //     subtitle: 'Profile',
+              //     trailingIcon: const Icon(
+              //       Icons.arrow_forward_ios_outlined,
+              //     ),
+              //     onTap: () {
+              //       Navigator.pushNamed(context, '/profilePage');
+              //     }),
               SettingsPageListTiles(
                   icon: const Icon(
                     Iconsax.global_edit,
@@ -110,18 +110,18 @@ class SettingsPage extends StatelessWidget {
                   onTap: () {
                     Navigator.pushNamed(context, '/themeScreen');
                   }),
-              SettingsPageListTiles(
-                  icon: SvgPicture.asset(
-                    ImageAssets.hospital,
-                    color: AppColors.textColor2,
-                    // size: iconSize,
-                  ),
-                  title: 'Facilities',
-                  subtitle: 'Manage Facilities',
-                  trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/facilities');
-                  }),
+              // SettingsPageListTiles(
+              //     icon: SvgPicture.asset(
+              //       ImageAssets.hospital,
+              //       color: AppColors.textColor2,
+              //       // size: iconSize,
+              //     ),
+              //     title: 'Facilities',
+              //     subtitle: 'Manage Facilities',
+              //     trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
+              //     onTap: () {
+              //       Navigator.pushNamed(context, '/facilities');
+              //     }),
               SettingsPageListTiles(
                   icon: const Icon(
                     Iconsax.info_circle,
@@ -133,33 +133,6 @@ class SettingsPage extends StatelessWidget {
                   trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
                   onTap: () {
                     Navigator.pushNamed(context, '/aboutUs');
-                  }),
-              Signout(
-                  icon: const Icon(Iconsax.logout,
-                      color: AppColors.textColor2, size: iconSize),
-                  title: 'Signout',
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const SignoutDialog();
-                        });
-                  }),
-              DeleteAccount(
-                  //iconColor: Colors.redAccent,
-                  icon: const Icon(
-                    Iconsax.trash,
-                    size: iconSize,
-                    color: Colors.redAccent,
-                  ),
-                  //color: AppColors.textColor2, size: 25),
-                  title: 'Delete Account',
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const DeleteAccountDialog();
-                        });
                   }),
             ],
           ),
@@ -381,104 +354,6 @@ class _SignoutDialogState extends State<SignoutDialog> {
                     'Sign out',
                     style: AppTextStyles.bodyOne.copyWith(
                         fontSize: 16.0,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white),
-                    //textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class DeleteAccountDialog extends StatelessWidget {
-  const DeleteAccountDialog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.4,
-        constraints: const BoxConstraints(maxHeight: 500, maxWidth: 500),
-        decoration: BoxDecoration(
-          color: AppColors.googleButtonColor,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 15,
-            ),
-            GestureDetector(
-                onTap: Navigator.of(context).pop,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 20.0),
-                  child: Align(
-                      alignment: Alignment.topRight,
-                      child: SvgPicture.asset(
-                        ImageAssets.close,
-                        height: 18,
-                      )),
-                )),
-            const Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 15)),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                // borderRadius: BorderRadius.circular(13),
-                color: Color.fromARGB(255, 228, 207, 207),
-              ),
-              child: const Icon(
-                Iconsax.trash,
-                color: Colors.red,
-                size: iconSize,
-              ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Text(
-              'Delete account',
-              style: AppTextStyles.bodyTwo
-                  .copyWith(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              child: Text(
-                'If your account is deleted, all your data willl be lost.',
-                style: AppTextStyles.bodyTwo
-                    .copyWith(fontWeight: FontWeight.w400, fontSize: 16),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            InkWell(
-              onTap: null,
-              child: Container(
-                width: MediaQuery.of(context).size.height * 0.34,
-                height:
-                    //50,
-                    MediaQuery.of(context).size.height * 0.07,
-                decoration: BoxDecoration(
-                    color: AppColors.deleteColor,
-                    borderRadius: BorderRadius.circular(35)),
-                child: Center(
-                  child: Text(
-                    'Delete my account',
-                    style: AppTextStyles.bodyOne.copyWith(
-                        fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: Colors.white),
                     //textAlign: TextAlign.center,
