@@ -213,6 +213,7 @@ class _AddFacilitiesPageState extends State<AddFacilitiesPage> {
                             hospitalImage: _selectedImage!);
                       }
                       //call the routing here
+                      Navigator.pushNamed(context, '/awaitApproval');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.buttonColor,

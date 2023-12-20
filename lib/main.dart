@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mboacare/app_modules/med_user/screen/dashboard/home.dart';
+import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/awaitApprovalScreen.dart';
 import 'package:mboacare/app_modules/user/screens/inner_screen/aboutUs.dart';
 import 'package:mboacare/app_modules/user/screens/inner_screen/user_profile_page.dart';
 import 'package:mboacare/global/theme/themeConstants.dart';
@@ -97,9 +99,11 @@ class MyApp extends StatelessWidget {
       },
       home: const SplashScreen(),
       routes: {
+        ('/home'): (context) => Home(),
         ('/aboutUs'): (context) => AboutUs(),
         ('/themeScreen'): (context) => ThemeScreen(),
         ('/profilePage'): (context) => ProfilePage(),
+        ('/awaitApproval'): (context) => AwaitApprovalScreen()
       },
     );
   }
