@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:mboacare/app_modules/med_user/screen/inner_screen/hospitaldetails.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/utils/app_dropdown.dart';
 import 'package:mboacare/widgets/chip_widget.dart';
-import 'package:mboacare/app_modules/user/screens/inner_screen/hospitaldetails.dart';
+//import 'package:mboacare/app_modules/user/screens/inner_screen/hospitaldetails.dart';
 import 'package:provider/provider.dart';
 import '../../../../model/hospital_model.dart';
 import '../../../../global/styles/colors.dart';
 import 'dart:developer' as devtools show log;
 
 import '../../../../services/hospital_provider.dart';
-
-
 
 class HospitalDashboard extends StatefulWidget {
   const HospitalDashboard({super.key});
