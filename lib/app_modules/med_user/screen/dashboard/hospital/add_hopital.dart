@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/search_address.dart';
+import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/utils/constants.dart';
 import 'package:mboacare/widgets/custom_btn.dart';
 import 'package:mboacare/widgets/extensions.dart';
 import 'package:provider/provider.dart';
 import '../../../../user/user_dashboard.dart';
 import '../../../../../global/styles/colors.dart';
-
 
 import '../../../../user/screens/dashboard/hospital.dart';
 import '../../../../../widgets/input_fields.dart';
@@ -17,8 +19,8 @@ import '../../../../../widgets/chips_items.dart';
 import '../../../../../widgets/image_upload_view.dart';
 
 class AddHospitalPage extends StatefulWidget {
-  const AddHospitalPage({super.key});
-
+  AddHospitalPage({super.key, required this.placeName});
+  String placeName;
   @override
   State<AddHospitalPage> createState() => _AddHospitalPageState();
 }
@@ -26,10 +28,10 @@ class AddHospitalPage extends StatefulWidget {
 class _AddHospitalPageState extends State<AddHospitalPage> {
   bool? argIsChecked = false;
   String? selectedTitle = "";
+  bool isAddressAvailable = false;
 
   void handleItemSelected(String? title, bool? isChecked) {
     debugPrint("Selected:: Title: $title, isChecked: $isChecked");
-    setState(() {});
     selectedTitle = title;
     argIsChecked = isChecked;
   }
@@ -61,7 +63,7 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Form(
-            key: provider.formKey,
+            // key: provider.formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -106,15 +108,14 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
                     )),
                 SizedBox(height: AppFontSizes.fontSize6),
                 EditTextForm(
-                    hintText: "Enter name",
-                    controller: provider.hospitalNameController,
-                    onChanged: (value) {
-                      setState(() {
-                        provider.setHospitalName(value);
-                      });
-                    },
+                  hintText: "Enter name",
+                  controller: provider.hospitalNameController,
+                  onChanged: (value) {
+                    setState(() {
+                      provider.setHospitalName(value);
+                    });
+                  },
                 ),
-
                 SizedBox(height: AppFontSizes.fontSize20),
                 Align(
                     alignment: Alignment.centerLeft,
@@ -131,14 +132,14 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
                     )),
                 SizedBox(height: AppFontSizes.fontSize6),
                 EditTextForm(
-                    hintText: "Enter email",
-                    prefixIcon: AppImages.emailIcon,
-                    controller: provider.hospitalEmailController,
-                    onChanged: (value) {
-                      setState(() {
-                        provider.setHospitalEmail(value);
-                      });
-                    },
+                  hintText: "Enter email",
+                  prefixIcon: ImageAssets.emailIcon,
+                  controller: provider.hospitalEmailController,
+                  onChanged: (value) {
+                    setState(() {
+                      provider.setHospitalEmail(value);
+                    });
+                  },
                 ),
                 SizedBox(height: AppFontSizes.fontSize20),
                 Align(
@@ -214,10 +215,31 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
                       ),
                     )),
                 SizedBox(height: AppFontSizes.fontSize6),
-                EditTextForm(
-                  hintText: "Add address",
-                  controller: provider.hospitalAddressController,
-                  prefixIcon: AppImages.markerPinIcon,
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => SearchAddress());
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.borderColor),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Row(
+                      children: [
+                        Image.asset(ImageAssets.makerIcon,
+                            width: 22.0, height: 22.0),
+                        Text(
+                          isAddressAvailable ? "Add address" : widget.placeName,
+                          style: GoogleFonts.inter(
+                              color: AppColors.hintTextColor,
+                              fontSize: AppFontSizes.fontSize16,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 SizedBox(height: AppFontSizes.fontSize20),
                 Align(
@@ -235,23 +257,24 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
                     )),
                 SizedBox(height: AppFontSizes.fontSize6),
                 provider.medicalServicesChipItems.isNotEmpty
-                ? Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: ChipListView(
-                    listItems: provider.medicalServicesChipItems,
-                    textController: provider.hospitalMedicalController,
-                    onRemoveClicked: () {  }, ),
-                ) : const SizedBox.shrink(),
+                    ? Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: ChipListView(
+                          listItems: provider.medicalServicesChipItems,
+                          textController: provider.hospitalMedicalController,
+                          onRemoveClicked: () {},
+                        ),
+                      )
+                    : const SizedBox.shrink(),
                 EditTextForm(
-                    hintText: "Add a medical service",
-                    controller: provider.hospitalMedicalController,
-                    onSubmitted: (text) {
-                      if (text.isNotEmpty) {
-                        provider.addToMedsChip(text);
-                      }
-                    },
+                  hintText: "Add a medical service",
+                  controller: provider.hospitalMedicalController,
+                  onSubmitted: (text) {
+                    if (text.isNotEmpty) {
+                      provider.addToMedsChip(text);
+                    }
+                  },
                 ),
-
                 SizedBox(height: AppFontSizes.fontSize20),
                 Align(
                     alignment: Alignment.centerLeft,
@@ -269,24 +292,25 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
                 SizedBox(height: AppFontSizes.fontSize6),
                 provider.facilitiesAvailableChipItems.isNotEmpty
                     ? Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: ChipListView(
-                  listItems: provider.facilitiesAvailableChipItems,
-                  textController: provider.hospitalFacilityController,
-                  onRemoveClicked: () {  }, ),
-                    ) : const SizedBox.shrink(),
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: ChipListView(
+                          listItems: provider.facilitiesAvailableChipItems,
+                          textController: provider.hospitalFacilityController,
+                          onRemoveClicked: () {},
+                        ),
+                      )
+                    : const SizedBox.shrink(),
                 EditTextForm(
-                    hintText: "Add facility",
-                    controller: provider.hospitalFacilityController,
-                    onSubmitted: (text) {
-                      debugPrint("onSubmitted: $text");
-                      if (text.isNotEmpty) {
-                        provider.addToFacilitiesChip(text);
-                      }
-                      setState(() {});
-                    },
+                  hintText: "Add facility",
+                  controller: provider.hospitalFacilityController,
+                  onSubmitted: (text) {
+                    debugPrint("onSubmitted: $text");
+                    if (text.isNotEmpty) {
+                      provider.addToFacilitiesChip(text);
+                    }
+                    setState(() {});
+                  },
                 ),
-
                 SizedBox(height: AppFontSizes.fontSize20),
                 Align(
                     alignment: Alignment.centerLeft,
@@ -306,21 +330,17 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
                   hintText: "Select hospital type",
                   controller: provider.hospitalTypeController,
                   readonly: true,
-                  onTap: () => hospitalTypeBottomSheet(
-                      context,
-                    pageTitle: "Hospital Type",
-                    listItems: provider.hospitalTypeList,
-                    onCloseIconClicked: () {
-                      Navigator.pop(context);
-                    },
-                    onItemClicked: (title, checked) {
-                        setState(() {});
-                        provider.hospitalTypeController.text = title.toString();
-                    }
-                  ),
-                  suffixIcon: AppImages.arrowDown,
+                  onTap: () => hospitalTypeBottomSheet(context,
+                      pageTitle: "Hospital Type",
+                      listItems: provider.hospitalTypeList,
+                      onCloseIconClicked: () {
+                    Navigator.pop(context);
+                  }, onItemClicked: (title, checked) {
+                    setState(() {});
+                    provider.hospitalTypeController.text = title.toString();
+                  }),
+                  suffixIcon: ImageAssets.arrowIcon,
                 ),
-
                 SizedBox(height: AppFontSizes.fontSize20),
                 Align(
                     alignment: Alignment.centerLeft,
@@ -339,22 +359,18 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
                 EditTextForm(
                   hintText: "Select hospital size",
                   readonly: true,
-                  suffixIcon: AppImages.arrowDown,
+                  suffixIcon: ImageAssets.arrowIcon,
                   controller: provider.hospitalSizeController,
-                    onTap: () => hospitalTypeBottomSheet(
-                        context,
-                        pageTitle: "Hospital Size",
-                        listItems: provider.hospitalSizeList,
-                        onCloseIconClicked: () {
-                          Navigator.pop(context);
-                        },
-                        onItemClicked: (title, checked) {
-                          setState(() {});
-                          provider.hospitalSizeController.text = title.toString();
-                        }
-                    ),
+                  onTap: () => hospitalTypeBottomSheet(context,
+                      pageTitle: "Hospital Size",
+                      listItems: provider.hospitalSizeList,
+                      onCloseIconClicked: () {
+                    Navigator.pop(context);
+                  }, onItemClicked: (title, checked) {
+                    setState(() {});
+                    provider.hospitalSizeController.text = title.toString();
+                  }),
                 ),
-
                 SizedBox(height: AppFontSizes.fontSize20),
                 Align(
                     alignment: Alignment.centerLeft,
@@ -373,27 +389,25 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
                 EditTextForm(
                   hintText: "Select hospital ownership",
                   readonly: true,
-                  suffixIcon: AppImages.arrowDown,
+                  suffixIcon: ImageAssets.arrowIcon,
                   controller: provider.hospitalOwnerShipController,
-                  onTap: () => hospitalTypeBottomSheet(
-                      context,
+                  onTap: () => hospitalTypeBottomSheet(context,
                       pageTitle: "Hospital Ownership",
                       listItems: provider.hospitalSizeOwnershipList,
                       onCloseIconClicked: () {
-                        Navigator.pop(context);
-                      },
-                      onItemClicked: (title, checked) {
-                        setState(() {});
-                        provider.hospitalOwnerShipController.text = title.toString();
-                      }
-                  ),
+                    Navigator.pop(context);
+                  }, onItemClicked: (title, checked) {
+                    setState(() {});
+                    provider.hospitalOwnerShipController.text =
+                        title.toString();
+                  }),
                 ),
                 SizedBox(height: AppFontSizes.fontSize20),
                 provider.selectedImage != null
                     ? SelectedImageView(
-                    selectedImage: provider.selectedImage,
-                  onTap: provider.pickImage,
-                )
+                        selectedImage: provider.selectedImage,
+                        onTap: provider.pickImage,
+                      )
                     : ImageUploadView(
                         onTap: provider.pickImage,
                       ),
@@ -402,25 +416,26 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
                   child: SizedBox(
                     width: context.getWidth() / 3,
                     child: AppButton(
+                        status: false,
                         onPressed: () {
                           provider.concatenateMedicalServices();
                           provider.concatenateFacilities();
                           provider.concatenateEmergencyService();
                           Future.delayed(const Duration(seconds: 1)).then((_) {
-                            provider.submitForm(
-                              onSuccessNavigate: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const HospitalDashboard(),
-                                  ),
-                                );
-                              }
-                            );
+                            provider.submitForm(onSuccessNavigate: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const HospitalDashboard(),
+                                ),
+                              );
+                            });
                           });
                         },
                         title: 'Submit',
-                        enabled: provider.formKey.currentState?.validate() == true),
+                        enabled:
+                            provider.formKey.currentState?.validate() == true),
                   ),
                 ),
               ],
@@ -431,14 +446,11 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
     );
   }
 
-  void hospitalTypeBottomSheet(
-      BuildContext context,
-      {
-        String? pageTitle,
-        List<String>? listItems,
-        Function()? onCloseIconClicked,
-        Function(String?, bool?)? onItemClicked
-      }) {
+  void hospitalTypeBottomSheet(BuildContext context,
+      {String? pageTitle,
+      List<String>? listItems,
+      Function()? onCloseIconClicked,
+      Function(String?, bool?)? onItemClicked}) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
@@ -459,7 +471,6 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
       receivedNumber = number;
     });
   }
-
 }
 
 class ChecklistItem {
@@ -468,4 +479,3 @@ class ChecklistItem {
 
   ChecklistItem({required this.title, required this.isChecked});
 }
-
