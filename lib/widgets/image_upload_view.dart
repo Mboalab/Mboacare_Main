@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mboacare/global/styles/assets_string.dart';
 
 import '../global/styles/colors.dart';
 import '../utils/constants.dart';
@@ -30,7 +31,7 @@ class ImageUploadView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: Image.asset(
-                AppImages.uploadIcon,
+                ImageAssets.uploadIcon,
                 width: 30,
                 height: 30,
               ),
@@ -57,7 +58,6 @@ class ImageUploadView extends StatelessWidget {
     );
   }
 }
-
 
 class SelectedImageView extends StatelessWidget {
   const SelectedImageView({super.key, this.selectedImage, this.onTap});
@@ -87,8 +87,10 @@ class SelectedImageView extends StatelessWidget {
                 onTap: onTap,
                 child: Container(
                   height: 32,
-                  margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 6),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 2, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: ShapeDecoration(
                     color: AppColors.primaryColor,
                     shape: RoundedRectangleBorder(

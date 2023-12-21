@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/widgets/extensions.dart';
 
 import '../global/styles/colors.dart';
@@ -70,7 +71,7 @@ class _CheckItemListState extends State<CheckItemList> {
                 InkWell(
                   onTap: widget.onCloseIconClicked,
                   child: SvgPicture.asset(
-                    AppImages.closeIcon,
+                    ImageAssets.close1,
                   ),
                 )
               ],
@@ -149,8 +150,8 @@ class CheckItems extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 20.0),
                 child: Image.asset(
                   isSelected
-                      ? AppImages.checkRingIcon
-                      : AppImages.uncheckRingIcon,
+                      ? ImageAssets.checkedRing
+                      : ImageAssets.uncheckedRing,
                   width: 24,
                   height: 24,
                 ),

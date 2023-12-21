@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mboacare/widgets/extensions.dart';
 import '../../utils/constants.dart';
@@ -9,13 +10,14 @@ class AppButton extends StatelessWidget {
   final String title;
   final bool enabled;
   final Color? color;
-
-  const AppButton({
+bool? status;
+   AppButton({
     Key? key,
     required this.onPressed,
     required this.title,
     required this.enabled,
     this.color,
+    this.status
   }) : super(key: key);
 
   @override
@@ -23,7 +25,7 @@ class AppButton extends StatelessWidget {
     return CupertinoButton(
         padding: EdgeInsets.zero,
         onPressed: enabled ? onPressed : null,
-        child: Container(
+        child: status == false? Container(
             height: AppFontSizes.fontSize40,
             // margin: const EdgeInsets.only(left: 20,right: 20),
             padding: EdgeInsets.symmetric(
@@ -42,7 +44,7 @@ class AppButton extends StatelessWidget {
                         fontWeight: FontWeight.w600)
                 )
             )
-        )
+        ):const Center(child: SpinKitThreeBounce(color: AppColors.primaryColor))
     );
   }
 }
