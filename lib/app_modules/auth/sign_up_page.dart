@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mboacare/global/styles/assets_string.dart';
+import 'package:mboacare/services/registerProvider.dart';
 import 'package:mboacare/services/signup_provider.dart';
 import 'package:mboacare/utils/constants.dart';
 import 'package:mboacare/utils/validations.dart';
@@ -7,8 +10,10 @@ import 'package:mboacare/widgets/custom_btn.dart';
 import 'package:mboacare/widgets/input_fields.dart';
 import 'package:mboacare/widgets/password_validation_view.dart';
 import 'package:provider/provider.dart';
+import '../../utils/snack_succ.dart';
 import '../med_user/screen/dashboard/hospital/add_hopital.dart';
 import '../../global/styles/colors.dart';
+import 'login.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -37,7 +42,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset(
-                    AppImages.appLogo,
+                    ImageAssets.logo,
                     width: AppFontSizes.fontSize125,
                   ),
                   SizedBox(
@@ -170,21 +175,49 @@ class _SignUpPageState extends State<SignUpPage> {
                     controller: provider.passwordController,
                   ),
                   SizedBox(height: AppFontSizes.fontSize18),
+
+                  // Consumer<RegisterProvider>(builder: (
+                  //   context,
+                  //   auth,
+                  //   child,
+                  // ) {
+                  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+                  //     if (auth.reqMessage != '') {
+                  //       snackMessage(
+                  //         message: auth.reqMessage,
+                  //         context: context,
+                  //       );
+                  //       auth.clear();
+                  //     }
+                  //   });
+                  //   return AppButton(
+                  //     onPressed: () {
+                  //       auth.register(
+                  //           email: provider.emailController.text, password: provider.passwordController.text);
+                  //     },
+                  //     title: "Register",
+                  //     enabled: provider.isValidRegister,
+                  //     status: auth.isLoading,
+                  //     //model.isValidRegister
+                  //   );
+                  // }),
                   AppButton(
                     onPressed: () {
-                      provider.signUpWithEmailAndPassword(
-                        onSuccessNavigate: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const AddHospitalPage(),
-                            ),
-                          );
-                        }
-                      );
+                      Get.to(() =>  AddHospitalPage(placeName: '',));
+                      // provider.signUpWithEmailAndPassword(
+                      //   onSuccessNavigate: () {
+                      //     Navigator.pushReplacement(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (context) => const AddHospitalPage(),
+                      //       ),
+                      //     );
+                      //   }
+                      // );
                     },
                     title: "Register",
                     enabled: provider.isValidRegister,
+                    status: false,
                     //model.isValidRegister
                   ),
                   SizedBox(height: AppFontSizes.fontSize1),
@@ -197,20 +230,18 @@ class _SignUpPageState extends State<SignUpPage> {
                   SizedBox(height: AppFontSizes.fontSize1),
                   AppBorderButton(
                     onPressed: () {
-                      provider.signUpWithGoogle(
-                        onSuccessNavigate: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const AddHospitalPage(),
-                            ),
-                          );
-                        }
-                      );
+                      provider.signUpWithGoogle(onSuccessNavigate: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>  AddHospitalPage(placeName: '',),
+                          ),
+                        );
+                      });
                     },
                     title: "Register with Google",
                     showImage: true,
-                    image: AppImages.googleIcon,
+                    image: ImageAssets.googleIcon,
                     borderColor: AppColors.borderColor,
                     textColor: AppColors.greenColor,
                     //model.isValidRegister
@@ -218,16 +249,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   SizedBox(height: AppFontSizes.fontSize16),
                   TextButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) =>
-                              const AddHospitalPage()));
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (_) =>
-                      //             const LoginScreen(title: "Mboacare")));
+                      Get.to(() => const LoginScreen(title: "Mboacare"));
                     },
                     child: Text(
                       "Already have an account? Log in",

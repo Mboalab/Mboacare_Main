@@ -30,8 +30,8 @@ class AddHospitalProvider extends ChangeNotifier {
   final hospitalSpecialitiesController = TextEditingController();
   final hospitalBedCapacityController = TextEditingController();
   final hospitalEmergencyServicesController = TextEditingController();
-  String initialCountry = 'NG';
-  final number = PhoneNumber(isoCode: 'NG');
+  String initialCountry = 'CM';
+  final number = PhoneNumber(isoCode: 'CM');
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final String documentId =
       'aeac9fSTIeI6UD0OywSj'; // ID of the document to fetch

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/services/login_provider.dart';
 import 'package:mboacare/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset(
-                  AppImages.appLogo,
+                  ImageAssets.logo,
                   width: 120,
                 ),
                 SizedBox(height: AppFontSizes.fontSize12),
@@ -163,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         onSuccessNavigate: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const AddHospitalPage()),
+                            MaterialPageRoute(builder: (_) =>  AddHospitalPage(placeName: '',)),
                           );
                         }
                     );
@@ -177,13 +178,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     provider.signInWithGoogle(
                         onSuccessNavigate: () {
                           Navigator.push(
-                              context, MaterialPageRoute(builder: (_) => const AddHospitalPage()));
+                              context, MaterialPageRoute(builder: (_) =>  AddHospitalPage(placeName: '',)));
                         }
                     );
                   },
                   title: AppStrings.signInWithGoogle,
                   showImage: true,
-                  image: AppImages.googleIcon,
+                  image: ImageAssets.googleIcon,
                   borderColor: AppColors.borderColor,
                   textColor: AppColors.greenColor,
                   //model.isValidRegister

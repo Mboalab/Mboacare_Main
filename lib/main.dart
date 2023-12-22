@@ -5,7 +5,8 @@ import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/awaitApp
 import 'package:mboacare/app_modules/user/screens/inner_screen/aboutUs.dart';
 import 'package:mboacare/app_modules/user/screens/inner_screen/user_profile_page.dart';
 import 'package:mboacare/global/theme/themeConstants.dart';
-import 'package:mboacare/global/theme/themeScreen.dart';
+import 'package:mboacare/services/map_services/locationProvider.dart';
+import 'package:mboacare/services/registerProvider.dart';
 import 'package:mboacare/services/signup_provider.dart';
 import 'package:mboacare/app_modules/splashscreen/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,7 +18,6 @@ import 'global/l10n/app_localizations.dart';
 import 'services/hospital_provider.dart';
 import 'services/locale_provider.dart';
 import 'services/login_provider.dart';
-import 'package:mboacare/services/facilities_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +32,8 @@ void main() async {
       ChangeNotifierProvider(create: (_) => UserDataProvider()),
       ChangeNotifierProvider(create: (_) => UserDataProvider()),
       ChangeNotifierProvider(create: (_) => ThemeProvider()),
-      ChangeNotifierProvider(create: (_) => FacilitiesProvider()),
+      ChangeNotifierProvider(create: (_) => LocationProvider()),
+      ChangeNotifierProvider(create: (_) => RegisterProvider()),
       // Add other providers here if needed.
     ],
     child: const MyApp(),

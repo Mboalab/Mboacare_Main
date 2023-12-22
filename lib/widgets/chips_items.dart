@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
-
-import '../utils/constants.dart';
 
 class ChipListView extends StatefulWidget {
   const ChipListView({
@@ -22,7 +21,6 @@ class ChipListView extends StatefulWidget {
 }
 
 class _ChipListViewState extends State<ChipListView> {
-
   void removeChip(int index) {
     setState(() {
       widget.listItems.removeAt(index);
@@ -40,16 +38,16 @@ class _ChipListViewState extends State<ChipListView> {
         debugPrint("Chips title: $items");
         return ChipItem(
           chipTitle: items,
-          onRemoveClicked: ()=> removeChip(index),
+          onRemoveClicked: () => removeChip(index),
         );
       }).toList(),
     );
   }
 }
 
-
 class ChipItem extends StatelessWidget {
-  const ChipItem({super.key, required this.chipTitle, required this.onRemoveClicked});
+  const ChipItem(
+      {super.key, required this.chipTitle, required this.onRemoveClicked});
 
   final String chipTitle;
   final Function() onRemoveClicked;
@@ -84,7 +82,7 @@ class ChipItem extends StatelessWidget {
           InkWell(
             onTap: onRemoveClicked,
             child: SvgPicture.asset(
-              AppImages.closeIcon,
+              ImageAssets.close1,
             ),
           )
         ],
