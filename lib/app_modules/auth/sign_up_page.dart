@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mboacare/app_modules/auth/success_screen.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/services/registerProvider.dart';
 import 'package:mboacare/services/signup_provider.dart';
@@ -203,7 +204,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   // }),
                   AppButton(
                     onPressed: () {
-                      Get.to(() =>  AddHospitalPage(placeName: '',));
+                      Get.to(() =>const  SuccessScreen());
                       // provider.signUpWithEmailAndPassword(
                       //   onSuccessNavigate: () {
                       //     Navigator.pushReplacement(
@@ -234,7 +235,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>  AddHospitalPage(placeName: '',),
+                            builder: (context) =>const  SuccessScreen(),
                           ),
                         );
                       });

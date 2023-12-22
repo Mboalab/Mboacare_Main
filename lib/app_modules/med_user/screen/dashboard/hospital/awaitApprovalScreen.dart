@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
+import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
 
 class AwaitApprovalScreen extends StatelessWidget {
@@ -17,7 +18,7 @@ class AwaitApprovalScreen extends StatelessWidget {
           Align(
             alignment: Alignment.topCenter,
             child: Image.asset(
-              'assets/images/check_ring.png',
+              ImageAssets.checkedRing,
               height: 150,
               width: 150,
             ),

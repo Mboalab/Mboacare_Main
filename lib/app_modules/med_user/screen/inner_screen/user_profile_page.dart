@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mboacare/app_modules/med_user/screen/inner_screen/user_password_update.dart';
 import 'package:mboacare/widgets/user_avatar.dart';
 import 'package:mboacare/global/styles/colors.dart';
-import 'package:mboacare/app_modules/user/screens/inner_screen/user_password_update.dart';
+
 import 'package:mboacare/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
