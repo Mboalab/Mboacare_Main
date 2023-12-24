@@ -29,7 +29,7 @@ class CheckMailScreen extends StatelessWidget {
             .copyWith(fontSize: 24, fontWeight: FontWeight.bold),
       ),
       const SizedBox(
-        height: 15,
+        height: 16,
       ),
       Text(
         'A reset password link has been sent to you.',
