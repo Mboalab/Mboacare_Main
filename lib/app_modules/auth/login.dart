@@ -20,7 +20,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<LoginProvider>(context);
@@ -38,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: 120,
                 ),
                 SizedBox(height: AppFontSizes.fontSize12),
-                 Text(
+                Text(
                   AppStrings.welcome,
                   style: GoogleFonts.inter(
                     fontSize: AppFontSizes.fontSize22,
@@ -47,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(height: AppFontSizes.fontSize14),
-                 Text(
+                Text(
                   AppStrings.details,
                   style: GoogleFonts.inter(
                     fontSize: AppFontSizes.fontSize16,
@@ -56,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(height: AppFontSizes.fontSize20),
-                 Align(
+                Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 1),
@@ -70,17 +69,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     )),
                 SizedBox(height: AppFontSizes.fontSize10),
                 EditTextForm(
-                    hintText: AppStrings.enterEmail,
-                    controller: provider.emailController,
-                    onChanged: (value) {
-                      setState(() {
-                        provider.setEmail(value);
-                        provider.validSignIn();
-                      });
-                    },
-                    ),
+                  hintText: AppStrings.enterEmail,
+                  controller: provider.emailController,
+                  onChanged: (value) {
+                    setState(() {
+                      provider.setEmail(value);
+                      provider.validSignIn();
+                    });
+                  },
+                ),
                 SizedBox(height: AppFontSizes.fontSize20),
-                 Align(
+                Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: EdgeInsets.only(left: AppFontSizes.fontSize4),
@@ -119,36 +118,39 @@ class _LoginScreenState extends State<LoginScreen> {
                           activeColor: Colors.green,
                           shape: RoundedRectangleBorder(
                             side: BorderSide(
-                              color: provider.rememberMe ? AppColors.primaryColor : AppColors.borderColor,
-                              width: 1.0
-                            ),
-                              borderRadius: BorderRadius.circular(AppFontSizes.fontSize4),
+                                color: provider.rememberMe
+                                    ? AppColors.primaryColor
+                                    : AppColors.borderColor,
+                                width: 1.0),
+                            borderRadius:
+                                BorderRadius.circular(AppFontSizes.fontSize4),
                           ),
                         ),
                         Text(
                           AppStrings.remember,
                           style: GoogleFonts.inter(
-                              color: AppColors.signInButtonColor,
-                              fontSize: AppFontSizes.fontSize14,
-                              fontWeight: FontWeight.w500,
+                            color: AppColors.signInButtonColor,
+                            fontSize: AppFontSizes.fontSize14,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
                     ),
                     TextButton(
                       onPressed: () {
-                        if (provider.emailController.text.isNotEmpty) {
-                          provider.sendPasswordResetEmail(provider.emailController.text.trim());
-                        } else {
-                          showMessage(message: "Please enter your email to reset the password.");
-                        }
+                        Navigator.pushNamed(context, '/forgotPassword');
+                        // if (provider.emailController.text.isNotEmpty) {
+                        //   provider.sendPasswordResetEmail(provider.emailController.text.trim());
+                        // } else {
+                        //   showMessage(message: "Please enter your email to reset the password.");
+                        // }
                       },
-                      child:  Text(
+                      child: Text(
                         AppStrings.forgot,
                         style: GoogleFonts.inter(
-                            color: AppColors.signInButtonColor,
-                            fontSize: AppFontSizes.fontSize14,
-                            fontWeight: FontWeight.w500,
+                          color: AppColors.signInButtonColor,
+                          fontSize: AppFontSizes.fontSize14,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
@@ -160,14 +162,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 AppButton(
                   title: AppStrings.sign,
                   onPressed: () {
-                    provider.signInWithEmailAndPassword(
-                        onSuccessNavigate: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) =>  AddHospitalPage(placeName: '',)),
-                          );
-                        }
-                    );
+                    provider.signInWithEmailAndPassword(onSuccessNavigate: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => AddHospitalPage(
+                                  placeName: '',
+                                )),
+                      );
+                    });
                   },
                   enabled: provider.isValidSignIn,
                 ),
@@ -175,12 +178,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 // Login with Google Button
                 AppBorderButton(
                   onPressed: () {
-                    provider.signInWithGoogle(
-                        onSuccessNavigate: () {
-                          Navigator.push(
-                              context, MaterialPageRoute(builder: (_) =>  AddHospitalPage(placeName: '',)));
-                        }
-                    );
+                    provider.signInWithGoogle(onSuccessNavigate: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => AddHospitalPage(
+                                    placeName: '',
+                                  )));
+                    });
                   },
                   title: AppStrings.signInWithGoogle,
                   showImage: true,
@@ -191,33 +196,33 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(height: AppFontSizes.fontSize10),
                 TextButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const SignUpPage()));
-                  },
-                    child:RichText(
-                      text:  TextSpan(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const SignUpPage()));
+                    },
+                    child: RichText(
+                      text: TextSpan(
                         children: [
                           TextSpan(
                               text: AppStrings.doNotHaveAccount,
-                            style: GoogleFonts.inter(
-                              color: AppColors.primaryColor,
-                                fontSize: AppFontSizes.fontSize14,
-                                fontWeight: FontWeight.w400
-                            )
-                          ),
+                              style: GoogleFonts.inter(
+                                  color: AppColors.primaryColor,
+                                  fontSize: AppFontSizes.fontSize14,
+                                  fontWeight: FontWeight.w400)),
                           TextSpan(
                             text: AppStrings.signUp,
                             style: GoogleFonts.inter(
-                              color: AppColors.primaryColor,
+                                color: AppColors.primaryColor,
                                 fontSize: AppFontSizes.fontSize14,
-                                fontWeight: FontWeight.w600// Set the color for "Sign up"
-                            ),
+                                fontWeight: FontWeight
+                                    .w600 // Set the color for "Sign up"
+                                ),
                           ),
                         ],
                       ),
-                    )
-                ),
+                    )),
               ],
             ),
           ),
