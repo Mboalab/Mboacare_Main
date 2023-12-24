@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:mboacare/app_modules/auth/login.dart';
-import 'package:mboacare/app_modules/auth/resetPassword.dart';
+import 'package:mboacare/app_modules/auth/checkMail.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
@@ -16,7 +16,7 @@ class ForgotPasswordScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(height: 100),
+          const SizedBox(height: 150),
           Align(
             alignment: Alignment.topCenter,
             child: Image.asset(
@@ -57,7 +57,7 @@ class ForgotPasswordScreen extends StatelessWidget {
             onPressed: () {
               //call the routing here
               //  Navigator.pushNamed(context, '/resetPassword');
-              Get.to(() => const ResetPasswordScreen());
+              Get.to(() => const CheckMailScreen());
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color.fromARGB(255, 26, 99, 32),
