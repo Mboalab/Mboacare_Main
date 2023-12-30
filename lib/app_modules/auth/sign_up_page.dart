@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mboacare/app_modules/auth/success_screen.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/services/registerProvider.dart';
-import 'package:mboacare/services/signup_provider.dart';
+
 import 'package:mboacare/utils/constants.dart';
 import 'package:mboacare/utils/validations.dart';
 import 'package:mboacare/widgets/custom_btn.dart';
@@ -26,7 +26,7 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<SignUpProvider>(context);
+    final provider = Provider.of<RegisterProvider>(context);
 
     return Scaffold(
       body: SafeArea(
@@ -176,51 +176,29 @@ class _SignUpPageState extends State<SignUpPage> {
                     controller: provider.passwordController,
                   ),
                   SizedBox(height: AppFontSizes.fontSize18),
-
-                  // Consumer<RegisterProvider>(builder: (
-                  //   context,
-                  //   auth,
-                  //   child,
-                  // ) {
-                  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-                  //     if (auth.reqMessage != '') {
-                  //       snackMessage(
-                  //         message: auth.reqMessage,
-                  //         context: context,
-                  //       );
-                  //       auth.clear();
-                  //     }
-                  //   });
-                  //   return AppButton(
-                  //     onPressed: () {
-                  //       auth.register(
-                  //           email: provider.emailController.text, password: provider.passwordController.text);
-                  //     },
-                  //     title: "Register",
-                  //     enabled: provider.isValidRegister,
-                  //     status: auth.isLoading,
-                  //     //model.isValidRegister
-                  //   );
-                  // }),
-                  AppButton(
-                    onPressed: () {
-                      Get.to(() =>const  SuccessScreen());
-                      // provider.signUpWithEmailAndPassword(
-                      //   onSuccessNavigate: () {
-                      //     Navigator.pushReplacement(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (context) => const AddHospitalPage(),
-                      //       ),
-                      //     );
-                      //   }
-                      // );
-                    },
-                    title: "Register",
-                    enabled: provider.isValidRegister,
-                    status: false,
-                    //model.isValidRegister
-                  ),
+                  Consumer<RegisterProvider>(builder: (
+                    context,
+                    auth,
+                    child,
+                  ) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (auth.reqMessage != '') {
+                        auth.clear();
+                      }
+                    });
+                    return AppButton(
+                      onPressed: () {
+                        auth.register(
+                            context: context,
+                            email: provider.emailController.text,
+                            password: provider.passwordController.text);
+                      },
+                      title: "Register",
+                      enabled: provider.isValidRegister,
+                      status: auth.isLoading,
+                      //model.isValidRegister
+                    );
+                  }),
                   SizedBox(height: AppFontSizes.fontSize1),
                   Text(
                     provider.registrationStatus,
@@ -229,28 +207,32 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   SizedBox(height: AppFontSizes.fontSize1),
-                  AppBorderButton(
-                    onPressed: () {
-                      provider.signUpWithGoogle(onSuccessNavigate: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>const  SuccessScreen(),
-                          ),
-                        );
-                      });
-                    },
-                    title: "Register with Google",
-                    showImage: true,
-                    image: ImageAssets.googleIcon,
-                    borderColor: AppColors.borderColor,
-                    textColor: AppColors.greenColor,
-                    //model.isValidRegister
-                  ),
+                  Consumer<RegisterProvider>(builder: (
+                    context,
+                    auth,
+                    child,
+                  ) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (auth.reqMessage != '') {
+                        auth.clear();
+                      }
+                    });
+                    return AppBorderButton(
+                      onPressed: () {
+                        auth.signUpWithGoogle(context: context);
+                      },
+                      title: "Register with Google",
+                      showImage: true,
+                      image: ImageAssets.googleIcon,
+                      borderColor: AppColors.borderColor,
+                      textColor: AppColors.greenColor,
+                      //model.isValidRegister
+                    );
+                  }),
                   SizedBox(height: AppFontSizes.fontSize16),
                   TextButton(
                     onPressed: () {
-                      Get.to(() => const LoginScreen(title: "Mboacare"));
+                      Get.to(() => const LoginScreen());
                     },
                     child: Text(
                       "Already have an account? Log in",
