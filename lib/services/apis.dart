@@ -12,6 +12,7 @@ class Apis {
   static const String updateProfile = "$baseUrl/auth/update-profile";
   static const String resetPassword = "$baseUrl/auth/reset-password";
   static const String changePassword = "$baseUrl/auth/change-password";
+  static const String verificationLink = "$baseUrl/auth/send-link";
 
 /*----------------------------------hospital endpoints--------------------------------------------------- */
 }
