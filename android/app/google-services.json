@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "437038645587-2enbribvkmgkjo2q5t5f2gincfa0944f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mboacare",
+            "certificate_hash": "4cc84f1a23740b7dcf5bfeaf3499fe7d60edce5a"
+          }
+        },
+        {
           "client_id": "437038645587-jr1pehldufietakvej0emptuv50r8ne3.apps.googleusercontent.com",
           "client_type": 3
         }

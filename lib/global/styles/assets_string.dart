@@ -31,4 +31,5 @@ class ImageAssets {
   static String close1 = "$IMAGE_ASSETS/close.svg";
   static String checkedRing = "$IMAGE_ASSETS/check_ring.png";
   static String uncheckedRing = "$IMAGE_ASSETS/uncheck_ring.png";
+  static String homeImage = "$IMAGE_ASSETS/homepage-tile-background2.jpg";
 }

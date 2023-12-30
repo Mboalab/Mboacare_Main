@@ -48,7 +48,7 @@ class SuccessScreen extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               //call the routing here
-              Get.to(() => const LoginScreen(title: ''));
+              Get.to(() => const LoginScreen());
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.buttonColor,

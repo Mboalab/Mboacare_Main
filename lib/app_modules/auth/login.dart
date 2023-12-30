@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mboacare/app_modules/auth/forgotPassword.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
-import 'package:mboacare/services/login_provider.dart';
+import 'package:mboacare/services/loginProvider.dart';
+
 import 'package:mboacare/utils/constants.dart';
+import 'package:mboacare/utils/snack_succ.dart';
 import 'package:provider/provider.dart';
-import '../med_user/screen/dashboard/hospital/add_hopital.dart';
+
 import 'sign_up_page.dart';
 import '../../global/styles/colors.dart';
 
 import '../../widgets/custom_btn.dart';
 import '../../widgets/input_fields.dart';
-import '../../widgets/snackbar.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key, required String title}) : super(key: key);
+  const LoginScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -138,12 +143,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/forgotPassword');
-                        // if (provider.emailController.text.isNotEmpty) {
-                        //   provider.sendPasswordResetEmail(provider.emailController.text.trim());
-                        // } else {
-                        //   showMessage(message: "Please enter your email to reset the password.");
-                        // }
+                        Get.to(() => const ForgotPasswordScreen(),
+                            duration: const Duration(
+                              milliseconds: 800,
+                            ),
+                            curve: Curves.easeInCirc,
+                            transition: Transition.fadeIn);
                       },
                       child: Text(
                         AppStrings.forgot,
@@ -159,48 +164,61 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 24),
                 // Login with Email Button
-                AppButton(
-                  title: AppStrings.sign,
-                  onPressed: () {
-                    provider.signInWithEmailAndPassword(onSuccessNavigate: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => AddHospitalPage(
-                                  placeName: '',
-                                )),
-                      );
-                    });
-                  },
-                  enabled: provider.isValidSignIn,
-                ),
+                Consumer<LoginProvider>(builder: (
+                  context,
+                  auth,
+                  child,
+                ) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (auth.reqMessage != '') {
+                      auth.clear();
+                    }
+                  });
+                  return AppButton(
+                    onPressed: () {
+                      auth.login(
+                          context: context,
+                          email: provider.emailController.text,
+                          password: provider.passwordController.text);
+                    },
+                    title: "Login",
+                    enabled: provider.isValidSignIn,
+                    status: auth.isLoading,
+                  );
+                }),
                 SizedBox(height: AppFontSizes.fontSize14),
                 // Login with Google Button
-                AppBorderButton(
-                  onPressed: () {
-                    provider.signInWithGoogle(onSuccessNavigate: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => AddHospitalPage(
-                                    placeName: '',
-                                  )));
-                    });
-                  },
-                  title: AppStrings.signInWithGoogle,
-                  showImage: true,
-                  image: ImageAssets.googleIcon,
-                  borderColor: AppColors.borderColor,
-                  textColor: AppColors.greenColor,
-                  //model.isValidRegister
-                ),
+                Consumer<LoginProvider>(builder: (
+                  context,
+                  auth,
+                  child,
+                ) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (auth.reqMessage != '') {
+                      auth.clear();
+                    }
+                  });
+                  return AppBorderButton(
+                    onPressed: () {
+                      auth.signInWithGoogle(context: context);
+                    },
+                    title: AppStrings.signInWithGoogle,
+                    showImage: true,
+                    image: ImageAssets.googleIcon,
+                    borderColor: AppColors.borderColor,
+                    textColor: AppColors.greenColor,
+                    //model.isValidRegister
+                  );
+                }),
                 SizedBox(height: AppFontSizes.fontSize10),
                 TextButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const SignUpPage()));
+                      Get.to(() => const SignUpPage(),
+                          duration: const Duration(
+                            milliseconds: 800,
+                          ),
+                          curve: Curves.easeInCirc,
+                          transition: Transition.zoom);
                     },
                     child: RichText(
                       text: TextSpan(

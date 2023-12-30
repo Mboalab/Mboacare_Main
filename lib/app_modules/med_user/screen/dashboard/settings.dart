@@ -4,7 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
-import 'package:mboacare/services/signup_provider.dart';
+import 'package:mboacare/services/registerProvider.dart';
 import 'package:mboacare/widgets/settings_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -298,7 +298,7 @@ class SignoutDialog extends StatefulWidget {
 class _SignoutDialogState extends State<SignoutDialog> {
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<SignUpProvider>(context);
+    final provider = Provider.of<RegisterProvider>(context);
     return Dialog(
       child: Container(
         width: MediaQuery.of(context).size.width,
