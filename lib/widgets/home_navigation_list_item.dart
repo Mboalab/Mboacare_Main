@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
+import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
-import 'package:mboacare/app_modules/auth/sign_up_page.dart';
+
 
 class HomeNavigationItems extends StatelessWidget {
   final String title;
@@ -26,13 +27,13 @@ class HomeNavigationItems extends StatelessWidget {
         borderRadius: BorderRadius.circular(14.0),
         color: AppColors.primaryColor,
         // backgroundBlendMode: BlendMode.color,
-        image: const DecorationImage(
+        image:  DecorationImage(
           fit: BoxFit
               .cover, //I assumed you want to occupy the entire space of the card
           image: AssetImage(
-            'lib/assests/images/homepage-tile-background2.jpg',
+           ImageAssets.homeImage,
           ),
-          colorFilter: ColorFilter.mode(
+          colorFilter:const ColorFilter.mode(
             // AppColors.primaryColor,
             AppColors.greenColor,
             BlendMode.color,
