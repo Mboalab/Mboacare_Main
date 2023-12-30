@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:mboacare/app_modules/auth/login.dart';
-import 'package:mboacare/app_modules/auth/checkMail.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
+import 'package:mboacare/services/forgotPasswordProvider.dart';
+import 'package:mboacare/widgets/custom_btn.dart';
+import 'package:mboacare/widgets/input_fields.dart';
+import 'package:provider/provider.dart';
 
-class ForgotPasswordScreen extends StatelessWidget {
+import '../../utils/constants.dart';
+
+class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ForgotPasswordProvider>(context);
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         children: [
           const SizedBox(height: 150),
           Align(
@@ -43,38 +51,66 @@ class ForgotPasswordScreen extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          const Padding(
-            padding: EdgeInsets.only(left: 20, right: 20),
-            child: TextField(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(), labelText: 'Enter your Email'),
-            ),
+          EditTextForm(
+            hintText: AppStrings.enterEmail,
+            controller: provider.emailController,
+            onChanged: (value) {
+              setState(() {
+                provider.setEmail(value);
+                provider.validSignIn();
+              });
+            },
           ),
           const SizedBox(
-            height: 25,
+            height: 40,
           ),
-          ElevatedButton(
-            onPressed: () {
-              //call the routing here
-              //  Navigator.pushNamed(context, '/resetPassword');
-              Get.to(() => const CheckMailScreen());
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 26, 99, 32),
-              foregroundColor: AppColors.whiteColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
-              minimumSize: const Size(150, 45),
-            ),
-            child: const Text(
-              'Submit',
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
+          Consumer<ForgotPasswordProvider>(builder: (
+            context,
+            auth,
+            child,
+          ) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (auth.reqMessage != '') {
+                // snackMessage(
+                //   message: auth.reqMessage,
+                //   context: context,
+                // );
+                auth.clear();
+              }
+            });
+            return AppButton(
+              onPressed: () {
+                auth.resetPassword(
+                  context: context,
+                  email: provider.emailController.text,
+                );
+              },
+              title: "Submit",
+              enabled: provider.isValidSignIn,
+              status: auth.isLoading,
+            );
+
+            // ElevatedButton(
+            //   onPressed: () {
+
+            //   },
+            //   style: ElevatedButton.styleFrom(
+            //     backgroundColor: const Color.fromARGB(255, 26, 99, 32),
+            //     foregroundColor: AppColors.whiteColor,
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(5),
+            //     ),
+            //     minimumSize: const Size(150, 45),
+            //   ),
+            //   child: const Text(
+            //     'Submit',
+            //     style: TextStyle(
+            //       fontSize: 17,
+            //       fontWeight: FontWeight.w500,
+            //     ),
+            //   ),
+            // );
+          }),
         ],
       ),
     );
