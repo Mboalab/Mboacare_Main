@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
+import 'package:mboacare/services/loginProvider.dart';
 import 'package:mboacare/services/registerProvider.dart';
 import 'package:mboacare/widgets/settings_widget.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +16,7 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<LoginProvider>(context);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -28,25 +32,26 @@ class Settings extends StatelessWidget {
                 child: Row(
                   children: [
                     CircleAvatar(
-                      backgroundImage: AssetImage(ImageAssets.profile),
+                      backgroundImage: NetworkImage(provider.profileImage),
                       radius: 45,
+                      //child: Container( child: Image.network(provider.profileImage)),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(left: 18.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Janet Dolittle',
-                            style: TextStyle(
+                            provider.userName ?? 'Mboa User',
+                            style: GoogleFonts.quicksand(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.textColor2),
                           ),
                           Padding(padding: EdgeInsets.only(bottom: 5)),
                           Text(
-                            'janetdolittle@mail.org',
-                            style: TextStyle(
+                            provider.userEmail ?? 'mboauser@gmail.com',
+                            style: GoogleFonts.quicksand(
                               fontSize: 15,
                             ),
                           ),
@@ -298,7 +303,7 @@ class SignoutDialog extends StatefulWidget {
 class _SignoutDialogState extends State<SignoutDialog> {
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<RegisterProvider>(context);
+    final provider = Provider.of<LoginProvider>(context);
     return Dialog(
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -363,31 +368,43 @@ class _SignoutDialogState extends State<SignoutDialog> {
             const SizedBox(
               height: 25,
             ),
-            InkWell(
-              onTap: () {
-                provider.signOut();
-                Navigator.pushNamed(context, '/home');
-              },
-              child: Container(
-                width: MediaQuery.of(context).size.height * 0.34,
-                height:
-                    //50,
-                    MediaQuery.of(context).size.height * 0.07,
-                decoration: BoxDecoration(
-                    color: AppColors.deleteColor,
-                    borderRadius: BorderRadius.circular(35)),
-                child: Center(
-                  child: Text(
-                    'Sign out',
-                    style: AppTextStyles.bodyOne.copyWith(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white),
-                    //textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            )
+            Consumer<LoginProvider>(builder: (
+              context,
+              log,
+              child,
+            ) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (log.reqMessage != '') {
+                  log.clear();
+                }
+              });
+              return log.loading
+                  ? const SpinKitThreeBounce(color: AppColors.redColor)
+                  : InkWell(
+                      onTap: () {
+                        log.signOut(context: context);
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.height * 0.34,
+                        height:
+                            //50,
+                            MediaQuery.of(context).size.height * 0.07,
+                        decoration: BoxDecoration(
+                            color: AppColors.deleteColor,
+                            borderRadius: BorderRadius.circular(35)),
+                        child: Center(
+                          child: Text(
+                            'Sign out',
+                            style: AppTextStyles.bodyOne.copyWith(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white),
+                            //textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    );
+            })
           ],
         ),
       ),

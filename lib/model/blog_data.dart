@@ -1,5 +1,4 @@
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'dart:io';
 import 'dart:developer' as devtools show log;
 
@@ -9,6 +8,9 @@ class BlogItem {
   final String title;
   final String author;
   final String date;
+  final bool isApproved;
+  final String blogTitle;
+  final String blogWebLink;
 
   BlogItem({
     required this.imageUrl,
@@ -16,6 +18,9 @@ class BlogItem {
     required this.title,
     required this.author,
     required this.date,
+    required this.isApproved,
+    required this.blogTitle,
+    required this.blogWebLink,
   });
 
   factory BlogItem.fromJson(Map<String, dynamic> json) {
@@ -25,25 +30,10 @@ class BlogItem {
       title: json['blogTitle'],
       author: json['blogAuthor'],
       date: json['blogPubDate'],
+      isApproved: json['isApprove'],
+      blogTitle: json['blogTitle'],
+      blogWebLink: json['blogWebLink'],
     );
-  }
-}
-
-Future<List<BlogItem>> fetchBlogData() async {
-  final response = await http.get(Uri.parse(
-      'https://us-central1-mboacare-api-v1.cloudfunctions.net/api/blog/all-blogs'));
-
-  if (response.statusCode == 200) {
-    final Map<String, dynamic> responseBody = json.decode(response.body);
-
-    if (responseBody.containsKey('data')) {
-      final List<dynamic> data = responseBody['data'];
-      return data.map((item) => BlogItem.fromJson(item)).toList();
-    } else {
-      throw Exception('API response does not contain a "data" field.');
-    }
-  } else {
-    throw Exception('Failed to load blog data');
   }
 }
 

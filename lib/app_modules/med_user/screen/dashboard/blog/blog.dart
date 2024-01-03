@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mboacare/app_modules/user/screens/inner_screen/blog_details.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
+import 'package:mboacare/services/appService.dart';
+import 'package:mboacare/widgets/blog_card.dart';
 import 'dart:developer' as devtools show log;
 import '../../../../../model/blog_data.dart';
 import 'add_blog_page.dart';
-
 
 class Blog extends StatefulWidget {
   const Blog({super.key});
@@ -16,27 +20,13 @@ class Blog extends StatefulWidget {
 }
 
 class _BlogState extends State<Blog> {
-  List<BlogItem> blogItems = [];
-  @override
-  void initState() {
-    super.initState();
-    _fetchBlogData();
-  }
-
-  Future<void> _fetchBlogData() async {
-    List<BlogItem> data = await fetchBlogData();
-    setState(() {
-      blogItems = data;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primaryColor,
         onPressed: () {
-         Get.to(() => const AddBlogPage());
+          Get.to(() => const AddBlogPage());
         },
         tooltip: 'Add blog article',
         child: const Icon(
@@ -61,20 +51,67 @@ class _BlogState extends State<Blog> {
           _buildCategories(context),
           Expanded(
             child: Scaffold(
-              body: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: ListView.builder(
-                    itemCount: blogItems.length,
-                    itemBuilder: (context, index) {
-                      return BottomBlogCard(
-                        imageUrl: blogItems[index].imageUrl,
-                        category: blogItems[index].category,
-                        title: toTitleCase(blogItems[index].title),
-                        author: blogItems[index].author,
-                        date: blogItems[index].date,
+              body: FutureBuilder<List<BlogItem>>(
+                  future: ApiServices().fetchBlogData(),
+                  builder: ((context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: SpinKitWaveSpinner(
+                          size: 45.0,
+                          color: AppColors.buttonColor,
+                        ),
                       );
-                    },
-                  )),
+                    }
+                    if (snapshot.data!.isEmpty) {
+                      return Center(
+                        child: Text(
+                          'No Blog Available!',
+                          style: GoogleFonts.quicksand(
+                            fontSize: 14,
+                          ),
+                        ),
+                      );
+                    }
+                    if (snapshot.connectionState == ConnectionState.none) {
+                      return Center(
+                        child: Text(
+                          'No Internet Connection!',
+                          style: GoogleFonts.quicksand(
+                            fontSize: 14,
+                          ),
+                        ),
+                      );
+                    }
+                    final data = snapshot.data;
+                    return ListView.builder(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        itemCount: data?.length,
+                        itemBuilder: (context, index) {
+                          final blog = data![index];
+                          if (blog.isApproved == false) {
+                          } else if (blog.isApproved == true) {
+                            return BottomBlogCard(
+                              tap: () {
+                                Get.to(
+                                    () => BlogDetails(
+                                        url: blog.blogWebLink,
+                                        title: blog.blogTitle.toString()),
+                                    duration: const Duration(
+                                      milliseconds: 800,
+                                    ),
+                                    curve: Curves.easeInCirc,
+                                    transition: Transition.fadeIn);
+                              },
+                              imageUrl: blog.imageUrl,
+                              category: blog.category,
+                              title: toTitleCase(blog.title),
+                              author: blog.author,
+                              date: blog.date,
+                            );
+                          }
+                        });
+                  })),
             ),
           )
         ],
@@ -282,83 +319,6 @@ Widget _buildCategories(BuildContext context) {
       ),
     ),
   );
-}
-
-class BottomBlogCard extends StatelessWidget {
-  final String imageUrl;
-  final String category;
-  final String title;
-  final String author;
-  final String date;
-  const BottomBlogCard({
-    super.key,
-    required this.imageUrl,
-    required this.category,
-    required this.title,
-    required this.author,
-    required this.date,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: const Color(0XFFF5F5F5),
-      elevation: 0.5,
-      child: SizedBox(
-        height: 120,
-        width: MediaQuery.of(context).size.width,
-        child: Row(
-          children: [
-            Expanded(
-              flex: 30,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                child: Image.network(
-                  imageUrl,
-                  height: 120,
-                  width: 120,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 70,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 5.0, right: 5.0, top: 10.0, bottom: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      category,
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                    const SizedBox(height: 6.0),
-                    Text(
-                      maxLines: 2,
-                      title,
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 6.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(author,
-                            style: const TextStyle(color: Colors.grey)),
-                        Text(date, style: const TextStyle(color: Colors.grey))
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class Categories extends StatelessWidget {
