@@ -18,7 +18,7 @@ dependencies:
   flutter_spinkit: ^5.2.0
   url_launcher: ^6.1.12
   url_launcher_web: ^2.0.18
-  webview_flutter: ^2.0.13
+ # webview_flutter: ^2.0.13
   flutter_form_builder: ^9.1.0
   image_picker: ^1.0.4
   file_picker: ^4.0.0
@@ -55,6 +55,7 @@ dependencies:
   nock: ^1.2.3
   multiselect: ^0.1.0
   get: ^4.6.6
+  webview_flutter: ^3.0.4
 
 dev_dependencies:
   flutter_test:
