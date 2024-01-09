@@ -27,7 +27,7 @@ void main() async {
   await Firebase.initializeApp();
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (_) => HospitalProvider()),
+      //ChangeNotifierProvider(create: (_) => HospitalProvider()),
       ChangeNotifierProvider(create: (_) => LocaleProvider()),
       // ChangeNotifierProvider(create: (_) => SignUpProvider()),
       ChangeNotifierProvider(create: (_) => LoginProvider()),

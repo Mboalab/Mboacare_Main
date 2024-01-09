@@ -4,7 +4,8 @@ import 'package:mboacare/app_modules/med_user/screen/inner_screen/hospitaldetail
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
-import 'package:mboacare/model/hospital_model.dart';
+import 'package:mboacare/model/hospital_data.dart';
+import 'package:mboacare/model/hospital_model/hospital_model.dart';
 import 'package:mboacare/services/hospital_provider.dart';
 import 'package:mboacare/utils/app_dropdown.dart';
 import 'package:mboacare/widgets/chip_widget.dart';
@@ -32,17 +33,17 @@ class _HospitalPageState extends State<HospitalPage> {
   }
 
   Future<void> _refreshData() async {
-    //final hospitalProvider = Provider.of<HospitalProvider>(context);
-    await Future.delayed(const Duration(seconds: 2));
+    // final hospitalProvider = Provider.of<HospitalProvider>(context);
+    // await hospitalProvider.fetchAllHospitals();
     if (!mounted) return;
     setState(() {
-      //hospitalProvider.getHospitalsStream();
+      // hospitalProvider.getHospitalsStream();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final hospitalProvider = Provider.of<HospitalProvider>(context);
+    final hospitalProvider = Provider.of(context);
 
     return GestureDetector(
       onTap: () {
@@ -68,7 +69,7 @@ class _HospitalPageState extends State<HospitalPage> {
                 },
                 onChanged: (query) {
                   devtools.log('Search query: $query');
-                  hospitalProvider.filterHospitals(query);
+                  hospitalProvider.filteredHospitals;
                 },
                 decoration: InputDecoration(
                   filled: true,
@@ -157,19 +158,19 @@ class _HospitalPageState extends State<HospitalPage> {
                 const SizedBox(height: 16.0),
 
                 // Filter Tabs
-                SingleChildScrollView(
+                const SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildFilterTab('View All'),
-                      _buildFilterTab('Surgery'),
-                      _buildFilterTab('Paediatrics'),
-                      _buildFilterTab('Internal Medicine'),
-                      _buildFilterTab('Obstetrics & Gynaecology'),
-                      _buildFilterTab('Cardiology'),
-                      _buildFilterTab('Oncology'),
-                      _buildFilterTab('Neurology'),
+                      // _buildFilterTab('View All'),
+                      // _buildFilterTab('Surgery'),
+                      // _buildFilterTab('Paediatrics'),
+                      // _buildFilterTab('Internal Medicine'),
+                      // _buildFilterTab('Obstetrics & Gynaecology'),
+                      // _buildFilterTab('Cardiology'),
+                      // _buildFilterTab('Oncology'),
+                      // _buildFilterTab('Neurology'),
                     ],
                   ),
                 ),
@@ -203,8 +204,7 @@ class _HospitalPageState extends State<HospitalPage> {
                         hospitalProvider.setSelectedFilter(dropdownValue);
                         Future.delayed(const Duration(milliseconds: 500))
                             .then((_) {
-                          hospitalProvider.updateFilteredHospitalsDropdown(
-                              filteredHospitals);
+                          hospitalProvider.updateFilteredHospitalsDropdown;
                           //hospitalProvider.filterHospitals(_selectedFilter);
                         });
                       });
@@ -220,16 +220,19 @@ class _HospitalPageState extends State<HospitalPage> {
 
                 // Hospitals list
                 Expanded(
-                  child: StreamBuilder<List<HospitalData>>(
-                    stream: hospitalProvider.getHospitalsStream(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        // Apply filtering based on selected filter tab and search query
-                        filteredHospitals = hospitalProvider.applyFilters(
-                          snapshot.data!,
-                          _searchController.text,
-                          _selectedFilter,
-                        );
+                  child: FutureBuilder(
+                      future: hospitalProvider.fetchAllHospitals(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          // Apply filtering based on selected filter tab and search query
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          List<HospitalModel> hospitals =
+                              hospitalProvider.allHospitals;
+                        }
 
                         // Update the _filteredHospitals list with the latest data
                         //hospitalProvider.updateFilteredHospitals(filteredHospitals);
@@ -269,14 +272,14 @@ class _HospitalPageState extends State<HospitalPage> {
                                               BorderRadius.circular(16),
                                           child: hospitalProvider
                                                       .filteredHospitals[index]
-                                                      .hospitalImageUrl !=
+                                                      .hospitalImage !=
                                                   ''
                                               ? Image(
                                                   image: NetworkImage(
                                                       hospitalProvider
                                                           .filteredHospitals[
                                                               index]
-                                                          .hospitalImageUrl),
+                                                          .hospitalImage!),
                                                   fit: BoxFit.cover,
                                                 )
                                               : Image(
@@ -332,8 +335,7 @@ class _HospitalPageState extends State<HospitalPage> {
                                             const EdgeInsets.only(left: 14.0),
                                         child: Text(
                                           hospitalProvider
-                                              .filteredHospitals[index]
-                                              .hospitalName,
+                                              .filteredHospitals[index].name!,
                                           // .toUpperCase(),
                                           style: const TextStyle(
                                             fontSize: 16,
@@ -384,7 +386,7 @@ class _HospitalPageState extends State<HospitalPage> {
                                     padding: const EdgeInsets.only(left: 14.0),
                                     child: Text(
                                       hospitalProvider.filteredHospitals[index]
-                                          .hospitalAddress,
+                                          .placeAddress!,
                                       style: const TextStyle(
                                         fontSize: 16,
                                         color: AppColors.textColor2,
@@ -395,10 +397,10 @@ class _HospitalPageState extends State<HospitalPage> {
                                   const SizedBox(height: 8.0),
                                   // Display Hospital Specialities as Colorful Boxes
                                   hospitalProvider.filteredHospitals[index]
-                                              .hospitalSpecialities ==
+                                              .serviceType ==
                                           ''
                                       ? Padding(
-                                          padding: EdgeInsets.only(
+                                          padding: const EdgeInsets.only(
                                               left: 12.0, bottom: 8.0),
                                           child: Text(
                                             'This facility has no specialties',
@@ -416,10 +418,11 @@ class _HospitalPageState extends State<HospitalPage> {
                                           child: Wrap(
                                             spacing: 5.0,
                                             runSpacing: 5.0,
-                                            children: hospitalProvider
-                                                .filteredHospitals[index]
-                                                .hospitalSpecialities
-                                                .split(',')
+                                            children: (hospitalProvider
+                                                        .filteredHospitals[
+                                                            index]
+                                                        .serviceType ??
+                                                    [])
                                                 .map(
                                                   (speciality) =>
                                                       ChipWidget(speciality),
@@ -433,13 +436,11 @@ class _HospitalPageState extends State<HospitalPage> {
                             );
                           },
                         );
-                      } else {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    },
-                  ),
+                        // } else {
+                        //       return const Center(
+                        //         child: CircularProgressIndicator(),
+                        //       );
+                      }),
                 ),
               ],
             ),
@@ -449,33 +450,33 @@ class _HospitalPageState extends State<HospitalPage> {
     );
   }
 
-  Widget _buildFilterTab(String filterOption) {
-    final hospitalProvider = Provider.of<HospitalProvider>(context);
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedFilter = filterOption;
-          hospitalProvider.setSelectedFilter(filterOption);
-          Future.delayed(const Duration(milliseconds: 500)).then((_) {
-            hospitalProvider.updateFilteredHospitals(filteredHospitals);
-          });
-        });
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Text(
-          filterOption,
-          style: AppTextStyles.bodyOne.copyWith(
-            fontSize: 16,
-            color: _selectedFilter == filterOption
-                ? AppColors.primaryColor
-                : Colors.black26,
-            fontWeight: _selectedFilter == filterOption
-                ? FontWeight.w600
-                : FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _buildFilterTab(String filterOption) {
+  //   final hospitalProvider = Provider.of<HospitalProvider>(context);
+  //   return GestureDetector(
+  //     onTap: () {
+  //       setState(() {
+  //         _selectedFilter = filterOption;
+  //         hospitalProvider.setSelectedFilter(filterOption);
+  //         Future.delayed(const Duration(milliseconds: 500)).then((_) {
+  //           hospitalProvider.updateFilteredHospitals;
+  //         });
+  //       });
+  //     },
+  //     child: Padding(
+  //       padding: const EdgeInsets.symmetric(horizontal: 8.0),
+  //       child: Text(
+  //         filterOption,
+  //         style: AppTextStyles.bodyOne.copyWith(
+  //           fontSize: 16,
+  //           color: _selectedFilter == filterOption
+  //               ? AppColors.primaryColor
+  //               : Colors.black26,
+  //           fontWeight: _selectedFilter == filterOption
+  //               ? FontWeight.w600
+  //               : FontWeight.w600,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
