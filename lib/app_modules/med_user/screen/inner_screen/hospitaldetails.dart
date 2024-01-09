@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:mboacare/model/hospital_model/hospital_model.dart';
 import 'package:mboacare/widgets/chip_widget.dart';
 import 'package:mboacare/global/styles/colors.dart';
-import 'package:mboacare/model/hospital_model.dart';
+import 'package:mboacare/model/hospital_data.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 import 'dart:developer' as devtools show log;
 
 class HospitalDetailsPage extends StatefulWidget {
-  final HospitalData hospital;
+  final HospitalModel hospital;
   const HospitalDetailsPage({super.key, required this.hospital});
 
   @override
@@ -43,22 +44,16 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    address = widget.hospital.hospitalAddress;
-    email = widget.hospital.hospitalEmail ?? '';
-    phone = widget.hospital.hospitalPhone ?? '';
-    final specalities = widget.hospital.hospitalSpecialities
-        .split(',')
+    address = widget.hospital.placeAddress!;
+    email = widget.hospital.userEmail ?? '';
+    phone = widget.hospital.phoneNumber ?? '';
+    final specalities =
+        (widget.hospital.serviceType ?? []).map((item) => item.trim()).toList();
+    final facilities = (widget.hospital.facilitiesType ?? [])
         .map((item) => item.trim())
         .toList();
-    final facilities = widget.hospital.hospitalFacilities
-        .split(',')
-        .map((item) => item.trim())
-        .toList();
-    final emergency = widget.hospital.hospitalEmergencyServices
-        ?.split(',')
-        .map((item) => item.trim())
-        .toList();
-    final bedCapacity = widget.hospital.hospitalBedCapacity;
+
+    final bedCapacity = widget.hospital.hospitalSize;
     return Scaffold(
       appBar: AppBar(title: const Text("Hospital Details")),
       body: SafeArea(
@@ -73,11 +68,11 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                       height: 200,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.0),
-                          image: widget.hospital.hospitalImageUrl != ''
+                          image: widget.hospital.hospitalImage != ''
                               ? DecorationImage(
                                   fit: BoxFit.cover,
                                   image: NetworkImage(
-                                    widget.hospital.hospitalImageUrl,
+                                    widget.hospital.hospitalImage!,
                                   ),
                                 )
                               : const DecorationImage(
@@ -92,8 +87,8 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                     bottom: 20,
                     left: MediaQuery.sizeOf(context).width * .3,
                     child: GestureDetector(
-                        onTap: () => _launchURL(widget.hospital.hospitalWebsite!),
-                        child: widget.hospital.hospitalWebsite != ''
+                        onTap: () => _launchURL(widget.hospital.website!),
+                        child: widget.hospital.website != ''
                             ? Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
@@ -130,7 +125,7 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                 height: 10,
               ),
               Text(
-                widget.hospital.hospitalName,
+                widget.hospital.name!,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: AppColors.text,
@@ -156,7 +151,7 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
               const SizedBox(height: 10),
               // Email Box
               InkWell(
-                onTap: (){
+                onTap: () {
                   final Uri mail = Uri(path: email, scheme: 'mailto');
                   url_launcher.launchUrl(mail);
                 },
@@ -170,7 +165,8 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                       prefixIconColor: AppColors.text,
                       hintText: email,
                       hintStyle: const TextStyle(color: AppColors.text),
-                      labelStyle: const TextStyle(color: AppColors.primaryColor),
+                      labelStyle:
+                          const TextStyle(color: AppColors.primaryColor),
                       border: const OutlineInputBorder(
                         borderSide:
                             BorderSide(color: AppColors.primaryColor, width: 2),
@@ -197,9 +193,9 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
               const SizedBox(height: 10),
               // Phone Box
               InkWell(
-                onTap: ()async{
-                  final Uri tel = Uri(scheme:'tel', path: phone);
-                  if(await url_launcher.canLaunchUrl(tel)){
+                onTap: () async {
+                  final Uri tel = Uri(scheme: 'tel', path: phone);
+                  if (await url_launcher.canLaunchUrl(tel)) {
                     await url_launcher.launchUrl(tel);
                   }
                 },
@@ -213,7 +209,8 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                       prefixIconColor: AppColors.text,
                       hintText: phone,
                       hintStyle: const TextStyle(color: AppColors.text),
-                      labelStyle: const TextStyle(color: AppColors.primaryColor),
+                      labelStyle:
+                          const TextStyle(color: AppColors.primaryColor),
                       border: const OutlineInputBorder(
                         borderSide:
                             BorderSide(color: AppColors.primaryColor, width: 2),
@@ -240,13 +237,13 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
               const SizedBox(height: 10),
               // Address Box
               InkWell(
-                onTap: ()async{
+                onTap: () async {
                   String query = Uri.encodeComponent(address);
-                  final Uri mapAddress = Uri.parse("https://www.google.com/maps/search/?api=1&query=$query");
-                  if( await url_launcher.canLaunchUrl(mapAddress)){
+                  final Uri mapAddress = Uri.parse(
+                      "https://www.google.com/maps/search/?api=1&query=$query");
+                  if (await url_launcher.canLaunchUrl(mapAddress)) {
                     await url_launcher.launchUrl(mapAddress);
                   }
-
                 },
                 child: SizedBox(
                   width: 350,
@@ -258,7 +255,8 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                       prefixIconColor: AppColors.text,
                       hintText: address,
                       hintStyle: const TextStyle(color: AppColors.text),
-                      labelStyle: const TextStyle(color: AppColors.primaryColor),
+                      labelStyle:
+                          const TextStyle(color: AppColors.primaryColor),
                       border: const OutlineInputBorder(
                         borderSide:
                             BorderSide(color: AppColors.primaryColor, width: 2),
@@ -358,16 +356,16 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                   ),
                 ),
               ),
-              Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: emergency!.isNotEmpty
-                      ? Wrap(
-                          runSpacing: 5,
-                          spacing: 5,
-                          children: emergency.map((item) {
-                            return ChipWidget(item);
-                          }).toList())
-                      : Container()),
+              // Padding(
+              //     padding: const EdgeInsets.all(5.0),
+              //     child: emergency!.isNotEmpty
+              //         ? Wrap(
+              //             runSpacing: 5,
+              //             spacing: 5,
+              //             children: emergency.map((item) {
+              //               return ChipWidget(item);
+              //             }).toList())
+              //         : Container()),
               const SizedBox(
                 height: 10,
               ),

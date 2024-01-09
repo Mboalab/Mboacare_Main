@@ -14,13 +14,19 @@ class Apis {
   static const String changePassword = "$baseUrl/auth/change-password";
   static const String verificationLink = "$baseUrl/auth/send-link";
 
-
 /*----------------------------------blog endpoints--------------------------------------------------- */
   static const String allBlog = "$baseUrl/blog/all-blogs";
-   static const String addBlog = "$baseUrl/blog/add-blog";
+  static const String addBlog = "$baseUrl/blog/add-blog";
 
 /*----------------------------------notification endpoints--------------------------------------------------- */
-static const String allNotification = "$baseUrl/notification/all-notifications";
+  static const String allNotification =
+      "$baseUrl/notification/all-notifications";
+
+  // --------------------------Hospital endpoints--------------------------
+  static const allHospitals = '$baseUrl/hospital/all-hospital';
+  static const addHospitals = '$baseUrl/hospital/add-hospital';
+  static const updateHospitals = '$baseUrl/hospital/update-hospital';
+  static const searchHospitals = '$baseUrl/hospital/search?q=Wunmi';
 }
 
 String mapKey = '';
