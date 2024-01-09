@@ -75,6 +75,8 @@ class ApiServices {
 
         if (responseData.containsKey('data')) {
           final List<dynamic> data = responseData['data'];
+          // ignore: avoid_print
+          print(data);
 
           return data.map((item) => HospitalModel.fromJson(item)).toList();
         } else {
@@ -99,7 +101,7 @@ class ApiServices {
         final Map<String, dynamic> responseData = json.decode(response.body);
         if (responseData.containsKey('data')) {
           final List<dynamic> data = responseData['data'];
-          print(responseData);
+          // print(responseData);
           return data
               .map((item) => SearchHospitalModel.fromJson(item))
               .toList();
