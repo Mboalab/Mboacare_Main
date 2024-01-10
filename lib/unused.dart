@@ -565,3 +565,44 @@
     // } catch (e) {
     //   devtools.log('Error fetching hospitals: $e');
     //   // throw Exception('Error fetching hospitals: $e');
+
+
+
+      // Expanded(
+      //                         child: FutureBuilder<List<HospitalModel>>(
+      //                             future: ApiServices().fetchAllHospitals(),
+      //                             builder: (context, snapshot) {
+      //                               if (!snapshot.hasData) {
+      //                                 return const Center(
+      //                                   child: SpinKitWaveSpinner(
+      //                                     size: 50.0,
+      //                                     color: AppColors.buttonColor,
+      //                                     trackColor: AppColors.registerCard,
+      //                                     waveColor: AppColors.deleteColor,
+      //                                   ),
+      //                                 );
+      //                               }
+      //                               if (snapshot.hasError) {
+      //                                 return Text('Error: ${snapshot.error}');
+      //                               }
+
+      //                               final hospitalData = snapshot.data;
+      //                               return ListView.builder(
+      //                                 itemCount: hospitalData!.length,
+      //                                 itemBuilder: (context, index) {
+      //                                   final hospital = hospitalData[index];
+
+      //                                   return Card(
+
+
+
+        // List<HospitalModel> _filterHospitals(String name, String location) {
+  //   return hospitalData
+  //       .where((hospital) =>
+  //           hospital.name?.toLowerCase().contains(name.toLowerCase()) == true ||
+  //           hospital.placeAddress
+  //                   ?.toLowerCase()
+  //                   .contains(location.toLowerCase()) ==
+  //               true)
+  //       .toList();
+  // }
