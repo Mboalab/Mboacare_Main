@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mboacare/app_modules/med_user/screen/inner_screen/hospitaldetails.dart';
 //import 'package:mboacare/app_modules/user/screens/inner_screen/hospitaldetails.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
@@ -6,6 +7,8 @@ import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
 import 'package:mboacare/model/hospital_data.dart';
 import 'package:mboacare/model/hospital_model/hospital_model.dart';
+import 'package:mboacare/model/search_hospital_model.dart';
+import 'package:mboacare/services/appService.dart';
 import 'package:mboacare/services/hospital_provider.dart';
 import 'package:mboacare/utils/app_dropdown.dart';
 import 'package:mboacare/widgets/chip_widget.dart';
@@ -23,7 +26,7 @@ class _HospitalPageState extends State<HospitalPage> {
   final TextEditingController _searchController = TextEditingController();
   String _selectedFilter = 'View All'; // Initialize with 'View All'
   String dropdownValue = dropdownItems.first; // Initialize with 'View All'
-  late List<HospitalData> filteredHospitals;
+  List<SearchHospitalModel> filteredHospitals = [];
   final FocusNode _searchFocusNode = FocusNode();
   final TextEditingController dropdownController = TextEditingController();
   @override
@@ -33,18 +36,35 @@ class _HospitalPageState extends State<HospitalPage> {
   }
 
   Future<void> _refreshData() async {
-    // final hospitalProvider = Provider.of<HospitalProvider>(context);
-    // await hospitalProvider.fetchAllHospitals();
+    Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
+    setState(() {});
+  }
+
+  Future<void> _searchForHospitals(String name, String location) async {
+    final hospitals = await ApiServices().searchHospital();
+
     setState(() {
-      // hospitalProvider.getHospitalsStream();
+      filteredHospitals = hospitals
+          .where((hospital) =>
+              hospital.name?.toLowerCase().contains(name.toLowerCase()) ==
+                  true ||
+              hospital.placeAddress
+                      ?.toLowerCase()
+                      .contains(location.toLowerCase()) ==
+                  true)
+          .toList();
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    final hospitalProvider = Provider.of(context);
+  void initState() {
+    super.initState();
+    ApiServices().fetchAllHospitals();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         // Unfocus the search field when tapping outside
@@ -67,9 +87,8 @@ class _HospitalPageState extends State<HospitalPage> {
                 onTap: () {
                   _searchFocusNode.requestFocus(); // Add this line
                 },
-                onChanged: (query) {
-                  devtools.log('Search query: $query');
-                  hospitalProvider.filteredHospitals;
+                onChanged: (value) {
+                  _searchForHospitals(value, _selectedFilter);
                 },
                 decoration: InputDecoration(
                   filled: true,
@@ -109,7 +128,9 @@ class _HospitalPageState extends State<HospitalPage> {
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: AppColors.primaryColor,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, '/addFacilities');
+          },
           tooltip: 'Add Hospital',
           child: const Icon(
             Icons.add,
@@ -136,8 +157,7 @@ class _HospitalPageState extends State<HospitalPage> {
                           fontSize: 28.0,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryColor,
-                          fontFamily:
-                              'Inter', // Replace with the appropriate font family
+                          fontFamily: 'Inter',
                         ),
                       ),
                     ],
@@ -150,27 +170,26 @@ class _HospitalPageState extends State<HospitalPage> {
                     fontSize: 16.0,
                     fontWeight: FontWeight.w400,
                     color: AppColors.secondaryTextColor,
-                    fontFamily:
-                        'Inter', // Replace with the appropriate font family
+                    fontFamily: 'Inter',
                   ),
                   // textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16.0),
 
                 // Filter Tabs
-                const SingleChildScrollView(
+                SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // _buildFilterTab('View All'),
-                      // _buildFilterTab('Surgery'),
-                      // _buildFilterTab('Paediatrics'),
-                      // _buildFilterTab('Internal Medicine'),
-                      // _buildFilterTab('Obstetrics & Gynaecology'),
-                      // _buildFilterTab('Cardiology'),
-                      // _buildFilterTab('Oncology'),
-                      // _buildFilterTab('Neurology'),
+                      _buildFilterTab('View All'),
+                      _buildFilterTab('Surgery'),
+                      _buildFilterTab('Paediatrics'),
+                      _buildFilterTab('Internal Medicine'),
+                      _buildFilterTab('Obstetrics & Gynaecology'),
+                      _buildFilterTab('Cardiology'),
+                      _buildFilterTab('Oncology'),
+                      _buildFilterTab('Neurology'),
                     ],
                   ),
                 ),
@@ -199,15 +218,15 @@ class _HospitalPageState extends State<HospitalPage> {
                     selectedTrailingIcon:
                         const Icon(Icons.keyboard_arrow_up_outlined),
                     onSelected: (String? newValue) {
-                      setState(() {
-                        dropdownValue = newValue!;
-                        hospitalProvider.setSelectedFilter(dropdownValue);
-                        Future.delayed(const Duration(milliseconds: 500))
-                            .then((_) {
-                          hospitalProvider.updateFilteredHospitalsDropdown;
-                          //hospitalProvider.filterHospitals(_selectedFilter);
-                        });
-                      });
+                      // setState(() {
+                      //   dropdownValue = newValue!;
+                      //  // hospitalProvider.setSelectedFilter(dropdownValue);
+                      //   Future.delayed(const Duration(milliseconds: 500))
+                      //       .then((_) {
+                      //     hospitalProvider.updateFilteredHospitalsDropdown;
+                      //     //hospitalProvider.filterHospitals(_selectedFilter);
+                      //   });
+                      // });
                     },
                     dropdownMenuEntries: dropdownItems
                         .map<DropdownMenuEntry<String>>((String value) {
@@ -220,227 +239,9 @@ class _HospitalPageState extends State<HospitalPage> {
 
                 // Hospitals list
                 Expanded(
-                  child: FutureBuilder(
-                      future: hospitalProvider.fetchAllHospitals(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          // Apply filtering based on selected filter tab and search query
-                          return CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          List<HospitalModel> hospitals =
-                              hospitalProvider.allHospitals;
-                        }
-
-                        // Update the _filteredHospitals list with the latest data
-                        //hospitalProvider.updateFilteredHospitals(filteredHospitals);
-
-                        return ListView.builder(
-                          itemCount: hospitalProvider.filteredHospitals.length,
-                          itemBuilder: (context, index) {
-                            // var hospital = hospitalProvider.hospitals[index];
-                            // devtools.log(hospital.hospitalImageUrl);
-                            return Card(
-                              elevation: 5.0,
-                              margin: const EdgeInsets.symmetric(
-                                vertical: 16.0,
-                                horizontal: 5.0,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16.0),
-                                side: const BorderSide(
-                                  width: 0.1,
-                                  color: AppColors.primaryColor,
-                                ),
-                              ),
-                              color: Colors.white,
-                              shadowColor: AppColors.primaryColor,
-                              surfaceTintColor: Colors.white,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  // Hospital Image
-                                  SizedBox(
-                                    height: 250.0,
-                                    child: Stack(
-                                      fit: StackFit.expand,
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                          child: hospitalProvider
-                                                      .filteredHospitals[index]
-                                                      .hospitalImage !=
-                                                  ''
-                                              ? Image(
-                                                  image: NetworkImage(
-                                                      hospitalProvider
-                                                          .filteredHospitals[
-                                                              index]
-                                                          .hospitalImage!),
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : Image(
-                                                  image: AssetImage(
-                                                      ImageAssets.myHospital),
-                                                  fit: BoxFit.cover,
-                                                ),
-                                        ),
-                                        Positioned(
-                                          right: 2,
-                                          top: 2,
-                                          child: IconButton(
-                                            style: ButtonStyle(
-                                              fixedSize:
-                                                  MaterialStateProperty.all(
-                                                const Size(2.0, 10.0),
-                                              ),
-                                              shape: MaterialStateProperty.all(
-                                                RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0),
-                                                ),
-                                              ),
-                                              side: MaterialStateProperty.all(
-                                                const BorderSide(
-                                                  width: 2.0,
-                                                  color: AppColors.primaryColor,
-                                                ),
-                                              ),
-                                            ),
-                                            onPressed: null,
-                                            icon: const Icon(
-                                              Icons.star_border_rounded,
-                                              color: AppColors.primaryColor,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 8.0,
-                                  ),
-
-                                  // Display Hospital Name with Right Arrow Button
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 14.0),
-                                        child: Text(
-                                          hospitalProvider
-                                              .filteredHospitals[index].name!,
-                                          // .toUpperCase(),
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: AppColors.textColor2,
-                                          ),
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (_) =>
-                                                  HospitalDetailsPage(
-                                                hospital: hospitalProvider
-                                                    .filteredHospitals[index],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        icon: const Icon(
-                                          size: 20.0,
-                                          Icons.arrow_forward,
-                                          color: Colors.white,
-                                        ),
-                                        style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  AppColors.buttonColor),
-                                          fixedSize: MaterialStateProperty.all(
-                                            const Size(2.0, 10.0),
-                                          ),
-                                          shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8.0),
-                                  // Display Hospital Address
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 14.0),
-                                    child: Text(
-                                      hospitalProvider.filteredHospitals[index]
-                                          .placeAddress!,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        color: AppColors.textColor2,
-                                      ),
-                                    ),
-                                  ),
-
-                                  const SizedBox(height: 8.0),
-                                  // Display Hospital Specialities as Colorful Boxes
-                                  hospitalProvider.filteredHospitals[index]
-                                              .serviceType ==
-                                          ''
-                                      ? Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 12.0, bottom: 8.0),
-                                          child: Text(
-                                            'This facility has no specialties',
-                                            style:
-                                                AppTextStyles.bodyTwo.copyWith(
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.red,
-                                              fontFamily: 'Inter',
-                                            ),
-                                          ),
-                                        )
-                                      : Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0, bottom: 8.0),
-                                          child: Wrap(
-                                            spacing: 5.0,
-                                            runSpacing: 5.0,
-                                            children: (hospitalProvider
-                                                        .filteredHospitals[
-                                                            index]
-                                                        .serviceType ??
-                                                    [])
-                                                .map(
-                                                  (speciality) =>
-                                                      ChipWidget(speciality),
-                                                )
-                                                .toList(),
-                                          ),
-                                        ),
-                                  // ... Add any other hospital information here ...
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                        // } else {
-                        //       return const Center(
-                        //         child: CircularProgressIndicator(),
-                        //       );
-                      }),
+                  child: filteredHospitals.isEmpty
+                      ? _buildAllHospitals()
+                      : _buildFilteredHospitals(),
                 ),
               ],
             ),
@@ -450,33 +251,422 @@ class _HospitalPageState extends State<HospitalPage> {
     );
   }
 
-  // Widget _buildFilterTab(String filterOption) {
-  //   final hospitalProvider = Provider.of<HospitalProvider>(context);
-  //   return GestureDetector(
-  //     onTap: () {
-  //       setState(() {
-  //         _selectedFilter = filterOption;
-  //         hospitalProvider.setSelectedFilter(filterOption);
-  //         Future.delayed(const Duration(milliseconds: 500)).then((_) {
-  //           hospitalProvider.updateFilteredHospitals;
-  //         });
-  //       });
-  //     },
-  //     child: Padding(
-  //       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-  //       child: Text(
-  //         filterOption,
-  //         style: AppTextStyles.bodyOne.copyWith(
-  //           fontSize: 16,
-  //           color: _selectedFilter == filterOption
-  //               ? AppColors.primaryColor
-  //               : Colors.black26,
-  //           fontWeight: _selectedFilter == filterOption
-  //               ? FontWeight.w600
-  //               : FontWeight.w600,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget _buildFilterTab(String filterOption) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedFilter = filterOption;
+          // hospitalProvider.setSelectedFilter(filterOption);
+          Future.delayed(const Duration(milliseconds: 500)).then((_) {
+            //  hospitalProvider.updateFilteredHospitals;
+          });
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Text(
+          filterOption,
+          style: AppTextStyles.bodyOne.copyWith(
+            fontSize: 16,
+            color: _selectedFilter == filterOption
+                ? AppColors.primaryColor
+                : Colors.black26,
+            fontWeight: _selectedFilter == filterOption
+                ? FontWeight.w600
+                : FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAllHospitals() {
+    return FutureBuilder<List<HospitalModel>>(
+        future: ApiServices().fetchAllHospitals(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: SpinKitWaveSpinner(
+                size: 50.0,
+                color: AppColors.buttonColor,
+                trackColor: AppColors.registerCard,
+                waveColor: AppColors.deleteColor,
+              ),
+            );
+          }
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+
+          final hospitalData = snapshot.data;
+          return ListView.builder(
+            itemCount: hospitalData!.length,
+            itemBuilder: (context, index) {
+              final hospital = hospitalData[index];
+
+              return Card(
+                elevation: 5.0,
+                margin: const EdgeInsets.symmetric(
+                  vertical: 16.0,
+                  horizontal: 5.0,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                  side: const BorderSide(
+                    width: 0.1,
+                    color: AppColors.primaryColor,
+                  ),
+                ),
+                color: Colors.white,
+                shadowColor: AppColors.primaryColor,
+                surfaceTintColor: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Hospital Image
+                    SizedBox(
+                      height: 250.0,
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image(
+                                image: NetworkImage(hospital.hospitalImage!),
+                              )
+                              // hospital
+                              //             .hospitalImage ==
+                              //         ''
+                              //     ? Image(
+                              //         image: NetworkImage(
+                              //             hospital
+                              //                 .hospitalImage!),
+                              //         fit: BoxFit.cover,
+                              //       )
+                              //     : Image(
+                              //         image: AssetImage(
+                              //             ImageAssets
+                              //                 .myHospital),
+                              //         fit: BoxFit.cover,
+                              //       ),
+                              ),
+                          Positioned(
+                            right: 2,
+                            top: 2,
+                            child: IconButton(
+                              style: ButtonStyle(
+                                fixedSize: MaterialStateProperty.all(
+                                  const Size(2.0, 10.0),
+                                ),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                                side: MaterialStateProperty.all(
+                                  const BorderSide(
+                                    width: 2.0,
+                                    color: AppColors.primaryColor,
+                                  ),
+                                ),
+                              ),
+                              onPressed: null,
+                              icon: const Icon(
+                                Icons.star_border_rounded,
+                                color: AppColors.primaryColor,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+
+                    // Display Hospital Name with Right Arrow Button
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 14.0),
+                          child: Text(
+                            hospital.name!.toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textColor2,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 16),
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => HospitalDetailsPage(
+                                    hospital: hospital,
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: const Icon(
+                              size: 60.0,
+                              Icons.arrow_forward,
+                              color: AppColors.greenColor,
+                            ),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  AppColors.buttonColor),
+                              minimumSize: MaterialStateProperty.all(
+                                const Size(2.0, 8.0),
+                              ),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8.0),
+                    // Display Hospital Address
+                    Padding(
+                      padding: const EdgeInsets.only(left: 14.0),
+                      child: Text(
+                        hospital.placeAddress!,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: AppColors.textColor2,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 8.0),
+                    // Display Hospital Specialities as Colorful Boxes
+                    hospital.serviceType == ''
+                        ? Padding(
+                            padding: EdgeInsets.only(left: 12.0, bottom: 8.0),
+                            child: Text(
+                              'This facility has no specialties',
+                              style: AppTextStyles.bodyTwo.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.red,
+                                fontFamily: 'Inter',
+                              ),
+                            ),
+                          )
+                        : Padding(
+                            padding:
+                                const EdgeInsets.only(left: 8.0, bottom: 8.0),
+                            child: Wrap(
+                              spacing: 5.0,
+                              runSpacing: 5.0,
+                              children: (hospital.serviceType ?? [])
+                                  .map(
+                                    (speciality) => ChipWidget(speciality),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                    // ... Add any other hospital information here ...
+                  ],
+                ),
+              );
+            },
+          );
+        });
+  }
+
+  Widget _buildFilteredHospitals() {
+    return ListView.builder(
+      itemCount: filteredHospitals.length,
+      itemBuilder: (context, index) {
+        final hospital = filteredHospitals[index];
+        return Card(
+          elevation: 5.0,
+          margin: const EdgeInsets.symmetric(
+            vertical: 16.0,
+            horizontal: 5.0,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            side: const BorderSide(
+              width: 0.1,
+              color: AppColors.primaryColor,
+            ),
+          ),
+          color: Colors.white,
+          shadowColor: AppColors.primaryColor,
+          surfaceTintColor: Colors.white,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Hospital Image
+              SizedBox(
+                height: 250.0,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Image(
+                          image: NetworkImage(hospital.hospitalImage!),
+                        )
+                        // hospital
+                        //             .hospitalImage ==
+                        //         ''
+                        //     ? Image(
+                        //         image: NetworkImage(
+                        //             hospital
+                        //                 .hospitalImage!),
+                        //         fit: BoxFit.cover,
+                        //       )
+                        //     : Image(
+                        //         image: AssetImage(
+                        //             ImageAssets
+                        //                 .myHospital),
+                        //         fit: BoxFit.cover,
+                        //       ),
+                        ),
+                    Positioned(
+                      right: 2,
+                      top: 2,
+                      child: IconButton(
+                        style: ButtonStyle(
+                          fixedSize: MaterialStateProperty.all(
+                            const Size(2.0, 10.0),
+                          ),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          side: MaterialStateProperty.all(
+                            const BorderSide(
+                              width: 2.0,
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                        ),
+                        onPressed: null,
+                        icon: const Icon(
+                          Icons.star_border_rounded,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 8.0,
+              ),
+
+              // Display Hospital Name with Right Arrow Button
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 14.0),
+                    child: Text(
+                      hospital.name!.toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textColor2,
+                      ),
+                    ),
+                  ),
+                  //   IconButton(
+                  //     onPressed: () {
+                  //       Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (_) =>
+                  //               HospitalDetailsPage(
+                  //             hospital: hospital,
+                  //           ),
+                  //         ),
+                  //       );
+                  //     },
+                  //     icon: const Icon(
+                  //       size: 60.0,
+                  //       Icons.arrow_forward,
+                  //       color: Colors.white,
+                  //     ),
+                  //     style: ButtonStyle(
+                  //       backgroundColor:
+                  //           MaterialStateProperty
+                  //               .all(AppColors
+                  //                   .buttonColor),
+                  //       fixedSize:
+                  //           MaterialStateProperty
+                  //               .all(
+                  //         const Size(2.0, 10.0),
+                  //       ),
+                  //       shape: MaterialStateProperty
+                  //           .all<
+                  //               RoundedRectangleBorder>(
+                  //         RoundedRectangleBorder(
+                  //           borderRadius:
+                  //               BorderRadius
+                  //                   .circular(10),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                ],
+              ),
+              const SizedBox(height: 8.0),
+              // Display Hospital Address
+              Padding(
+                padding: const EdgeInsets.only(left: 14.0),
+                child: Text(
+                  hospital.placeAddress!,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: AppColors.textColor2,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 8.0),
+              // Display Hospital Specialities as Colorful Boxes
+              hospital.serviceType == ''
+                  ? Padding(
+                      padding: const EdgeInsets.only(left: 12.0, bottom: 8.0),
+                      child: Text(
+                        'This facility has no specialties',
+                        style: AppTextStyles.bodyTwo.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.red,
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+                      child: Wrap(
+                        spacing: 5.0,
+                        runSpacing: 5.0,
+                        children: (hospital.serviceType ?? [])
+                            .map(
+                              (speciality) => ChipWidget(speciality),
+                            )
+                            .toList(),
+                      ),
+                    ),
+              // ... Add any other hospital information here ...
+            ],
+          ),
+        );
+      },
+    );
+  }
 }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mboacare/app_modules/auth/forgotPassword.dart';
 import 'package:mboacare/app_modules/auth/checkMail.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/home.dart';
+import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/add_facilities_page.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/awaitApprovalScreen.dart';
 import 'package:mboacare/app_modules/med_user/screen/inner_screen/user_profile_page.dart';
 import 'package:mboacare/app_modules/user/screens/inner_screen/aboutUs.dart';
@@ -29,7 +30,7 @@ void main() async {
     providers: [
       //ChangeNotifierProvider(create: (_) => HospitalProvider()),
       ChangeNotifierProvider(create: (_) => LocaleProvider()),
-      // ChangeNotifierProvider(create: (_) => SignUpProvider()),
+      //ChangeNotifierProvider(create: (_) => SignUpProvider()),
       ChangeNotifierProvider(create: (_) => LoginProvider()),
 
       ChangeNotifierProvider(create: (_) => AddHospitalProvider()),
@@ -111,7 +112,8 @@ class MyApp extends StatelessWidget {
         ('/profilePage'): (context) => ProfilePage(),
         ('/awaitApproval'): (context) => AwaitApprovalScreen(),
         ('/resetPassword'): (context) => CheckMailScreen(),
-        ('/forgotPassword'): (context) => ForgotPasswordScreen()
+        ('/forgotPassword'): (context) => ForgotPasswordScreen(),
+        ('/addFacilities'): (context) => AddFacilitiesPage(),
       },
     );
   }

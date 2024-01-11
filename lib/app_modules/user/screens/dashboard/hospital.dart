@@ -393,32 +393,35 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                             ),
                           ),
                         ),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => HospitalDetailsPage(
-                                  hospital: hospital,
+                        Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => HospitalDetailsPage(
+                                    hospital: hospital,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          icon: const Icon(
-                            size: 60.0,
-                            Icons.arrow_forward,
-                            color: Colors.white,
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                AppColors.buttonColor),
-                            fixedSize: MaterialStateProperty.all(
-                              const Size(2.0, 10.0),
+                              );
+                            },
+                            icon: const Icon(
+                              size: 60.0,
+                              Icons.arrow_forward,
+                              color: AppColors.greenColor,
                             ),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  AppColors.buttonColor),
+                              fixedSize: MaterialStateProperty.all(
+                                const Size(2.0, 10.0),
+                              ),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
                             ),
                           ),
