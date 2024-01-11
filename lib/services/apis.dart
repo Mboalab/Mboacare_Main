@@ -29,4 +29,4 @@ class Apis {
   static const searchHospitals = '$baseUrl/hospital/search?q=Wunmi';
 }
 
-String mapKey = '';
+String mapKey = 'AIzaSyBkuwcKikuNtM-07vxwHHHl9M-icIBst5w';
