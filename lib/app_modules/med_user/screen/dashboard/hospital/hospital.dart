@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mboacare/app_modules/med_user/screen/inner_screen/hospitaldetails.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
+import 'package:mboacare/global/styles/colors.dart';
 import 'package:mboacare/model/hospital_model/hospital_model.dart';
 import 'package:mboacare/model/search_hospital_model.dart';
 import 'package:mboacare/services/appService.dart';
@@ -10,11 +11,7 @@ import 'package:mboacare/utils/app_dropdown.dart';
 import 'package:mboacare/widgets/chip_widget.dart';
 //import 'package:mboacare/app_modules/user/screens/inner_screen/hospitaldetails.dart';
 import 'package:provider/provider.dart';
-import '../../../../model/hospital_data.dart';
-import '../../../../global/styles/colors.dart';
 import 'dart:developer' as devtools show log;
-
-import '../../../../services/hospital_provider.dart';
 
 class HospitalDashboard extends StatefulWidget {
   const HospitalDashboard({super.key});
@@ -327,23 +324,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                               borderRadius: BorderRadius.circular(16),
                               child: Image(
                                 image: NetworkImage(hospital.hospitalImage!),
-                              )
-                              // hospital
-                              //             .hospitalImage ==
-                              //         ''
-                              //     ? Image(
-                              //         image: NetworkImage(
-                              //             hospital
-                              //                 .hospitalImage!),
-                              //         fit: BoxFit.cover,
-                              //       )
-                              //     : Image(
-                              //         image: AssetImage(
-                              //             ImageAssets
-                              //                 .myHospital),
-                              //         fit: BoxFit.cover,
-                              //       ),
-                              ),
+                              )),
                           Positioned(
                             right: 2,
                             top: 2,
@@ -407,23 +388,23 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                               );
                             },
                             icon: const Icon(
-                              size: 60.0,
+                              size: 20.0,
                               Icons.arrow_forward,
                               color: AppColors.greenColor,
                             ),
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  AppColors.buttonColor),
-                              fixedSize: MaterialStateProperty.all(
-                                const Size(2.0, 10.0),
-                              ),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
+                            // style: ButtonStyle(
+                            //   backgroundColor: MaterialStateProperty.all(
+                            //       AppColors.buttonColor),
+                            //   fixedSize: MaterialStateProperty.all(
+                            //     const Size(2.0, 10.0),
+                            //   ),
+                            //   shape: MaterialStateProperty.all<
+                            //       RoundedRectangleBorder>(
+                            //     RoundedRectangleBorder(
+                            //       borderRadius: BorderRadius.circular(10),
+                            //     ),
+                            //   ),
+                            // ),
                           ),
                         ),
                       ],
