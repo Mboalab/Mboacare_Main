@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:mboacare/app_modules/auth/success_screen.dart';
+import 'package:mboacare/app_modules/auth/auth_messages/success_screen.dart';
 import 'package:mboacare/services/apis.dart';
 import 'package:http/http.dart' as http;
 import 'package:mboacare/utils/snack_error.dart';
@@ -66,6 +66,11 @@ class RegisterProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearInput() {
+    emailController.clear();
+    passwordController.clear();
+  }
+
   void register(
       {required String email,
       required String password,
@@ -96,6 +101,7 @@ class RegisterProvider extends ChangeNotifier {
         _isLoading = false;
 
         snackMessage(message: res['message'], context: context);
+        clearInput();
         notifyListeners();
         Get.to(() => const SuccessScreen(),
             duration: const Duration(
@@ -153,9 +159,11 @@ class RegisterProvider extends ChangeNotifier {
       if (req.statusCode == 200 || req.statusCode == 201) {
         var res = json.decode(req.body);
 
-        _isLoading = false;
+       
 
         snackMessage(message: res['message'], context: context);
+        clearInput();
+         _isLoading = false;
         notifyListeners();
         Get.to(() => const SuccessScreen(),
             duration: const Duration(

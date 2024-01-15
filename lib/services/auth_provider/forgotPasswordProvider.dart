@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mboacare/app_modules/auth/checkMail.dart';
+import 'package:mboacare/app_modules/auth/auth_messages/checkMail.dart';
 import 'package:mboacare/services/apis.dart';
 import 'package:http/http.dart' as http;
 import 'package:mboacare/utils/snack_error.dart';
