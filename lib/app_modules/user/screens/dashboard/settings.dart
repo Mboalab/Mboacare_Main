@@ -4,7 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
-import 'package:mboacare/services/registerProvider.dart';
+import 'package:mboacare/services/auth_provider/registerProvider.dart';
 import 'package:mboacare/widgets/settings_widget.dart';
 import 'package:provider/provider.dart';
 
