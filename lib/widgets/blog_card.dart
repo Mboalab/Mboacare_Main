@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class BottomBlogCard extends StatelessWidget {
   final String imageUrl;
   final String category;
@@ -8,15 +7,14 @@ class BottomBlogCard extends StatelessWidget {
   final String author;
   final String date;
   final Function() tap;
-  const BottomBlogCard({
-    super.key,
-    required this.imageUrl,
-    required this.category,
-    required this.title,
-    required this.author,
-    required this.date,
-    required this.tap
-  });
+  const BottomBlogCard(
+      {super.key,
+      required this.imageUrl,
+      required this.category,
+      required this.title,
+      required this.author,
+      required this.date,
+      required this.tap});
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +30,12 @@ class BottomBlogCard extends StatelessWidget {
             children: [
               Expanded(
                 flex: 30,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                  child: Image.network(
-                    imageUrl,
-                    height: 120,
-                    width: 120,
-                    fit: BoxFit.cover,
-                  ),
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      image: DecorationImage(
+                          image: NetworkImage(imageUrl), fit: BoxFit.fill)),
                 ),
               ),
               Expanded(
@@ -64,11 +60,17 @@ class BottomBlogCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 6.0),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(author,
                               style: const TextStyle(color: Colors.grey)),
-                          Text(date, style: const TextStyle(color: Colors.grey))
+                          const SizedBox(width: 36.0),
+                          Expanded(
+                            child: Text(date,
+                                style: const TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    color: Colors.grey)),
+                          )
                         ],
                       )
                     ],
