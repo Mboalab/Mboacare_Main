@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mboacare/app_modules/auth/forgotPassword.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
-import 'package:mboacare/services/loginProvider.dart';
+import 'package:mboacare/services/auth_provider/loginProvider.dart';
 
 import 'package:mboacare/utils/constants.dart';
 import 'package:mboacare/utils/snack_succ.dart';

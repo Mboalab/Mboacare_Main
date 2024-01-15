@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mboacare/app_modules/med_user/screen/dashboard/blog/blog.dart';
+
 import 'package:mboacare/app_modules/user/screens/dashboard/hospital.dart';
+
+
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
@@ -9,6 +11,7 @@ import 'package:mboacare/widgets/home_navigation_list_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../auth/sign_up_page.dart';
+import '../../../user/screens/dashboard/blog_page.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -95,7 +98,7 @@ class _HomeState extends State<Home> {
                       subtitle: 'Read blog posts',
                       iconImage: ImageAssets.blog,
                       onTap: () {
-                        Get.to(() => const Blog());
+                        Get.to(() => const BlogPage());
                       },
                     ),
                     HomeNavigationItems(

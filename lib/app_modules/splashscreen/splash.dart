@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
         () => const DashboardScreen(userName: 'Mboacare'),
         duration: const Duration(milliseconds: 1200),
         curve: Curves.easeIn,
-        transition: Transition.zoom,
+        transition: Transition.fadeIn,
       );
     });
   }

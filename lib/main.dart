@@ -3,28 +3,34 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mboacare/app_modules/auth/forgotPassword.dart';
-import 'package:mboacare/app_modules/auth/checkMail.dart';
+import 'package:mboacare/app_modules/auth/auth_messages/checkMail.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/home.dart';
 
 import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/add_hopital.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/awaitApprovalScreen.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/edit_facilities_page.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/manageFacilities.dart';
-import 'package:mboacare/app_modules/med_user/screen/inner_screen/user_profile_page.dart';
+import 'package:mboacare/app_modules/med_user/screen/dashboard/profile/user_profile_page.dart';
 import 'package:mboacare/app_modules/user/screens/inner_screen/aboutUs.dart';
 import 'package:mboacare/global/theme/themeConstants.dart';
 import 'package:mboacare/global/theme/themeScreen.dart';
-import 'package:mboacare/services/forgotPasswordProvider.dart';
-import 'package:mboacare/services/loginProvider.dart';
+import 'package:mboacare/services/auth_provider/chagePasswordProvider.dart';
+import 'package:mboacare/services/auth_provider/update_profileProvider.dart';
+import 'package:mboacare/services/blog_provider/delete_blogProvider.dart';
+import 'package:mboacare/services/databaseProvider.dart';
+import 'package:mboacare/services/auth_provider/forgotPasswordProvider.dart';
+import 'package:mboacare/services/auth_provider/loginProvider.dart';
 import 'package:mboacare/services/map_services/locationProvider.dart';
-import 'package:mboacare/services/registerProvider.dart';
+import 'package:mboacare/services/auth_provider/registerProvider.dart';
 import 'package:mboacare/app_modules/splashscreen/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mboacare/services/user_provider.dart';
 import 'package:provider/provider.dart';
+import 'services/blog_provider/add_blogProvider.dart';
 import 'services/add_hospital_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'global/l10n/app_localizations.dart';
+import 'services/blog_provider/edit_blogProvider.dart';
 import 'services/hospital_provider.dart';
 import 'services/locale_provider.dart';
 
@@ -35,9 +41,13 @@ void main() async {
     providers: [
       //ChangeNotifierProvider(create: (_) => HospitalProvider()),
       ChangeNotifierProvider(create: (_) => LocaleProvider()),
+      ChangeNotifierProvider(create: (_) => EditBlogProvider()),
+      ChangeNotifierProvider(create: (_) => UpdateProfileProvider()),
+      ChangeNotifierProvider(create: (_) => DeleteBlogProvider()),
       //ChangeNotifierProvider(create: (_) => SignUpProvider()),
       ChangeNotifierProvider(create: (_) => LoginProvider()),
-
+      ChangeNotifierProvider(create: (_) => AddBlogProvider()),
+      ChangeNotifierProvider(create: (_) => DatabaseProvider()),
       ChangeNotifierProvider(create: (_) => AddHospitalProvider()),
       ChangeNotifierProvider(create: (_) => UserDataProvider()),
       ChangeNotifierProvider(create: (_) => UserDataProvider()),
@@ -45,6 +55,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => LocationProvider()),
       ChangeNotifierProvider(create: (_) => RegisterProvider()),
       ChangeNotifierProvider(create: (_) => ForgotPasswordProvider()),
+       ChangeNotifierProvider(create: (_) => ChangePasswordProvider()),
       // Add other providers here if needed.
     ],
     child: const MyApp(),

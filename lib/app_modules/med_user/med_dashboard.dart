@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:mboacare/app_modules/med_user/screen/dashboard/blog/blog.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/home.dart';
 
 import 'package:mboacare/app_modules/med_user/screen/dashboard/settings.dart';
@@ -11,6 +10,8 @@ import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
 import 'package:mboacare/widgets/drawer_widget.dart';
 import 'package:mboacare/widgets/myBottomBar.dart';
+
+import '../user/screens/dashboard/blog_page.dart';
 
 class MedDashboard extends StatefulWidget {
   const MedDashboard({Key? key}) : super(key: key);
@@ -25,7 +26,8 @@ class _MedDashboardState extends State<MedDashboard> {
   final List<Widget> _pages = [
     const Home(),
     const HospitalDashboard(),
-    const Blog(),
+   
+    const BlogPage(),
     const Settings(),
   ];
 

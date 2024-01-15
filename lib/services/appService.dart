@@ -1,4 +1,8 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:mboacare/model/hospital_model/hospital_model.dart';
 import 'package:mboacare/model/search_hospital_model.dart';
 import 'dart:convert';
@@ -6,9 +10,12 @@ import 'dart:convert';
 import '../model/blog_data.dart';
 import '../model/notification_data.dart';
 import 'apis.dart';
+import 'auth_provider/loginProvider.dart';
 
 class ApiServices {
   Future<List<BlogItem>> fetchBlogData() async {
+    
+    
     String url = Apis.allBlog;
 
     Map<String, String> headers = {
@@ -24,6 +31,7 @@ class ApiServices {
 
         if (responseBody.containsKey('data')) {
           final List<dynamic> data = responseBody['data'];
+          log(data.toString());
           return data.map((item) => BlogItem.fromJson(item)).toList();
         } else {
           throw Exception('API response does not contain a "data" field.');
@@ -35,6 +43,40 @@ class ApiServices {
     return [];
   }
 
+  Future<List<BlogItem>> myBlogData({ required BuildContext context}) async {
+    final provider = Provider.of<LoginProvider>(context);
+
+    String myEmail = provider.userEmail;
+    
+    String url = Apis.myBlog;
+    String myUrl = "$url$myEmail";
+
+    print(myUrl);
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Charset': 'utf-8',
+    };
+
+    final response = await http.get(Uri.parse(myUrl), headers: headers);
+
+    try {
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseBody = json.decode(response.body);
+
+        if (responseBody.containsKey('data')) {
+          final List<dynamic> data = responseBody['data'];
+          log(data.toString());
+          return data.map((item) => BlogItem.fromJson(item)).toList();
+        } else {
+          throw Exception('API response does not contain a "data" field.');
+        }
+      } else {
+        throw Exception('Failed to load blog data');
+      }
+    } catch (e) {}
+    return [];
+  }
   Future<List<Notify>> fetchNotifications() async {
     String url = Apis.allNotification;
 

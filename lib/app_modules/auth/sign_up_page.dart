@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mboacare/app_modules/auth/success_screen.dart';
+import 'package:mboacare/app_modules/auth/auth_messages/success_screen.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
-import 'package:mboacare/services/registerProvider.dart';
+import 'package:mboacare/services/auth_provider/registerProvider.dart';
 
 import 'package:mboacare/utils/constants.dart';
 import 'package:mboacare/utils/validations.dart';

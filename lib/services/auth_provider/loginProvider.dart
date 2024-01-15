@@ -6,23 +6,28 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mboacare/app_modules/med_user/med_dashboard.dart';
 import 'package:mboacare/app_modules/user/user_dashboard.dart';
+import 'package:mboacare/services/databaseProvider.dart';
 import 'package:mboacare/utils/snack_error.dart';
 import 'package:mboacare/utils/snack_succ.dart';
 import 'package:mboacare/utils/validations.dart';
+
+import '../../global/styles/assets_string.dart';
 
 class LoginProvider extends ChangeNotifier {
   final auth = FirebaseAuth.instance;
   final googleSignIn = GoogleSignIn();
 
- bool _loading = false;
+  bool _loading = false;
   String _reqMessage = "";
   bool _isLoading = false;
-  
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   String userEmail = '';
   String userName = '';
+  String userPhone = '';
   String profileImage = "";
+  String uid = '';
   String email = "";
   String password = "";
   bool isPasswordVisible = false;
@@ -49,6 +54,11 @@ class LoginProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearInput() {
+    emailController.clear();
+    passwordController.clear();
+  }
+
   void login(
       {required String email,
       required String password,
@@ -60,10 +70,10 @@ class LoginProvider extends ChangeNotifier {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
 
-      User? user = userCredential.user;
+      final User user = userCredential.user!;
       print(user);
 
-      if (user!.emailVerified == false) {
+      if (user.emailVerified == false) {
         _isLoading = false;
         _reqMessage = "Email is not verified! Check email to verify Account!";
         snackErrorMessage(
@@ -76,6 +86,15 @@ class LoginProvider extends ChangeNotifier {
 
         snackMessage(message: "Login Successful!", context: context);
         print(user);
+        userEmail = user.email!;
+        userName = user.displayName!;
+        profileImage = user.photoURL ?? Image.asset(ImageAssets.logo) as String;
+        userPhone = user.phoneNumber!;
+        uid = user.uid;
+        DatabaseProvider().saveEmail(userEmail);
+        DatabaseProvider().saveName(userName);
+        DatabaseProvider().saveUserID(uid);
+        clearInput();
         notifyListeners();
         Get.to(() => const MedDashboard(),
             duration: const Duration(
@@ -116,9 +135,6 @@ class LoginProvider extends ChangeNotifier {
           await auth.signInWithCredential(credential);
       final User user = userCredential.user!;
       print(user);
-      userEmail = user.email!;
-      userName = user.displayName!;
-      profileImage = user.photoURL!;
       // Handle successful sign-in
       if (user.emailVerified == false) {
         _isLoading = false;
@@ -131,13 +147,23 @@ class LoginProvider extends ChangeNotifier {
         _isLoading = false;
         snackMessage(message: "Login Successful!", context: context);
         print(user);
-        notifyListeners();
+        userEmail = user.email!;
+        userName = user.displayName!;
+        profileImage = user.photoURL ?? Image.asset(ImageAssets.logo) as String;
+        userPhone = user.phoneNumber.toString();
+        uid = user.uid;
+        DatabaseProvider().saveEmail(userEmail);
+        DatabaseProvider().saveName(userName);
+        DatabaseProvider().saveUserID(uid);
+
         Get.to(() => const MedDashboard(),
             duration: const Duration(
               milliseconds: 800,
             ),
             curve: Curves.easeInCirc,
             transition: Transition.fadeIn);
+
+        notifyListeners();
       }
     } catch (e) {
       notifyListeners();
@@ -168,7 +194,8 @@ class LoginProvider extends ChangeNotifier {
         transition: Transition.fadeIn);
     try {
       await auth.signOut();
-      await googleSignIn.signOut(); // For Google sign-in
+      await googleSignIn.signOut();
+      DatabaseProvider().logout(context);
       _loading = false;
       notifyListeners();
     } catch (error) {

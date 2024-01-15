@@ -17,10 +17,14 @@ class Apis {
 /*----------------------------------blog endpoints--------------------------------------------------- */
   static const String allBlog = "$baseUrl/blog/all-blogs";
   static const String addBlog = "$baseUrl/blog/add-blog";
+  static const String myBlog = "$baseUrl/blog/my-blogs?q=";
+  static const String updateBlog = "$baseUrl/blog/update-blog";
+  static const String deleteBlog = "$baseUrl/blog/delete-blog/";
 
 /*----------------------------------notification endpoints--------------------------------------------------- */
   static const String allNotification =
       "$baseUrl/notification/all-notifications";
+
 
   // --------------------------Hospital endpoints--------------------------
   static const allHospitals = '$baseUrl/hospital/all-hospital';
@@ -29,4 +33,4 @@ class Apis {
   static const searchHospitals = '$baseUrl/hospital/search?q=Wunmi';
 }
 
-String mapKey = 'AIzaSyBkuwcKikuNtM-07vxwHHHl9M-icIBst5w';
+String mapKey = '';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
-import 'package:mboacare/services/forgotPasswordProvider.dart';
+import 'package:mboacare/services/auth_provider/forgotPasswordProvider.dart';
 import 'package:mboacare/widgets/custom_btn.dart';
 import 'package:mboacare/widgets/input_fields.dart';
 import 'package:provider/provider.dart';
@@ -90,26 +90,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               status: auth.isLoading,
             );
 
-            // ElevatedButton(
-            //   onPressed: () {
-
-            //   },
-            //   style: ElevatedButton.styleFrom(
-            //     backgroundColor: const Color.fromARGB(255, 26, 99, 32),
-            //     foregroundColor: AppColors.whiteColor,
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(5),
-            //     ),
-            //     minimumSize: const Size(150, 45),
-            //   ),
-            //   child: const Text(
-            //     'Submit',
-            //     style: TextStyle(
-            //       fontSize: 17,
-            //       fontWeight: FontWeight.w500,
-            //     ),
-            //   ),
-            // );
+           
           }),
         ],
       ),
