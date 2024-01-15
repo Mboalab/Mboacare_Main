@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:mboacare/app_modules/med_user/screen/dashboard/blog/my_blog.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
-import 'package:mboacare/services/loginProvider.dart';
-import 'package:mboacare/services/registerProvider.dart';
+import 'package:mboacare/services/auth_provider/loginProvider.dart';
+import 'package:mboacare/services/auth_provider/registerProvider.dart';
 import 'package:mboacare/widgets/settings_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -71,7 +73,7 @@ class Settings extends StatelessWidget {
                 indent: 2,
               ),
               const SizedBox(
-                height: 20,
+                height: 5,
               ),
               SettingsPageListTiles(
                   icon: const Icon(
@@ -126,6 +128,23 @@ class Settings extends StatelessWidget {
                   trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
                   onTap: () {
                     Navigator.pushNamed(context, '/facilities');
+                  }),
+              SettingsPageListTiles(
+                  icon: SvgPicture.asset(
+                    ImageAssets.blog,
+                    color: AppColors.textColor2,
+                    // size: iconSize,
+                  ),
+                  title: 'Blog',
+                  subtitle: 'Manage Blogs',
+                  trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
+                  onTap: () {
+                    Get.to(
+                      () => const MyBlog(),
+                      duration: const Duration(milliseconds: 800),
+                      curve: Curves.easeInCirc,
+                      transition: Transition.leftToRight,
+                    );
                   }),
               SettingsPageListTiles(
                   icon: const Icon(
