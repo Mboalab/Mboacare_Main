@@ -11,6 +11,7 @@ class BlogItem {
   final bool isApproved;
   final String blogTitle;
   final String blogWebLink;
+  final String blogId;
 
   BlogItem({
     required this.imageUrl,
@@ -21,6 +22,7 @@ class BlogItem {
     required this.isApproved,
     required this.blogTitle,
     required this.blogWebLink,
+    required this.blogId,
   });
 
   factory BlogItem.fromJson(Map<String, dynamic> json) {
@@ -33,10 +35,45 @@ class BlogItem {
       isApproved: json['isApprove'],
       blogTitle: json['blogTitle'],
       blogWebLink: json['blogWebLink'],
+      blogId: json['id'],
     );
   }
 }
 
+class BlogModel {
+  String? blogWebLink;
+  String? blogImage;
+  String? userEmail;
+  String? blogPubDate;
+  String? id;
+  List<String>? blogCat;
+  String? blogTitle;
+  String? blogAuthor;
+  bool? isApprove;
+
+  BlogModel(
+      {this.blogWebLink,
+      this.blogImage,
+      this.userEmail,
+      this.id,
+      this.blogCat,
+      this.blogTitle,
+      this.blogAuthor,
+      this.blogPubDate,
+      this.isApprove});
+
+  BlogModel.fromJson(Map<String, dynamic> json) {
+    blogWebLink = json['blogWebLink'];
+    blogImage = json['blogImage'];
+    userEmail = json['userEmail'];
+    id = json['id'];
+    blogCat = json['blogCat'][0];
+    blogTitle = json['blogTitle'];
+    blogAuthor = json['blogAuthor'];
+    blogPubDate = json['blogPubDate'].toString();
+    isApprove = json['isApprove'];
+  }
+}
 //  TODO: Fix the design of the add_blog_page so it can accomodate the API.  blogContent is a required field.
 
 Future<void> addBlog(
