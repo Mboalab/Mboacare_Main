@@ -127,7 +127,7 @@ class Settings extends StatelessWidget {
                   subtitle: 'Manage Facilities',
                   trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
                   onTap: () {
-                    Navigator.pushNamed(context, '/facilities');
+                    Navigator.pushNamed(context, '/manageFacilities');
                   }),
               SettingsPageListTiles(
                   icon: SvgPicture.asset(

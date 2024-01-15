@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mboacare/app_modules/auth/forgotPassword.dart';
 import 'package:mboacare/app_modules/auth/auth_messages/checkMail.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/home.dart';
+
+import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/add_hopital.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/awaitApprovalScreen.dart';
+import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/edit_facilities_page.dart';
+import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/manageFacilities.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/profile/user_profile_page.dart';
 import 'package:mboacare/app_modules/user/screens/inner_screen/aboutUs.dart';
 import 'package:mboacare/global/theme/themeConstants.dart';
@@ -33,11 +39,12 @@ void main() async {
   await Firebase.initializeApp();
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (_) => HospitalProvider()),
+      //ChangeNotifierProvider(create: (_) => HospitalProvider()),
       ChangeNotifierProvider(create: (_) => LocaleProvider()),
       ChangeNotifierProvider(create: (_) => EditBlogProvider()),
       ChangeNotifierProvider(create: (_) => UpdateProfileProvider()),
       ChangeNotifierProvider(create: (_) => DeleteBlogProvider()),
+      //ChangeNotifierProvider(create: (_) => SignUpProvider()),
       ChangeNotifierProvider(create: (_) => LoginProvider()),
       ChangeNotifierProvider(create: (_) => AddBlogProvider()),
       ChangeNotifierProvider(create: (_) => DatabaseProvider()),
@@ -113,7 +120,7 @@ class MyApp extends StatelessWidget {
         }
         return supportedLocales.first;
       },
-      home: const SplashScreen(),
+      home: const ManageFacilities(),
       routes: {
         ('/home'): (context) => Home(),
         ('/aboutUs'): (context) => AboutUs(),
@@ -121,7 +128,16 @@ class MyApp extends StatelessWidget {
         ('/profilePage'): (context) => ProfilePage(),
         ('/awaitApproval'): (context) => AwaitApprovalScreen(),
         ('/resetPassword'): (context) => CheckMailScreen(),
-        ('/forgotPassword'): (context) => ForgotPasswordScreen()
+        ('/forgotPassword'): (context) => ForgotPasswordScreen(),
+
+        ('/editFacilities'): (context) => EditFacilitiesPage(),
+        ('/manageFacilities'): (context) => ManageFacilities(),
+        ('/addHospital'): (context) => AddHospitalPage(
+              placeName: Platform.localeName,
+            ),
+        //('/addHospital'): (context) => AddHospitalPage(
+        //  placeName: Platform.localeName,
+        //  )
       },
     );
   }

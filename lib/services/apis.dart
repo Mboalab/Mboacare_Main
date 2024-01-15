@@ -24,6 +24,13 @@ class Apis {
 /*----------------------------------notification endpoints--------------------------------------------------- */
   static const String allNotification =
       "$baseUrl/notification/all-notifications";
+
+
+  // --------------------------Hospital endpoints--------------------------
+  static const allHospitals = '$baseUrl/hospital/all-hospital';
+  static const addHospitals = '$baseUrl/hospital/add-hospital';
+  static const updateHospitals = '$baseUrl/hospital/update-hospital';
+  static const searchHospitals = '$baseUrl/hospital/search?q=Wunmi';
 }
 
 String mapKey = '';

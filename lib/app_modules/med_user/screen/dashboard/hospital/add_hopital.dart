@@ -42,6 +42,8 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: AppColors.navbarColor,
         title: Text(
           AppStrings.back,
           style: const TextStyle(color: AppColors.greyColor),
@@ -50,12 +52,7 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
           icon: const Icon(Icons.arrow_back, color: AppColors.greyColor),
           onPressed: () {
             // Navigate back to the dashboard page
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                  builder: (context) => const DashboardScreen(
-                        userName: '',
-                      )),
-            );
+            Navigator.of(context).pop();
           },
         ),
       ),

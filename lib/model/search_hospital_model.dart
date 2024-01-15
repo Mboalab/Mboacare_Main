@@ -1,4 +1,6 @@
-class HospitalModel {
+import 'package:flutter/material.dart';
+
+class SearchHospitalModel {
   List<String>? serviceType;
   String? website;
   String? hospitalType;
@@ -7,6 +9,7 @@ class HospitalModel {
   String? placeAddress;
   String? hospitalOwner;
   String? hospitalSize;
+  bool? isApprove;
   String? phoneNumber;
   String? name;
   String? hospitalImage;
@@ -14,9 +17,8 @@ class HospitalModel {
   String? id;
   String? email;
   String? longitude;
-  bool? isApprove;
 
-  HospitalModel(
+  SearchHospitalModel(
       {this.serviceType,
       this.website,
       this.hospitalType,
@@ -25,16 +27,16 @@ class HospitalModel {
       this.placeAddress,
       this.hospitalOwner,
       this.hospitalSize,
+      this.isApprove,
       this.phoneNumber,
       this.name,
       this.hospitalImage,
       this.userEmail,
       this.id,
       this.email,
-      this.longitude,
-      this.isApprove});
+      this.longitude});
 
-  HospitalModel.fromJson(Map<String, dynamic> json) {
+  SearchHospitalModel.fromJson(Map<String, dynamic> json) {
     serviceType = json['serviceType'].cast<String>();
     website = json['website'];
     hospitalType = json['hospitalType'];
@@ -43,6 +45,7 @@ class HospitalModel {
     placeAddress = json['placeAddress'];
     hospitalOwner = json['hospitalOwner'];
     hospitalSize = json['hospitalSize'];
+    isApprove = json['isApprove'];
     phoneNumber = json['phoneNumber'];
     name = json['name'];
     hospitalImage = json['hospitalImage'];
@@ -50,6 +53,5 @@ class HospitalModel {
     id = json['id'];
     email = json['email'];
     longitude = json['longitude'];
-    isApprove = json['isApprove'];
   }
 }
