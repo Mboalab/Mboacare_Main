@@ -4,7 +4,7 @@ import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
 
-import 'login.dart';
+import '../login.dart';
 
 class SuccessScreen extends StatelessWidget {
   const SuccessScreen({Key? key}) : super(key: key);
