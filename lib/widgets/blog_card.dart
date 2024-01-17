@@ -29,9 +29,9 @@ class BottomBlogCard extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                flex: 30,
+                flex: 40,
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.4,
+                  // width: MediaQuery.of(context).size.width * 0.4,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       image: DecorationImage(
@@ -42,7 +42,7 @@ class BottomBlogCard extends StatelessWidget {
                 flex: 70,
                 child: Padding(
                   padding: const EdgeInsets.only(
-                      left: 5.0, right: 5.0, top: 10.0, bottom: 10.0),
+                      left: 12.0, right: 5.0, top: 10.0, bottom: 10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,

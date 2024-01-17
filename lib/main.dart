@@ -55,7 +55,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => LocationProvider()),
       ChangeNotifierProvider(create: (_) => RegisterProvider()),
       ChangeNotifierProvider(create: (_) => ForgotPasswordProvider()),
-       ChangeNotifierProvider(create: (_) => ChangePasswordProvider()),
+      ChangeNotifierProvider(create: (_) => ChangePasswordProvider()),
       // Add other providers here if needed.
     ],
     child: const MyApp(),
@@ -120,7 +120,7 @@ class MyApp extends StatelessWidget {
         }
         return supportedLocales.first;
       },
-      home: const ManageFacilities(),
+      home: const SplashScreen(),
       routes: {
         ('/home'): (context) => Home(),
         ('/aboutUs'): (context) => AboutUs(),

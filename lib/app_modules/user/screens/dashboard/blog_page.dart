@@ -8,10 +8,14 @@ import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/services/appService.dart';
 import 'package:mboacare/widgets/blog_card.dart';
 import 'package:mboacare/widgets/search_widget.dart';
+import 'package:mboacare/widgets/shimmer_top.dart';
 import 'package:mboacare/widgets/top_card.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../global/styles/colors.dart';
 import 'dart:developer' as devtools show log;
 import '../../../../model/blog_data.dart';
+import '../../../../utils/constants.dart';
+import '../../../../widgets/shimmer_effect.dart';
 
 class BlogPage extends StatefulWidget {
   const BlogPage({super.key});
@@ -49,6 +53,18 @@ class _BlogPageState extends State<BlogPage> {
             const SizedBox(
               height: 10.0,
             ),
+            Text(
+              textAlign: TextAlign.left,
+              'Top Blog',
+              style: GoogleFonts.montserrat(
+                color: AppColors.buttonColor,
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
             SizedBox(
               height: height * 0.33,
               // width: width * 0.2,
@@ -56,12 +72,7 @@ class _BlogPageState extends State<BlogPage> {
                   future: ApiServices().fetchBlogData(),
                   builder: ((context, snapshot) {
                     if (!snapshot.hasData) {
-                      return const Center(
-                        child: SpinKitCircle(
-                          size: 50.0,
-                          color: AppColors.buttonColor,
-                        ),
-                      );
+                      return ShimmerTop();
                     }
                     if (snapshot.data!.isEmpty) {
                       return Center(
@@ -74,14 +85,7 @@ class _BlogPageState extends State<BlogPage> {
                       );
                     }
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: Text(
-                          'Loading Top Blogs.......',
-                          style: GoogleFonts.quicksand(
-                            fontSize: 14,
-                          ),
-                        ),
-                      );
+                      return ShimmerTop();
                     }
                     final data = snapshot.data;
                     return ListView.builder(
@@ -131,19 +135,45 @@ class _BlogPageState extends State<BlogPage> {
                   future: ApiServices().fetchBlogData(),
                   builder: ((context, snapshot) {
                     if (!snapshot.hasData) {
-                      return const Center(
-                        child: SpinKitCircle(
-                          size: 50.0,
-                          color: AppColors.buttonColor,
-                        ),
+                      const SizedBox(
+                        height: 10.0,
+                      );
+                      return Column(
+                        children: [
+                          ListView.separated(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: 5,
+                            itemBuilder: (context, index) =>
+                                const ShimmerCard(),
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(height: defaultPadding),
+                          ),
+                        ],
                       );
                     }
+
                     if (snapshot.data!.isEmpty) {
                       return Text(
                         'No Blog Available!',
                         style: GoogleFonts.quicksand(
                           fontSize: 14,
                         ),
+                      );
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Column(
+                        children: [
+                          ListView.separated(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: 5,
+                            itemBuilder: (context, index) =>
+                                const ShimmerCard(),
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(height: defaultPadding),
+                          ),
+                        ],
                       );
                     }
                     if (snapshot.connectionState == ConnectionState.none) {
@@ -160,8 +190,7 @@ class _BlogPageState extends State<BlogPage> {
                       child: ListView.builder(
                           physics: BouncingScrollPhysics(),
                           shrinkWrap: false,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
                           itemCount: data?.length,
                           itemBuilder: (context, index) {
                             final blog = data![index];
