@@ -4,865 +4,535 @@ import 'dart:developer';
 
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/edit_search.dart';
+import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/manageFacilities.dart';
+import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/search_address.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
+import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
 //import 'package:mboacare/model/placemodel/facilities_model.dart';
 import 'package:mboacare/services/facilities_provider.dart';
+import 'package:mboacare/services/hospital_provider/delete_hospitalProvider.dart';
+import 'package:mboacare/services/hospital_provider/edit_hospitalProvider.dart';
+import 'package:mboacare/utils/constants.dart';
+import 'package:mboacare/widgets/check_list_item.dart';
+import 'package:mboacare/widgets/chips_items.dart';
+import 'package:mboacare/widgets/custom_btn.dart';
+import 'package:mboacare/widgets/extensions.dart';
+import 'package:mboacare/widgets/image_upload_view.dart';
+import 'package:mboacare/widgets/input_fields.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../widgets/custom_textfield.dart';
 
 class EditFacilitiesPage extends StatefulWidget {
   // final FacilitiesModel facilitiesModel;
-  const EditFacilitiesPage({
-    super.key,
-  });
+  const EditFacilitiesPage(
+      {super.key,
+      this.email,
+      this.hospitalAddress,
+      this.id,
+      this.hospitalFacilities,
+      this.hospitalOwner,
+      this.hospitalServices,
+      this.hospitalSize,
+      this.hospitalType,
+      this.image,
+      this.name,
+      this.phone,
+      this.website,
+      this.lat,
+      this.lng});
+
+  final String? id,
+      name,
+      email,
+      phone,
+      hospitalType,
+      hospitalOwner,
+      hospitalAddress,
+      hospitalSize,
+      hospitalServices,
+      hospitalFacilities,
+      website,
+      lat,
+      lng,
+      image;
 
   @override
   State<EditFacilitiesPage> createState() => _EditFacilitiesPageState();
 }
 
 class _EditFacilitiesPageState extends State<EditFacilitiesPage> {
-  String selectedType = 'Public';
-  List<String> type = [
-    'Public',
-    'Private',
-    'Other',
-  ];
-  String selectedSize = 'Medium';
-  List<String> size = [
-    'Small',
-    'Medium',
-    'Large',
-  ];
-  String selectedOwnership = 'Government';
-  List<String> ownership = [
-    'Individual',
-    'Corporate',
-    'Government',
-  ];
+  bool? argIsChecked = false;
+  String? selectedTitle = "";
+  bool isAddressAvailable = false;
 
-  bool isSize = false;
-  bool isType = false;
-  bool isOwnership = false;
-  int selectedIndex = 0;
-  final ImagePicker _imagePicker = ImagePicker();
-  File? _selectedImage;
-  List<String> facilitiesTags = [];
-  List<String> medicalTags = [];
-  Future<void> _pickImage() async {
-    final pickedImage =
-        await _imagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      if (pickedImage != null) {
-        _selectedImage = File(pickedImage.path);
-      }
-    });
+  void handleItemSelected(String? title, bool? isChecked) {
+    debugPrint("Selected:: Title: $title, isChecked: $isChecked");
+    selectedTitle = title;
+    argIsChecked = isChecked;
   }
 
-  final formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _phoneNoController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _websiteController = TextEditingController();
-  final _addressController = TextEditingController();
-  TextEditingController medicalTagsController = TextEditingController();
-  TextEditingController facilitiesTagsController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    // final facilitiesProvider = Provider.of<FacilitiesProvider>(context);
+    final provider = Provider.of<EditHospitalProvider>(context);
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+      appBar: AppBar(
+        backgroundColor: AppColors.whiteColor,
+        titleSpacing: 0.0,
+        title: Text(
+          widget.name.toString(),
+          style: GoogleFonts.inter(
+            fontSize: 18,
+          ),
+        ),
+        centerTitle: false,
+        leading: IconButton(
+          onPressed: () {
+            Get.to(() => const ManageFacilities());
+          },
+          icon: const Icon(
+            Icons.arrow_back_rounded,
+            size: 25.0,
+          ),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                _showDialog(context);
+              },
+              icon: const Icon(
+                Icons.delete_outline_outlined,
+                color: Color.fromARGB(255, 225, 82, 82),
+              ))
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            // key: provider.formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(
-                          Icons.arrow_back,
-                          color: AppColors.secondaryTextColor,
-                        )),
-                    Text('Edit facility',
-                        style: AppTextStyles.bodyOne.copyWith(fontSize: 18)),
-                    const SizedBox(
-                      width: 180,
-                    ),
-                    InkWell(
-                        onTap: () {
-                          deleteDialog(context);
-                        },
-                        child: SvgPicture.asset(
-                          'assets/icons/delete.svg',
-                          color: AppColors.deleteColor,
-                        )),
-                  ],
-                ),
-
-                const SizedBox(
-                  height: 10,
-                ),
-                const Text(
-                  'Hospital Information',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.buttonColor),
-                ),
-                const Divider(
-                  color: AppColors.buttonColor,
-                  thickness: 2.5,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Hospital name *',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.grey),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTextField(
-                  hintText: '',
-                  controller: _nameController,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Hospital Email',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.grey),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTextField(
-                  hintText: '',
-                  controller: _emailController,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Phone Number *',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.grey),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTextField(
-                  hintText: '',
-                  controller: _phoneNoController,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Hospital Website *',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.grey),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTextField(
-                  hintText: '',
-                  controller: _websiteController,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Hospital Address *',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.grey),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTextField(
-                  controller: _addressController,
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.all(17.0),
-                    child: SvgPicture.asset(
-                      'assets/icons/location.svg',
-                    ),
+                SizedBox(
+                  child: Column(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppStrings.information,
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.primaryColor),
+                          ),
+                          const Divider(
+                            color: AppColors.primaryColor,
+                            thickness: 2.0,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  hintText: '5447, Park Lane, London, UK',
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 30,
                 ),
-                const Text('Medical Services Offered'),
-                //widget.facilitiesModel.facilitiesType != null
-                //  ? GridView.builder(
-                //         shrinkWrap: true,
-                //         padding: const EdgeInsets.all(10),
-                //         itemCount:
-                //          widget.facilitiesModel.facilitiesType?.length,
-                //         gridDelegate:
-                //             const SliverGridDelegateWithFixedCrossAxisCount(
-                //           crossAxisCount: 3,
-                //           mainAxisExtent: 45,
-                //         ),
-                //         itemBuilder: (context, index) {
-                //          // print(widget.facilitiesModel.facilitiesType?.length);
-                //           return Chip(
-                //             backgroundColor: Colors.white,
-                //             label: const Text('',
-                //              // widget.facilitiesModel.facilitiesType![index],
-                //               style:  TextStyle(
-                //                   color: Colors.black,
-                //                   fontWeight: FontWeight.w600,
-                //                   fontSize: 17),
-                //             ),
-                //             deleteIconColor: Colors.black,
-                //             padding: const EdgeInsets.all(0),
-                //             onDeleted: () {
-                //               setState(() {
-                //                 // widget.facilitiesModel.facilitiesType?.remove(
-                //                 //     widget
-                //                 //         .facilitiesModel.facilitiesType?[index]);
-                //               });
-                //             },
-                //           );
-                //         },
-                //       )
-                //     : const SizedBox(),
-                // medicalTags.isNotEmpty
-                // ? GridView.builder(
-                //     shrinkWrap: true,
-                //     padding: const EdgeInsets.all(10),
-                //     itemCount: medicalTags.length,
-                //     gridDelegate:
-                //         const SliverGridDelegateWithFixedCrossAxisCount(
-                //       crossAxisCount: 3,
-                //       mainAxisExtent: 45,
-                //     ),
-                //     itemBuilder: (context, index) => Chip(
-                //       backgroundColor: Colors.white,
-                //       label: Text(
-                //         medicalTags[index],
-                //         style: const TextStyle(
-                //             color: Colors.black,
-                //             fontWeight: FontWeight.w600,
-                //             fontSize: 17),
-                //       ),
-                //       deleteIconColor: Colors.black,
-                //       padding: const EdgeInsets.all(0),
-                //       onDeleted: () {
-                //         setState(() {
-                //           medicalTags.remove(medicalTags[index]);
-                //         });
-                //       },
-                //     ),
-                //   )
-                //  : const SizedBox.shrink(),
-                TextFormField(
-                  controller: medicalTagsController,
-                  cursorColor: Colors.teal,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                          color: AppColors.grey300, width: 1.5),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                          color: AppColors.grey300, width: 1.5),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                          color: AppColors.grey300, width: 1.5),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                    hintText: 'Add a medical service',
-                  ),
-                  onFieldSubmitted: (_) {
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: AppFontSizes.fontSize4),
+                      child: Text(
+                        'Hospital Name *',
+                        style: GoogleFonts.inter(
+                          fontSize: AppFontSizes.fontSize14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    )),
+                SizedBox(height: AppFontSizes.fontSize6),
+                EditTextForm(
+                  hintText: widget.name.toString(),
+                  controller: provider.hospitalNameController,
+                  onChanged: (value) {
                     setState(() {
-                      medicalTags.add(medicalTagsController.text);
-
-                      medicalTagsController.text = '';
+                      provider.setHospitalName(value);
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Facilities available',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.grey),
-                ),
-                // widget.facilitiesModel.serviceType != null
-                // ? GridView.builder(
-                //     shrinkWrap: true,
-                //     padding: const EdgeInsets.all(10),
-                //     itemCount: widget.facilitiesModel.serviceType?.length,
-                //     gridDelegate:
-                //         const SliverGridDelegateWithFixedCrossAxisCount(
-                //       crossAxisCount: 3,
-                //       mainAxisExtent: 45,
-                //     ),
-                //     itemBuilder: (context, index) {
-                //       print(widget.facilitiesModel.serviceType?.length);
-                //       return Chip(
-                //         backgroundColor: Colors.white,
-                //         label: Text(
-                //           widget.facilitiesModel.serviceType![index],
-                //           style: const TextStyle(
-                //               color: Colors.black,
-                //               fontWeight: FontWeight.w600,
-                //               fontSize: 17),
-                //         ),
-                //         deleteIconColor: Colors.black,
-                //         padding: const EdgeInsets.all(0),
-                //         onDeleted: () {
-                //           setState(() {
-                //             widget.facilitiesModel.serviceType?.remove(
-                //                 widget.facilitiesModel.serviceType?[index]);
-                //           });
-                //         },
-                //       );
-                //     },
-                //   )
-                //  : const SizedBox(),
-                //facilitiesTags.isNotEmpty
-                // ? GridView.builder(
-                //     shrinkWrap: true,
-                //     padding: const EdgeInsets.all(10),
-                //     itemCount: facilitiesTags.length,
-                //     gridDelegate:
-                //         const SliverGridDelegateWithFixedCrossAxisCount(
-                //       crossAxisCount: 3,
-                //       mainAxisExtent: 45,
-                //     ),
-                //     itemBuilder: (context, index) => Chip(
-                //       backgroundColor: Colors.white,
-                //       label: Text(
-                //         facilitiesTags[index],
-                //         style: const TextStyle(
-                //             color: Colors.black,
-                //             fontWeight: FontWeight.w600,
-                //             fontSize: 17),
-                //       ),
-                //       deleteIconColor: Colors.black,
-                //       padding: const EdgeInsets.all(0),
-                //       onDeleted: () {
-                //         setState(() {
-                //           facilitiesTags.remove(facilitiesTags[index]);
-                //         });
-                //       },
-                //     ),
-                //   )
-                // : const SizedBox.shrink(),
-                TextFormField(
-                  controller: facilitiesTagsController,
-                  cursorColor: Colors.teal,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                          color: AppColors.grey300, width: 1.5),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                          color: AppColors.grey300, width: 1.5),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                          color: AppColors.grey300, width: 1.5),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                    hintText: 'Add a facility',
-                  ),
-                  onFieldSubmitted: (_) {
+                SizedBox(height: AppFontSizes.fontSize20),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: AppFontSizes.fontSize4),
+                      child: Text(
+                        'Hospital Email *',
+                        style: GoogleFonts.inter(
+                          fontSize: AppFontSizes.fontSize14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    )),
+                SizedBox(height: AppFontSizes.fontSize6),
+                EditTextForm(
+                  hintText: widget.email.toString(),
+                  prefixIcon: ImageAssets.emailIcon,
+                  controller: provider.hospitalEmailController,
+                  onChanged: (value) {
                     setState(() {
-                      facilitiesTags.add(facilitiesTagsController.text);
-
-                      facilitiesTagsController.text = '';
+                      provider.setHospitalEmail(value);
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Hospital Type',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.grey),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    isType = !isType;
-                    setState(() {});
-                  },
-                  child: Container(
-                    height: 50,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: AppColors.whiteColor,
-                        border:
-                            Border.all(color: AppColors.grey300, width: 1.5),
-                        borderRadius: BorderRadius.circular(10)),
+                SizedBox(height: AppFontSizes.fontSize20),
+                Align(
+                    alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              selectedType,
-                              style: const TextStyle(
-                                  color: AppColors.grey200,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            const Icon(
-                              Icons.keyboard_arrow_down,
-                              color: AppColors.grey,
-                            )
-                          ]),
-                    ),
-                  ),
-                ),
-                if (isType)
-                  Card(
-                    elevation: 0.2,
-                    child: SizedBox(
-                      height: 200,
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Select Hospital Type',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black),
-                            ),
-                          ),
-                          const Divider(
-                            color: AppColors.grey,
-                          ),
-                          ListView.builder(
-                            primary: true,
-                            shrinkWrap: true,
-                            itemCount: type.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                color: selectedIndex == index
-                                    ? AppColors.grey100
-                                    : Colors.transparent,
-                                child: InkWell(
-                                    onTap: () {
-                                      selectedType = type[index];
-                                      selectedIndex = index;
-                                      isType = false;
-                                      setState(() {});
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10),
-                                      child: Row(
-                                        children: [
-                                          selectedIndex == index
-                                              ? SvgPicture.asset(
-                                                  'assets/icons/check.svg')
-                                              : SvgPicture.asset(
-                                                  'assets/icons/uncheck.svg'),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            type[index],
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    )),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Hospital Size',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.grey),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    isSize = !isSize;
-                    setState(() {});
-                  },
-                  child: Container(
-                    height: 50,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: AppColors.whiteColor,
-                        border:
-                            Border.all(color: AppColors.grey300, width: 1.5),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              selectedSize,
-                              style: const TextStyle(
-                                  color: AppColors.grey200,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            const Icon(
-                              Icons.keyboard_arrow_down,
-                              color: AppColors.grey,
-                            )
-                          ]),
-                    ),
-                  ),
-                ),
-                if (isSize)
-                  Card(
-                    elevation: 0.2,
-                    child: SizedBox(
-                      height: 200,
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Select hospital Size',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black),
-                            ),
-                          ),
-                          const Divider(
-                            color: AppColors.grey,
-                          ),
-                          ListView.builder(
-                            primary: true,
-                            shrinkWrap: true,
-                            itemCount: size.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                color: selectedIndex == index
-                                    ? AppColors.grey100
-                                    : Colors.transparent,
-                                child: InkWell(
-                                    onTap: () {
-                                      isSize = false;
-                                      selectedSize = type[index];
-                                      selectedIndex = index;
-                                      setState(() {});
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10),
-                                      child: Row(
-                                        children: [
-                                          selectedIndex == index
-                                              ? SvgPicture.asset(
-                                                  'assets/icons/check.svg')
-                                              : SvgPicture.asset(
-                                                  'assets/icons/uncheck.svg'),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            size[index],
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    )),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Hospital Ownership',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.grey),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    isOwnership = !isOwnership;
-                    setState(() {});
-                  },
-                  child: Container(
-                    height: 50,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: AppColors.whiteColor,
-                        border:
-                            Border.all(color: AppColors.grey300, width: 1.5),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              selectedOwnership,
-                              style: const TextStyle(
-                                  color: AppColors.grey200,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            const Icon(
-                              Icons.keyboard_arrow_down,
-                              color: AppColors.grey,
-                            )
-                          ]),
-                    ),
-                  ),
-                ),
-                if (isOwnership)
-                  Card(
-                    elevation: 0.2,
-                    child: SizedBox(
-                      height: 230,
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Select hospital ownership',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black),
-                            ),
-                          ),
-                          const Divider(
-                            color: AppColors.grey,
-                          ),
-                          ListView.builder(
-                            primary: true,
-                            shrinkWrap: true,
-                            itemCount: ownership.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                color: selectedIndex == index
-                                    ? AppColors.grey100
-                                    : Colors.transparent,
-                                child: InkWell(
-                                    onTap: () {
-                                      isOwnership = false;
-                                      selectedOwnership = ownership[index];
-                                      selectedIndex = index;
-                                      setState(() {});
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10),
-                                      child: Row(
-                                        children: [
-                                          selectedIndex == index
-                                              ? SvgPicture.asset(
-                                                  'assets/icons/check.svg')
-                                              : SvgPicture.asset(
-                                                  'assets/icons/uncheck.svg'),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            ownership[index],
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    )),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Stack(
-                  children: [
-                    Container(
-                        height: 150,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            // image: DecorationImage(
-                            //     fit: BoxFit.cover,
-
-                            //     image:
-                            //     NetworkImage(
-                            //         widget.facilitiesModel.hospitalImage ?? ''),
-                            //         ),
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                                color: AppColors.grey300, width: 1.5)),
-                        child: Image.asset(
-                          'assets/images/facilitiesImage.png',
-                          fit: BoxFit.cover,
-                        )
-
-                        //     Image.asset(
-                        //        // widget.facilitiesModel.hospitalImage ?? '',
-                        //         //fit: BoxFit.cover,
-                        //       )
-                        //     : Image.file(
-                        //         _selectedImage!,
-                        //         fit: BoxFit.cover,
-                        //         height: 150,
-                        //       )
-                        ),
-                    Positioned(
-                      top: 90,
-                      left: 180,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _pickImage();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.buttonColor,
-                          foregroundColor: AppColors.whiteColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          minimumSize: const Size(15, 35),
-                        ),
-                        child: const Text(
-                          'Change photo',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                          ),
+                      padding: EdgeInsets.only(left: AppFontSizes.fontSize4),
+                      child: Text(
+                        'Phone number *',
+                        style: GoogleFonts.inter(
+                          fontSize: AppFontSizes.fontSize14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor,
                         ),
                       ),
+                    )),
+                SizedBox(height: AppFontSizes.fontSize6),
+                PhoneNumberInput(
+                  number: provider.number,
+                  hintText: widget.phone,
+                  controller: provider.hospitalPhoneNumberController,
+                  onInputChanged: (number) {
+                    setState(() {});
+                    debugPrint("onInputChanged: ${number.phoneNumber}");
+                  },
+                  validator: (value) {
+                    setState(() {});
+                    debugPrint("validator value: $value");
+                    return "";
+                  },
+                  onInputValidated: (value) {
+                    setState(() {});
+                    debugPrint("onInputValidated value: $value");
+                  },
+                  onSubmit: () {
+                    setState(() {});
+                    debugPrint("onSubmit");
+                  },
+                  onSaved: (number) {
+                    setState(() {});
+                    debugPrint("onSaved: $number");
+                  },
+                ),
+                SizedBox(height: AppFontSizes.fontSize20),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: AppFontSizes.fontSize4),
+                      child: Text(
+                        'Hospital Website *',
+                        style: GoogleFonts.inter(
+                          fontSize: AppFontSizes.fontSize14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    )),
+                SizedBox(height: AppFontSizes.fontSize6),
+                EditTextForm(
+                    hintText: widget.website.toString(),
+                    controller: provider.hospitalWebsiteController),
+                SizedBox(height: AppFontSizes.fontSize20),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: AppFontSizes.fontSize4),
+                      child: Text(
+                        'Hospital Address *',
+                        style: GoogleFonts.inter(
+                          fontSize: AppFontSizes.fontSize14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    )),
+                SizedBox(height: AppFontSizes.fontSize6),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => EditSearch());
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.borderColor),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-                  ],
+                    child: Row(
+                      children: [
+                        Image.asset(ImageAssets.makerIcon,
+                            width: 22.0, height: 22.0),
+                        Text(
+                          isAddressAvailable
+                              ? "Add address"
+                              : widget.hospitalAddress.toString(),
+                          style: GoogleFonts.inter(
+                              color: AppColors.hintTextColor,
+                              fontSize: AppFontSizes.fontSize16,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                const SizedBox(
-                  height: 40,
+                SizedBox(height: AppFontSizes.fontSize20),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: AppFontSizes.fontSize4),
+                      child: Text(
+                        'Medical Services Offered *',
+                        style: GoogleFonts.inter(
+                          fontSize: AppFontSizes.fontSize14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    )),
+                SizedBox(height: AppFontSizes.fontSize6),
+                provider.medicalServicesChipItems.isNotEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: ChipListView(
+                          listItems: provider.medicalServicesChipItems,
+                          textController: provider.hospitalMedicalController,
+                          onRemoveClicked: () {},
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+                EditTextForm(
+                  hintText: widget.hospitalServices.toString(),
+                  controller: provider.hospitalMedicalController,
+                  onSubmitted: (text) {
+                    if (text.isNotEmpty) {
+                      provider.addToMedsChip(text);
+                    }
+                  },
                 ),
+                SizedBox(height: AppFontSizes.fontSize20),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: AppFontSizes.fontSize4),
+                      child: Text(
+                        'Facilities Available *',
+                        style: GoogleFonts.inter(
+                          fontSize: AppFontSizes.fontSize14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    )),
+                SizedBox(height: AppFontSizes.fontSize6),
+                provider.facilitiesAvailableChipItems.isNotEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: ChipListView(
+                          listItems: provider.facilitiesAvailableChipItems,
+                          textController: provider.hospitalFacilityController,
+                          onRemoveClicked: () {},
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+                EditTextForm(
+                  hintText: widget.hospitalFacilities.toString(),
+                  controller: provider.hospitalFacilityController,
+                  onSubmitted: (text) {
+                    debugPrint("onSubmitted: $text");
+                    if (text.isNotEmpty) {
+                      setState(() {
+                        provider.addToFacilitiesChip(text);
+                        print(text);
+                      });
+                    }
+                  },
+                ),
+                SizedBox(height: AppFontSizes.fontSize20),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: AppFontSizes.fontSize4),
+                      child: Text(
+                        'Hospital Type *',
+                        style: GoogleFonts.inter(
+                          fontSize: AppFontSizes.fontSize14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    )),
+                SizedBox(height: AppFontSizes.fontSize6),
+                EditTextForm(
+                  hintText: widget.hospitalType.toString(),
+                  controller: provider.hospitalTypeController,
+                  readonly: true,
+                  onTap: () => hospitalTypeBottomSheet(context,
+                      pageTitle: "Hospital Type",
+                      listItems: provider.hospitalTypeList,
+                      onCloseIconClicked: () {
+                    Navigator.pop(context);
+                  }, onItemClicked: (title, checked) {
+                    setState(() {});
+                    provider.hospitalTypeController.text = title.toString();
+                    print(title);
+                  }),
+                  suffixIcon: ImageAssets.arrowIcon,
+                ),
+                SizedBox(height: AppFontSizes.fontSize20),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: AppFontSizes.fontSize4),
+                      child: Text(
+                        'Hospital Size *',
+                        style: GoogleFonts.inter(
+                          fontSize: AppFontSizes.fontSize14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    )),
+                SizedBox(height: AppFontSizes.fontSize6),
+                EditTextForm(
+                  hintText: widget.hospitalSize.toString(),
+                  readonly: true,
+                  suffixIcon: ImageAssets.arrowIcon,
+                  controller: provider.hospitalSizeController,
+                  onTap: () => hospitalTypeBottomSheet(context,
+                      pageTitle: "Hospital Size",
+                      listItems: provider.hospitalSizeList,
+                      onCloseIconClicked: () {
+                    Navigator.pop(context);
+                  }, onItemClicked: (title, checked) {
+                    setState(() {});
+                    provider.hospitalSizeController.text = title.toString();
+                    print(title);
+                  }),
+                ),
+                SizedBox(height: AppFontSizes.fontSize20),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: AppFontSizes.fontSize4),
+                      child: Text(
+                        'Hospital Ownership *',
+                        style: GoogleFonts.inter(
+                          fontSize: AppFontSizes.fontSize14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    )),
+                SizedBox(height: AppFontSizes.fontSize6),
+                EditTextForm(
+                  hintText: widget.hospitalOwner.toString(),
+                  readonly: true,
+                  suffixIcon: ImageAssets.arrowIcon,
+                  controller: provider.hospitalOwnerShipController,
+                  onTap: () => hospitalTypeBottomSheet(context,
+                      pageTitle: 'Hospital Owner',
+                      listItems: provider.hospitalSizeOwnershipList,
+                      onCloseIconClicked: () {
+                    Navigator.pop(context);
+                  }, onItemClicked: (title, checked) {
+                    setState(() {});
+                    provider.hospitalOwnerShipController.text =
+                        title.toString();
+                  }),
+                ),
+                SizedBox(height: AppFontSizes.fontSize20),
+                provider.selectedImage != null
+                    ? SelectedImageView(
+                        selectedImage: provider.selectedImage,
+                        onTap: provider.pickImage,
+                      )
+                    : ImageUploadView(
+                        onTap: provider.pickImage,
+                      ),
+                const SizedBox(height: 20),
                 Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // facilitiesProvider.editFacilities(
-                      //     name: _nameController.text,
-                      //     email: _emailController.text,
-                      //     website: _websiteController.text,
-                      //     phoneno: _phoneNoController.text,
-                      //     context: context,
-                      //     latitude: '20.00',
-                      //     longitude: '30.00',
-                      //     hospitalAddress: _addressController.text,
-                      //     serviceType: medicalTags,
-                      //     facilitiesType: facilitiesTags,
-                      //     hospitalType: selectedType,
-                      //     hospitalOwner: selectedOwnership,
-                      //     hospitalSize: selectedSize,
-                      //     hospitalImage: _selectedImage!);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.buttonColor,
-                      foregroundColor: AppColors.whiteColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      minimumSize: const Size(150, 45),
-                    ),
-                    child: const Text(
-                      'Save',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                  child: SizedBox(
+                    width: context.getWidth() / 3,
+                    child: Consumer<EditHospitalProvider>(
+                        builder: (context, hospital, child) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (hospital.reqMessage != '') {
+                          hospital.clear();
+                        }
+                      });
+                      return AppButton(
+                          status: hospital.isLoading,
+                          onPressed: () {
+                            // if (provider.formKey.currentState!.validate()) {
+                            String hospitalLat = widget.lat.toString();
+                            String hospitalLng = widget.lng.toString();
+                            String hospitalAddress =
+                                widget.hospitalAddress.toString();
+                            String hospitalName =
+                                provider.hospitalNameController.text.trim();
+                            String hospitalWeblink =
+                                provider.hospitalWebsiteController.text;
+                            String hospitalEmail =
+                                provider.hospitalEmailController.text.trim();
+                            String hospitalPhone =
+                                provider.hospitalPhoneNumberController.text;
+                            String hospitalOwner =
+                                provider.hospitalOwnerShipController.text;
+                            String hospitalSize =
+                                provider.hospitalSizeController.text;
+                            String hospitalMedicalServices =
+                                provider.hospitalServices.toString();
+                            String hospitalFacilities =
+                                provider.hospitalFacilities.toString();
+                            String hospitalType =
+                                provider.hospitalTypeController.text;
+                            String id = widget.id.toString();
+
+                            hospital.editHospital(
+                                hospitalName,
+                                hospitalWeblink,
+                                hospitalEmail,
+                                hospitalType,
+                                hospitalOwner,
+                                hospitalSize,
+                                hospitalMedicalServices,
+                                hospitalFacilities,
+                                hospitalAddress,
+                                hospitalLat,
+                                hospitalLng,
+                                hospitalPhone,
+                                id,
+                                provider.selectedImage,
+                                context);
+                          },
+                          title: 'Update',
+                          enabled: true);
+                    }),
                   ),
                 ),
-                const SizedBox(
-                  height: 50,
-                )
               ],
             ),
           ),
@@ -871,89 +541,126 @@ class _EditFacilitiesPageState extends State<EditFacilitiesPage> {
     );
   }
 
-  void deleteDialog(BuildContext context) {
-    final facilitiesProvider =
-        // Provider.of<FacilitiesProvider>(context, listen: false);
-        showDialog<AlertDialog>(
+  void _showDialog(BuildContext context) {
+    showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          icon: Container(
-            height: 50,
-            width: 50,
-            decoration: const BoxDecoration(
-                shape: BoxShape.circle, color: AppColors.danger),
-            child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset(
-                  'lib/assests/icons/delete.svg',
-                )),
-          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 40),
+          titlePadding:
+              const EdgeInsets.symmetric(horizontal: 60, vertical: 14),
+          actionsPadding: const EdgeInsets.symmetric(horizontal: 50),
           title: const Text(
-            'Delete  medical facility',
+            textAlign: TextAlign.center,
+            "Delete Hospital",
             style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black),
+              fontSize: 18,
+              color: AppColors.grey,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           content: const Text(
-            'You are about to permanently delete this medical facility.',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
             textAlign: TextAlign.center,
+            "Are you sure you want to delete Hospital?",
+            style: TextStyle(
+              fontSize: 14,
+              color: AppColors.grey,
+              fontWeight: FontWeight.w400,
+            ),
           ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    //     print('hh');
-                    // await    facilitiesProvider.deleteFacilities(
-                    //       context: context,
-                    //         website: widget.facilitiesModel.website ?? '');
-                    //          facilitiesProvider.getFacilities();
-                    //     Navigator.pop(context);
-                    //     Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.deleteColor,
-                    foregroundColor: AppColors.whiteColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    minimumSize: const Size(40, 40),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.red),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        'No',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.whiteColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )),
+                  const SizedBox(
+                    width: 5,
                   ),
-                  child: const Text(
-                    'DELETE',
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.buttonColor,
-                    foregroundColor: AppColors.whiteColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    minimumSize: const Size(40, 40),
-                  ),
-                  child: const Text(
-                    'CANCEL',
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
+                  Consumer<DeleteHospitalProvider>(
+                      builder: (context, hospital, child) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (hospital.reqMessage != '') {}
+                      hospital.clear();
+                    });
+                    return hospital.isLoading
+                        ? const SpinKitThreeBounce(
+                            color: AppColors.cardbg,
+                          )
+                        : TextButton(
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(AppColors.cardbg),
+                            ),
+                            onPressed: () {
+                              print(widget.id);
+                              hospital.deleteHospital(
+                                  hospitalId: widget.id.toString(),
+                                  context: context);
+                            },
+                            child: const Text(
+                              'Yes',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppColors.whiteColor,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ));
+                  }),
+                ],
+              ),
             ),
           ],
         );
       },
     );
   }
+
+  void hospitalTypeBottomSheet(BuildContext context,
+      {String? pageTitle,
+      List<String>? listItems,
+      Function()? onCloseIconClicked,
+      Function(String?, bool?)? onItemClicked}) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return CheckItemList(
+            pageTitle: pageTitle.toString(),
+            listItems: listItems!,
+            onCloseIconClicked: onCloseIconClicked!,
+            onItemClicked: onItemClicked!,
+          );
+        });
+  }
+
+  void getPhoneNumber(String phoneNumber, PhoneNumber receivedNumber) async {
+    PhoneNumber number =
+        await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, 'US');
+
+    setState(() {
+      receivedNumber = number;
+    });
+  }
+}
+
+class ChecklistItem {
+  String title;
+  bool isChecked;
+
+  ChecklistItem({required this.title, required this.isChecked});
 }

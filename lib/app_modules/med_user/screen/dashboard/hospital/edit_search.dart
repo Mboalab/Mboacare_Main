@@ -2,24 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/add_hopital.dart';
+import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/edit_facilities_page.dart';
 import 'package:mboacare/global/styles/colors.dart';
 import 'package:mboacare/model/placepredicts.dart';
 import 'package:mboacare/services/apis.dart';
+import 'package:mboacare/services/map_services/editSelect.dart';
 import 'package:mboacare/services/map_services/locationProvider.dart';
 import 'package:mboacare/services/map_services/mapService.dart';
 import 'package:mboacare/services/map_services/searchSelection.dart';
 import 'package:provider/provider.dart';
 
-class SearchAddress extends StatefulWidget {
-  const SearchAddress({
+class EditSearch extends StatefulWidget {
+  const EditSearch({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<SearchAddress> createState() => _SearchAddressState();
+  State<EditSearch> createState() => _EditSearchState();
 }
 
-class _SearchAddressState extends State<SearchAddress> {
+class _EditSearchState extends State<EditSearch> {
   TextEditingController searchController = TextEditingController();
 
   List<PlacePredictions> placePredictionsList = [];
@@ -40,10 +42,10 @@ class _SearchAddressState extends State<SearchAddress> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Get.to(() => AddHospitalPage(
-                  placeName: placeName,
-                  lat: searchLat,
-                  lng: searchLng,
+            Get.to(() => EditFacilitiesPage(
+                  hospitalAddress: placeName,
+                  lat: searchLat.toString(),
+                  lng: searchLng.toString(),
                 ));
           },
           icon: const Icon(Icons.arrow_back),
@@ -104,7 +106,7 @@ class _SearchAddressState extends State<SearchAddress> {
                             scrollDirection: Axis.vertical,
                             padding: const EdgeInsets.all(0.0),
                             itemBuilder: (context, index) {
-                              return SearchTile(
+                              return EditTile(
                                   predictions: searchPredictionsList[index]);
                             },
                             separatorBuilder:
