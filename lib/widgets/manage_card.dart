@@ -97,7 +97,7 @@ class ManageCard extends StatelessWidget {
                               blogTime,
                               style: AppTextStyles.bodyOne.copyWith(
                                   color: AppColors.grey,
-                                  fontSize: 12,
+                                  fontSize: 15.0,
                                   fontWeight: FontWeight.w500),
                             ),
                             GestureDetector(
