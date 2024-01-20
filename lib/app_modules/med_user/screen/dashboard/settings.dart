@@ -5,9 +5,13 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/blog/my_blog.dart';
+import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/manageFacilities.dart';
+import 'package:mboacare/app_modules/med_user/screen/dashboard/profile/user_profile_page.dart';
+import 'package:mboacare/app_modules/med_user/screen/inner_screen/aboutUs.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
+import 'package:mboacare/global/theme/themeScreen.dart';
 import 'package:mboacare/services/auth_provider/loginProvider.dart';
 import 'package:mboacare/services/auth_provider/registerProvider.dart';
 import 'package:mboacare/widgets/settings_widget.dart';
@@ -87,7 +91,12 @@ class Settings extends StatelessWidget {
                     Icons.arrow_forward_ios_outlined,
                   ),
                   onTap: () {
-                    Navigator.pushNamed(context, '/profilePage');
+                    Get.to(
+                      () => const ProfilePage(),
+                      duration: const Duration(milliseconds: 800),
+                      curve: Curves.easeInCirc,
+                      transition: Transition.leftToRight,
+                    );
                   }),
               SettingsPageListTiles(
                   icon: const Icon(
@@ -115,7 +124,12 @@ class Settings extends StatelessWidget {
                   subtitle: 'System',
                   trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
                   onTap: () {
-                    Navigator.pushNamed(context, '/themeScreen');
+                    Get.to(
+                      () => const ThemeScreen(),
+                      duration: const Duration(milliseconds: 800),
+                      curve: Curves.easeInCirc,
+                      transition: Transition.leftToRight,
+                    );
                   }),
               SettingsPageListTiles(
                   icon: SvgPicture.asset(
@@ -127,7 +141,12 @@ class Settings extends StatelessWidget {
                   subtitle: 'Manage Facilities',
                   trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
                   onTap: () {
-                    Navigator.pushNamed(context, '/manageFacilities');
+                    Get.to(
+                      () => const ManageFacilities(),
+                      duration: const Duration(milliseconds: 800),
+                      curve: Curves.easeInCirc,
+                      transition: Transition.leftToRight,
+                    );
                   }),
               SettingsPageListTiles(
                   icon: SvgPicture.asset(
@@ -156,7 +175,12 @@ class Settings extends StatelessWidget {
                   subtitle: 'Contact us',
                   trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
                   onTap: () {
-                    Navigator.pushNamed(context, '/aboutUs');
+                    Get.to(
+                      () => const AboutUs(),
+                      duration: const Duration(milliseconds: 800),
+                      curve: Curves.easeInCirc,
+                      transition: Transition.leftToRight,
+                    );
                   }),
               Signout(
                   icon: const Icon(Iconsax.logout,
