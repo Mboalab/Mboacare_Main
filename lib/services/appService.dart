@@ -160,6 +160,41 @@ class ApiServices {
     }
   }
 
+  Future<List<HospitalModel>> myHospitalData({ required BuildContext context}) async {
+    final provider = Provider.of<LoginProvider>(context);
+
+    String myEmail = provider.userEmail;
+    
+    String url = Apis.myHospitals;
+    String myUrl = "$url$myEmail";
+
+    print(myUrl);
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Charset': 'utf-8',
+    };
+
+    final response = await http.get(Uri.parse(myUrl), headers: headers);
+
+    try {
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseBody = json.decode(response.body);
+
+        if (responseBody.containsKey('data')) {
+          final List<dynamic> data = responseBody['data'];
+          log(data.toString());
+          return data.map((item) => HospitalModel.fromJson(item)).toList();
+        } else {
+          throw Exception('API response does not contain a "data" field.');
+        }
+      } else {
+        throw Exception('Failed to load blog data');
+      }
+    } catch (e) {}
+    return [];
+  }
+
   // Future<List<SearchHospitalModel>> filterHospitals(String filterOption) async {
   //   final allHospitals = await fetchAllHospitals();
 
