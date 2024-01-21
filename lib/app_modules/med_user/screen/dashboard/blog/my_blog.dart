@@ -137,17 +137,7 @@ class _MyBlogState extends State<MyBlog> {
                 });
           })),
 
-      // ListView(
-      //   padding: EdgeInsets.symmetric(horizontal: 10.0),
-      //   children: [
-      //     ManageCard(
-      //       onCardTap: () {},
-      //       imagePath: ImageAssets.topBlog,
-      //       blogTitle: 'Design',
-      //       blogTime: '2:00PM',
-      //     )
-      //   ],
-      // ),
+    
     );
   }
 }

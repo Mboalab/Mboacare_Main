@@ -13,14 +13,20 @@ import '../../../../../global/styles/colors.dart';
 
 import '../../../../user/screens/dashboard/hospital.dart';
 import '../../../../../widgets/input_fields.dart';
-import '../../../../../services/add_hospital_provider.dart';
+import '../../../../../services/hospital_provider/add_hospital_provider.dart';
 import '../../../../../widgets/check_list_item.dart';
 import '../../../../../widgets/chips_items.dart';
 import '../../../../../widgets/image_upload_view.dart';
 
 class AddHospitalPage extends StatefulWidget {
-  AddHospitalPage({super.key, required this.placeName});
+  AddHospitalPage(
+      {super.key,
+      required this.placeName,
+      required this.lat,
+      required this.lng});
   String placeName;
+  double lat;
+  double lng;
   @override
   State<AddHospitalPage> createState() => _AddHospitalPageState();
 }
@@ -303,9 +309,11 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
                   onSubmitted: (text) {
                     debugPrint("onSubmitted: $text");
                     if (text.isNotEmpty) {
-                      provider.addToFacilitiesChip(text);
+                      setState(() {
+                        provider.addToFacilitiesChip(text);
+                        print(text);
+                      });
                     }
-                    setState(() {});
                   },
                 ),
                 SizedBox(height: AppFontSizes.fontSize20),
@@ -335,6 +343,7 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
                   }, onItemClicked: (title, checked) {
                     setState(() {});
                     provider.hospitalTypeController.text = title.toString();
+                    print(title);
                   }),
                   suffixIcon: ImageAssets.arrowIcon,
                 ),
@@ -366,6 +375,7 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
                   }, onItemClicked: (title, checked) {
                     setState(() {});
                     provider.hospitalSizeController.text = title.toString();
+                    print(title);
                   }),
                 ),
                 SizedBox(height: AppFontSizes.fontSize20),
@@ -412,27 +422,57 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
                 Center(
                   child: SizedBox(
                     width: context.getWidth() / 3,
-                    child: AppButton(
-                        status: false,
-                        onPressed: () {
-                          provider.concatenateMedicalServices();
-                          provider.concatenateFacilities();
-                          provider.concatenateEmergencyService();
-                          Future.delayed(const Duration(seconds: 1)).then((_) {
-                            provider.submitForm(onSuccessNavigate: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const HospitalDashboard(),
-                                ),
-                              );
-                            });
-                          });
-                        },
-                        title: 'Submit',
-                        enabled:
-                            provider.formKey.currentState?.validate() == true),
+                    child: Consumer<AddHospitalProvider>(
+                        builder: (context, hospital, child) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (hospital.reqMessage != '') {
+                          hospital.clear();
+                        }
+                      });
+                      return AppButton(
+                          status: hospital.isLoading,
+                          onPressed: () {
+                            // if (provider.formKey.currentState!.validate()) {
+                            String hospitalLat = widget.lat.toString();
+                            String hospitalLng = widget.lng.toString();
+                            String hospitalAddress = widget.placeName;
+                            String hospitalName =
+                                provider.hospitalNameController.text.trim();
+                            String hospitalWeblink =
+                                provider.hospitalWebsiteController.text;
+                            String hospitalEmail =
+                                provider.hospitalEmailController.text.trim();
+                            String hospitalPhone =
+                                provider.hospitalPhoneNumberController.text;
+                            String hospitalOwner =
+                                provider.hospitalOwnerShipController.text;
+                            String hospitalSize =
+                                provider.hospitalSizeController.text;
+                            String hospitalMedicalServices =
+                                provider.hospitalServices.toString();
+                            String hospitalFacilities =
+                                provider.hospitalFacilities.toString();
+                            String hospitalType =
+                                provider.hospitalTypeController.text;
+                            hospital.addHospital(
+                                hospitalName,
+                                hospitalWeblink,
+                                hospitalEmail,
+                                hospitalType,
+                                hospitalOwner,
+                                hospitalSize,
+                                hospitalMedicalServices,
+                                hospitalFacilities,
+                                hospitalAddress,
+                                hospitalLat,
+                                hospitalLng,
+                                hospitalPhone,
+                                provider.selectedImage,
+                                context);
+                          },
+                          title: 'Submit',
+                          enabled: true);
+                    }),
                   ),
                 ),
               ],

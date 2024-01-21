@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:get/get.dart';
+import 'package:mboacare/app_modules/user/screens/inner_screen/blog_details.dart';
 import 'package:mboacare/global/styles/colors.dart';
 
 import 'package:http/http.dart' as http;
@@ -9,7 +10,7 @@ import 'dart:convert';
 
 import 'package:mboacare/services/apis.dart';
 
-import '../app_modules/user/screens/inner_screen/blog_details.dart';
+
 
 class SearchWidget extends StatefulWidget {
   const SearchWidget({Key? key}) : super(key: key);
