@@ -27,9 +27,11 @@ class Apis {
 
   // --------------------------Hospital endpoints--------------------------
   static const allHospitals = '$baseUrl/hospital/all-hospital';
-  static const addHospitals = '$baseUrl/hospital/add-hospital';
-  static const updateHospitals = '$baseUrl/hospital/update-hospital';
+  static const addHospital = '$baseUrl/hospital/add-hospital';
+  static const updateHospital = '$baseUrl/hospital/update-hospital';
   static const searchHospitals = '$baseUrl/hospital/search?q=Wunmi';
+   static const deleteHospital = '$baseUrl/hospital/delete-hospital/';
+   static const myHospitals = '$baseUrl/hospital/my-hospitals?q=';
 }
 
 String mapKey = '';
