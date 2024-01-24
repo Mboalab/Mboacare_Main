@@ -89,32 +89,28 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                     child: GestureDetector(
                         onTap: () => _launchURL(widget.hospital.website!),
                         child: widget.hospital.website != ''
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: AppColors.text,
-                                ),
-                                padding: const EdgeInsets.all(3),
-                                height: 40,
-                                width: 150,
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    // Icon(
-                                    //   Icons.language_outlined,
-                                    //   color: Colors.white,
-                                    // ),
-                                    // SizedBox(
-                                    //   width: 10,
-                                    // ),
-                                    Text(
-                                      'Visit Website',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  ],
+                            ? InkWell(
+                                onTap: () {},
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: AppColors.text,
+                                  ),
+                                  padding: const EdgeInsets.all(3),
+                                  height: 40,
+                                  width: 150,
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Visit Website',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               )
                             : Container()),

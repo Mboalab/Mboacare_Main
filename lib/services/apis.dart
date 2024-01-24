@@ -30,8 +30,8 @@ class Apis {
   static const addHospital = '$baseUrl/hospital/add-hospital';
   static const updateHospital = '$baseUrl/hospital/update-hospital';
   static const searchHospitals = '$baseUrl/hospital/search?q=Wunmi';
-   static const deleteHospital = '$baseUrl/hospital/delete-hospital/';
-   static const myHospitals = '$baseUrl/hospital/my-hospitals?q=';
+  static const deleteHospital = '$baseUrl/hospital/delete-hospital/';
+  static const myHospitals = '$baseUrl/hospital/my-hospitals?q=';
 }
 
-String mapKey = '';
+String mapKey = 'AIzaSyBkuwcKikuNtM-07vxwHHHl9M-icIBst5w';
