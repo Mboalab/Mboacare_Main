@@ -4,6 +4,8 @@ class Apis {
   /*----------------------------------Base URL--------------------------------------------------- */
   static const String baseUrl =
       "https://us-central1-mboacare-api-v1.cloudfunctions.net/api";
+  static const String logoUrl =
+      'https://drive.google.com/drive/u/3/folders/159jj3T0pfMzCQsfMf-WtX9oMiefDf-gp';
 
   /*----------------------------------Auth endpoints--------------------------------------------------- */
 

@@ -183,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     title: "Login",
                     enabled: provider.isValidSignIn,
-                    status: auth.isLoading,
+                    status: auth.loading,
                   );
                 }),
                 SizedBox(height: AppFontSizes.fontSize14),

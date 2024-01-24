@@ -1,11 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mboacare/app_modules/med_user/med_dashboard.dart';
 import 'package:mboacare/app_modules/user/user_dashboard.dart';
+import 'package:mboacare/services/apis.dart';
 import 'package:mboacare/services/databaseProvider.dart';
 import 'package:mboacare/utils/snack_error.dart';
 import 'package:mboacare/utils/snack_succ.dart';
@@ -63,7 +66,7 @@ class LoginProvider extends ChangeNotifier {
       {required String email,
       required String password,
       required BuildContext context}) async {
-    _isLoading = true;
+    _loading = true;
     notifyListeners();
 
     try {
@@ -71,30 +74,32 @@ class LoginProvider extends ChangeNotifier {
           email: email, password: password);
 
       final User user = userCredential.user!;
-      print(user);
 
       if (user.emailVerified == false) {
-        _isLoading = false;
-        _reqMessage = "Email is not verified! Check email to verify Account!";
+        _loading = false;
+
         snackErrorMessage(
             message: "Email is not verified! Check email to verify Account!",
             context: context);
         print(_reqMessage);
         notifyListeners();
       } else {
-        _isLoading = false;
-
-        snackMessage(message: "Login Successful!", context: context);
-        print(user);
+        _loading = false;
+        // notifyListeners();
+        log(user.toString());
         userEmail = user.email!;
-        userName = user.displayName!;
-        profileImage = user.photoURL ?? Image.asset(ImageAssets.logo) as String;
-        userPhone = user.phoneNumber!;
+        userName = user.displayName ?? 'MboaUser';
+        profileImage = user.photoURL ?? Apis.logoUrl;
+        userPhone = user.phoneNumber ?? 'Update Phone';
         uid = user.uid;
         DatabaseProvider().saveEmail(userEmail);
         DatabaseProvider().saveName(userName);
         DatabaseProvider().saveUserID(uid);
+        print(userEmail);
+        print(userName);
+        print(uid);
         clearInput();
+        snackMessage(message: "Login Successful!", context: context);
         notifyListeners();
         Get.to(() => const MedDashboard(),
             duration: const Duration(
@@ -106,11 +111,11 @@ class LoginProvider extends ChangeNotifier {
     } catch (e) {
       if (e is FirebaseAuthException) {
         if (e.code == "user-not-found") {
-          _isLoading = false;
+          _loading = false;
           //_reqMessage = e.code;
           snackErrorMessage(message: e.code, context: context);
         } else {
-          _isLoading = false;
+          _loading = false;
           _reqMessage = e.message!;
           snackErrorMessage(message: e.message!, context: context);
           notifyListeners();

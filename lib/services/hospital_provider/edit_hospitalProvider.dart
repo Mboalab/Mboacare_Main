@@ -250,7 +250,7 @@ class EditHospitalProvider extends ChangeNotifier {
     } catch (e) {
       _isLoading = false;
       notifyListeners();
-      final errorMessage = 'Error adding blog: $e';
+      final errorMessage = 'Error updating blog: $e';
       snackErrorMessage(message: errorMessage, context: context);
       notifyListeners();
     }
