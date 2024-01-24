@@ -4,6 +4,8 @@ class Apis {
   /*----------------------------------Base URL--------------------------------------------------- */
   static const String baseUrl =
       "https://us-central1-mboacare-api-v1.cloudfunctions.net/api";
+  static const String logoUrl =
+      'https://drive.google.com/drive/u/3/folders/159jj3T0pfMzCQsfMf-WtX9oMiefDf-gp';
 
   /*----------------------------------Auth endpoints--------------------------------------------------- */
 
@@ -30,8 +32,8 @@ class Apis {
   static const addHospital = '$baseUrl/hospital/add-hospital';
   static const updateHospital = '$baseUrl/hospital/update-hospital';
   static const searchHospitals = '$baseUrl/hospital/search?q=Wunmi';
-   static const deleteHospital = '$baseUrl/hospital/delete-hospital/';
-   static const myHospitals = '$baseUrl/hospital/my-hospitals?q=';
+  static const deleteHospital = '$baseUrl/hospital/delete-hospital/';
+  static const myHospitals = '$baseUrl/hospital/my-hospitals?q=';
 }
 
 String mapKey = '';
