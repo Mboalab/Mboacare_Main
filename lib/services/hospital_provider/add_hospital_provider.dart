@@ -207,29 +207,28 @@ class AddHospitalProvider extends ChangeNotifier {
     final url = Uri.parse(Apis.addHospital);
     print(url);
     final request = http.MultipartRequest('POST', url);
-    
-    request.fields['name']= hospitalName;
-    request.fields['website']= hospitalWeblink;
-    request.fields['email']= hospitalEmail;
-    request.fields['placeAddress']=hospitalAddress;
-    request.fields['latitude']=hospitalLat;
-    request.fields['longitude']=hospitalLng;
-     request.fields['phoneNumber']=hospitalPhone;
-         request.fields['hospitalType']=hospitalFacilities;
-          request.fields['hospitalOwner']=hospitalOwner;
- request.fields['hospitalSize']=hospitalSize;
-        request.fields['serviceType']=hospitalMedicalServices;
-        request.fields['facilitiesType']=hospitalMedicalServices;
-         request.fields['userEmail']=myEmail;
 
-         if (image != null) {
+    request.fields['name'] = hospitalName;
+    request.fields['website'] = hospitalWeblink;
+    request.fields['email'] = hospitalEmail;
+    request.fields['placeAddress'] = hospitalAddress;
+    request.fields['latitude'] = hospitalLat;
+    request.fields['longitude'] = hospitalLng;
+    request.fields['phoneNumber'] = hospitalPhone;
+    request.fields['hospitalType'] = hospitalFacilities;
+    request.fields['hospitalOwner'] = hospitalOwner;
+    request.fields['hospitalSize'] = hospitalSize;
+    request.fields['serviceType'] = hospitalMedicalServices;
+    request.fields['facilitiesType'] = hospitalMedicalServices;
+    request.fields['userEmail'] = myEmail;
+
+    if (image != null) {
       request.files
           .add(await http.MultipartFile.fromPath('hospitalImage', image.path));
     }
 
-
     final response = await request.send();
-     try {
+    try {
       if (response.statusCode == 200 || response.statusCode == 201) {
         _isLoading = false;
         notifyListeners();
@@ -241,20 +240,20 @@ class AddHospitalProvider extends ChangeNotifier {
             curve: Curves.easeInCirc,
             transition: Transition.fadeIn);
         notifyListeners();
-       
+
         notifyListeners();
       } else {
         _isLoading = false;
         notifyListeners();
         final errorMessage =
-            'Failed to add blog. Status Code: ${response.reasonPhrase}';
+            'Failed to add hospital. Status Code: ${response.reasonPhrase}';
         snackErrorMessage(message: errorMessage, context: context);
         notifyListeners();
       }
     } catch (e) {
       _isLoading = false;
       notifyListeners();
-      final errorMessage = 'Error adding blog: $e';
+      final errorMessage = 'Error adding hospital: $e';
       snackErrorMessage(message: errorMessage, context: context);
       notifyListeners();
     }
@@ -264,7 +263,7 @@ class AddHospitalProvider extends ChangeNotifier {
     _reqMessage = '';
     notifyListeners();
   }
-  
+
   // List<ChecklistItem> checklistEmergencyService = [
   //   ChecklistItem(title: 'Ambulance', isChecked: false),
   //   ChecklistItem(title: '24/7 Emergency Room', isChecked: false),

@@ -69,6 +69,8 @@ class RegisterProvider extends ChangeNotifier {
   void clearInput() {
     emailController.clear();
     passwordController.clear();
+    nameController.clear();
+    confirmPasswordController.clear();
   }
 
   void register(
@@ -159,11 +161,9 @@ class RegisterProvider extends ChangeNotifier {
       if (req.statusCode == 200 || req.statusCode == 201) {
         var res = json.decode(req.body);
 
-       
-
         snackMessage(message: res['message'], context: context);
         clearInput();
-         _isLoading = false;
+        _isLoading = false;
         notifyListeners();
         Get.to(() => const SuccessScreen(),
             duration: const Duration(
