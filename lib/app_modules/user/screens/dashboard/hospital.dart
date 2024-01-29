@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:mboacare/app_modules/med_user/screen/inner_screen/hospitaldetails.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
@@ -8,6 +9,7 @@ import 'package:mboacare/model/search_hospital_model.dart';
 import 'package:mboacare/services/appService.dart';
 import 'package:mboacare/utils/app_dropdown.dart';
 import 'package:mboacare/widgets/chip_widget.dart';
+import 'package:mboacare/widgets/shimmer_top.dart';
 //import 'package:mboacare/app_modules/user/screens/inner_screen/hospitaldetails.dart';
 import 'package:provider/provider.dart';
 import '../../../../model/hospital_data.dart';
@@ -32,6 +34,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
   String dropdownValue = dropdownItems.first; // Initialize with 'View All'
 
   final FocusNode _searchFocusNode = FocusNode();
+  bool starToggle = false;
   final TextEditingController dropdownController = TextEditingController();
   @override
   void dispose() {
@@ -77,6 +80,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
         },
         child: Scaffold(
             appBar: AppBar(
+              elevation: 0,
               leading: Image.asset(
                 ImageAssets.logo,
               ),
@@ -279,14 +283,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
         future: ApiServices().fetchAllHospitals(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Center(
-              child: SpinKitWaveSpinner(
-                size: 50.0,
-                color: AppColors.buttonColor,
-                trackColor: AppColors.registerCard,
-                waveColor: AppColors.deleteColor,
-              ),
-            );
+            return ShimmerTop();
           }
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
@@ -326,48 +323,42 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                           ClipRRect(
                               borderRadius: BorderRadius.circular(16),
                               child: Image(
+                                fit: BoxFit.cover,
                                 image: NetworkImage(hospital.hospitalImage!),
-                              )
-                              // hospital
-                              //             .hospitalImage ==
-                              //         ''
-                              //     ? Image(
-                              //         image: NetworkImage(
-                              //             hospital
-                              //                 .hospitalImage!),
-                              //         fit: BoxFit.cover,
-                              //       )
-                              //     : Image(
-                              //         image: AssetImage(
-                              //             ImageAssets
-                              //                 .myHospital),
-                              //         fit: BoxFit.cover,
-                              //       ),
-                              ),
+                              )),
                           Positioned(
                             right: 2,
                             top: 2,
-                            child: IconButton(
-                              style: ButtonStyle(
-                                fixedSize: MaterialStateProperty.all(
-                                  const Size(2.0, 10.0),
-                                ),
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                ),
-                                side: MaterialStateProperty.all(
-                                  const BorderSide(
-                                    width: 2.0,
-                                    color: AppColors.primaryColor,
-                                  ),
-                                ),
-                              ),
-                              onPressed: null,
-                              icon: const Icon(
-                                Icons.star_border_rounded,
-                                color: AppColors.primaryColor,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 8.0, top: 8),
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2,
+                                        color: AppColors.primaryColor),
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Colors.transparent),
+                                child: IconButton.filledTonal(
+                                    onPressed: () {
+                                      setState(() {
+                                        starToggle = !starToggle;
+                                      });
+                                    },
+                                    icon: starToggle == false
+                                        ? const Icon(
+                                            Icons.star_border,
+                                            size: 20,
+                                            color: AppColors.primaryColor,
+                                          )
+                                        : const Icon(
+                                            Icons.star,
+                                            size: 20,
+                                            color: AppColors.primaryColor,
+                                          )),
                               ),
                             ),
                           )
@@ -394,38 +385,29 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(right: 15),
-                          child: IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => HospitalDetailsPage(
-                                    hospital: hospital,
-                                  ),
-                                ),
-                              );
-                            },
-                            icon: const Icon(
-                              size: 60.0,
-                              Icons.arrow_forward,
-                              color: AppColors.greenColor,
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryColor,
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  AppColors.buttonColor),
-                              fixedSize: MaterialStateProperty.all(
-                                const Size(2.0, 10.0),
-                              ),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
+                            child: IconButton.filledTonal(
+                                onPressed: () {
+                                  Get.to(() =>
+                                      HospitalDetailsPage(hospital: hospital));
+                                },
+                                icon: const Icon(
+                                  Icons.arrow_forward,
+                                  size: 24,
+                                  color: AppColors.colorWhite,
+                                )),
                           ),
-                        ),
+                        )
+
+                        // ),
                       ],
                     ),
                     const SizedBox(height: 8.0),

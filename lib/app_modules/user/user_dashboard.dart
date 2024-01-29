@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:mboacare/app_modules/notifications/notifications.dart';
+import 'package:mboacare/app_modules/notifications/notifications_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:mboacare/app_modules/user/screens/dashboard/blog_page.dart';
@@ -14,7 +14,6 @@ import 'screens/dashboard/home.dart';
 import 'screens/dashboard/hospital.dart';
 import 'screens/dashboard/settings.dart';
 
-
 class DashboardScreen extends StatefulWidget {
   final String userName;
 
@@ -25,8 +24,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-
-  
   @override
   void didChangeDependencies() {
     locatePosition(context);
@@ -34,13 +31,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   int _currentIndex = 0;
- 
+
   final List<Widget> _pages = [
-      const Home(),
-      const HospitalDashboard(),
-      const BlogPage(),
-      const SettingsPage(),
-    ];
+    const Home(),
+    const HospitalDashboard(),
+    const BlogPage(),
+    const SettingsPage(),
+  ];
 
   void _onTabTapped(int index) {
     setState(() {
@@ -52,6 +49,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: AppColors.registerCard,
         title: Image.asset(
           ImageAssets.logo,
@@ -62,7 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         actions: [
           InkWell(
             onTap: () {
-             Get.to(()=> const Notifications());
+              Get.to(() => const NotificationsPage());
             },
             child: Padding(
               padding: const EdgeInsets.only(right: 15),

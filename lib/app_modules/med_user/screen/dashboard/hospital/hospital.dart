@@ -82,7 +82,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
               title: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: SizedBox(
-                  height: 50, // Set the height of the search bar
+                  height: 50,
                   child: TextField(
                     controller: _searchController,
                     focusNode: _searchFocusNode,
@@ -323,32 +323,40 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                           ClipRRect(
                               borderRadius: BorderRadius.circular(16),
                               child: Image(
+                                fit: BoxFit.contain,
                                 image: NetworkImage(hospital.hospitalImage!),
                               )),
                           Positioned(
                             right: 2,
                             top: 2,
-                            child: IconButton(
-                              style: ButtonStyle(
-                                fixedSize: MaterialStateProperty.all(
-                                  const Size(2.0, 10.0),
-                                ),
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
+                            child: Container(
+                              height: 100,
+                              width: 100,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  color: Colors.transparent),
+                              child: IconButton(
+                                style: ButtonStyle(
+                                  fixedSize: MaterialStateProperty.all(
+                                    const Size(2.0, 10.0),
+                                  ),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                  ),
+                                  side: MaterialStateProperty.all(
+                                    const BorderSide(
+                                      width: 2.0,
+                                      color: AppColors.primaryColor,
+                                    ),
                                   ),
                                 ),
-                                side: MaterialStateProperty.all(
-                                  const BorderSide(
-                                    width: 2.0,
-                                    color: AppColors.primaryColor,
-                                  ),
-                                ),
-                              ),
-                              onPressed: null,
-                              icon: const Icon(
-                                Icons.star_border_rounded,
-                                color: AppColors.primaryColor,
+                                onPressed: null,
+                                icon: const Icon(Icons.star_border_rounded,
+                                    color: AppColors.danger
+                                    //AppColors.primaryColor,
+                                    ),
                               ),
                             ),
                           )

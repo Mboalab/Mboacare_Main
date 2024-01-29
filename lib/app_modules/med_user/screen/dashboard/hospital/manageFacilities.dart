@@ -43,6 +43,7 @@ class ManageFacilities extends StatelessWidget {
           },
           icon: const Icon(
             Icons.arrow_back_rounded,
+            color: AppColors.secondaryTextColor,
             size: 25.0,
           ),
         ),

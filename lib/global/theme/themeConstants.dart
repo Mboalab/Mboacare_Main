@@ -6,8 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class DarkThemeColors {
   static const Color background = Color.fromARGB(255, 32, 32, 32);
   static const Color cardBackground = Color.fromARGB(255, 221, 217, 217);
-  static const Color primaryText = Color.fromARGB(255, 255, 255, 255);
-  static const Color secondaryText = Color.fromARGB(255, 151, 144, 144);
+  static const Color primaryText = Colors.white;
+  static const Color secondaryText = Color.fromARGB(255, 255, 255, 255);
   static const Color accentText = Color(0xFF009688);
   static const Color buttonBackground = Color(0xFF009688);
   static const Color buttonText = Color(0xFFFFFFFF);
@@ -45,10 +45,6 @@ class ThemeProvider with ChangeNotifier {
       // Set the theme based on system brightness
 
       _themeMode = ThemeMode.light;
-      // final systemBrightness = ui.window.platformBrightness;
-      // _themeMode = systemBrightness == ui.Brightness.dark
-      //     ? ThemeMode.dark
-      //     : ThemeMode.light;
     } else {
       // Set the theme based on the selected option
       _themeMode = selectedTheme;
@@ -64,12 +60,6 @@ class ThemeProvider with ChangeNotifier {
   }
 
   ThemeData getThemeData() {
-    // if (_themeMode == ThemeMode.system) {
-    //   final systemBrightness = ui.window.platformBrightness;
-    //   return systemBrightness == ui.Brightness.dark
-    //       ? ThemeData.dark()
-    //       : ThemeData.light();
-    // }
     if (_themeMode == ThemeMode.dark) {
       return ThemeData.dark().copyWith(
         // Apply dark theme colors here
@@ -83,8 +73,8 @@ class ThemeProvider with ChangeNotifier {
             color: DarkThemeColors.primaryText,
           ),
           bodyMedium: TextStyle(
-            color: DarkThemeColors.secondaryText,
-          ),
+              // color: DarkThemeColors.secondaryText,
+              ),
         ),
       );
     } else {

@@ -103,6 +103,7 @@ class _EditFacilitiesPageState extends State<EditFacilitiesPage> {
           icon: const Icon(
             Icons.arrow_back_rounded,
             size: 25.0,
+            color: AppColors.secondaryTextColor,
           ),
         ),
         actions: [

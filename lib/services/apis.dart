@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Apis {
   /*----------------------------------Map Key--------------------------------------------------- */
 
@@ -27,6 +29,10 @@ class Apis {
 /*----------------------------------notification endpoints--------------------------------------------------- */
   static const String allNotification =
       "$baseUrl/notification/all-notifications";
+  static const String singleNotification =
+      "$baseUrl/notification/delete-notification/title";
+  static const String deleteNotification =
+      "$baseUrl/notification/delete-notification/title";
 
   // --------------------------Hospital endpoints--------------------------
   static const allHospitals = '$baseUrl/hospital/all-hospital';
@@ -37,4 +43,4 @@ class Apis {
   static const myHospitals = '$baseUrl/hospital/my-hospitals?q=';
 }
 
-String mapKey = '';
+String mapKey = 'AIzaSyBkuwcKikuNtM-07vxwHHHl9M-icIBst5w';
