@@ -3,15 +3,17 @@ import 'package:get/get.dart';
 
 import 'package:mboacare/app_modules/user/screens/dashboard/hospital.dart';
 
-
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
+import 'package:mboacare/services/apis.dart';
+import 'package:mboacare/utils/router.dart';
 import 'package:mboacare/widgets/home_navigation_list_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../auth/sign_up_page.dart';
 import '../../../user/screens/dashboard/blog_page.dart';
+import 'hospital/add_hopital.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -27,6 +29,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       key: scaffoldKey,
       body: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -45,12 +48,7 @@ class _HomeState extends State<Home> {
                       textAlign: TextAlign.center,
                       style: AppTextStyles.headerOne.copyWith(
                           color: AppColors.textColor2, fontSize: 35.0),
-                      // TextStyle(
-                      //   fontSize: 36,
-                      //   fontWeight: FontWeight.w700,
-                      //   fontFamily: 'Inter',
-                      //   color: AppColors.textColor2,
-                      // ),
+                      
                     ),
                     const SizedBox(height: 10),
                     Text(
@@ -82,7 +80,13 @@ class _HomeState extends State<Home> {
                       subtitle: 'Want to register a medical facility?',
                       iconImage: ImageAssets.hospital,
                       onTap: () {
-                        Get.to(() => const SignUpPage());
+                        PageNavigator(ctx: context).nextPageOnly(
+                            page: AddHospitalPage(
+                          placeName: '',
+                          lat: 0.0,
+                          lng: 0.0,
+                        ));
+                        //Get.to(() => const SignUpPage());
                       },
                     ),
                     HomeNavigationItems(
@@ -90,7 +94,8 @@ class _HomeState extends State<Home> {
                       subtitle: 'Browse through facilities',
                       iconImage: ImageAssets.hospital,
                       onTap: () {
-                        Get.to(() => const HospitalDashboard());
+                        PageNavigator(ctx: context)
+                            .nextPageOnly(page: const HospitalDashboard());
                       },
                     ),
                     HomeNavigationItems(
@@ -98,7 +103,8 @@ class _HomeState extends State<Home> {
                       subtitle: 'Read blog posts',
                       iconImage: ImageAssets.blog,
                       onTap: () {
-                        Get.to(() => const BlogPage());
+                        PageNavigator(ctx: context)
+                            .nextPageOnly(page: const BlogPage());
                       },
                     ),
                     HomeNavigationItems(
@@ -107,7 +113,7 @@ class _HomeState extends State<Home> {
                       iconImage: ImageAssets.location,
                       onTap: () async {
                         // Open the LinkedIn URL in the browser
-                        const url = 'https://www.linkedin.com/company/mboalab/';
+                        const url = Apis.linkIn;
                         final Uri uri = Uri.parse(url);
                         await launchUrl(uri);
                       },
