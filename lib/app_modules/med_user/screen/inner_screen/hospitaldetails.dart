@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/model/hospital_model/hospital_model.dart';
 import 'package:mboacare/widgets/chip_widget.dart';
 import 'package:mboacare/global/styles/colors.dart';
@@ -25,20 +26,21 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
   Future<void> _launchURL(String url) async {
     devtools.log('Launching URL: $url');
 
-    if (url.isNotEmpty &&
-        (url.startsWith('http://') || url.startsWith('https://'))) {
-      try {
-        final Uri uri = Uri.parse(url);
-        // if (Uri) {
-        await url_launcher.launchUrl(uri);
-        // } else {
-        //   print('Could not launch $url');
-        // }
-      } catch (e) {
-        devtools.log('Error launching URL: $e');
-      }
-    } else {
-      devtools.log('Invalid URL: $url');
+    if (url == null || url.isEmpty) {
+      devtools.log('URL is empty or null.');
+      return;
+    }
+
+    // Check if the URL has the required prefix, if not, add it
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      url = 'http://$url';
+    }
+
+    try {
+      final Uri uri = Uri.parse(url);
+      await url_launcher.launchUrl(uri);
+    } catch (e) {
+      devtools.log('Error launching URL: $e');
     }
   }
 
@@ -55,7 +57,24 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
 
     final bedCapacity = widget.hospital.hospitalSize;
     return Scaffold(
-      appBar: AppBar(title: const Text("Hospital Details")),
+      appBar: AppBar(
+          backgroundColor: AppColors.navbar,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back_rounded,
+              color: AppColors.secondaryTextColor,
+              size: 25.0,
+            ),
+          ),
+          titleSpacing: 0.0,
+          title: Text(
+            'Hospital Details',
+            style: AppTextStyles.bodyFour
+                .copyWith(fontSize: 18, color: AppColors.secondaryTextColor),
+          )),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -84,37 +103,36 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                     ),
                   ),
                   Positioned(
-                    bottom: 20,
-                    left: MediaQuery.sizeOf(context).width * .3,
-                    child: GestureDetector(
-                        onTap: () => _launchURL(widget.hospital.website!),
-                        child: widget.hospital.website != ''
-                            ? InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: AppColors.text,
-                                  ),
-                                  padding: const EdgeInsets.all(3),
-                                  height: 40,
-                                  width: 150,
-                                  child: const Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Visit Website',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                      bottom: 20,
+                      left: MediaQuery.sizeOf(context).width * .3,
+                      child: widget.hospital.website != ''
+                          ? InkWell(
+                              onTap: () {
+                                _launchURL(widget.hospital.website!);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: AppColors.primaryColor,
                                 ),
-                              )
-                            : Container()),
-                  )
+                                padding: const EdgeInsets.all(3),
+                                height: 40,
+                                width: 150,
+                                child: const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Visit Website',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                          : Container())
                 ],
               ),
               const SizedBox(

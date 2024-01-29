@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/home.dart';
 
 import 'package:mboacare/app_modules/med_user/screen/dashboard/settings.dart';
-import 'package:mboacare/app_modules/notifications/notifications.dart';
+import 'package:mboacare/app_modules/notifications/notifications_page.dart';
 import 'package:mboacare/app_modules/user/screens/dashboard/hospital.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
@@ -26,7 +26,6 @@ class _MedDashboardState extends State<MedDashboard> {
   final List<Widget> _pages = [
     const Home(),
     const HospitalDashboard(),
-   
     const BlogPage(),
     const Settings(),
   ];
@@ -51,7 +50,7 @@ class _MedDashboardState extends State<MedDashboard> {
         actions: [
           InkWell(
             onTap: () {
-              Get.to(() => const Notifications());
+              Get.to(() => const NotificationsPage());
             },
             child: Padding(
               padding: const EdgeInsets.only(right: 15),
