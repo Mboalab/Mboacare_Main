@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/manageFacilities.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/search_address.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/utils/constants.dart';
+import 'package:mboacare/utils/router.dart';
 import 'package:mboacare/widgets/custom_btn.dart';
 import 'package:mboacare/widgets/extensions.dart';
 import 'package:provider/provider.dart';
@@ -58,7 +60,9 @@ class _AddHospitalPageState extends State<AddHospitalPage> {
           icon: const Icon(Icons.arrow_back, color: AppColors.greyColor),
           onPressed: () {
             // Navigate back to the dashboard page
-            Navigator.of(context).pop();
+             PageNavigator(ctx: context)
+                            .nextPageOnly(page: const ManageFacilities());
+            
           },
         ),
       ),

@@ -7,6 +7,7 @@ import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/colors.dart';
 import 'package:mboacare/model/hospital_model/hospital_model.dart';
 import 'package:mboacare/services/appService.dart';
+import 'package:mboacare/utils/router.dart';
 import 'package:mboacare/widgets/manageFaciltiesCard.dart';
 import 'package:get/get.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/add_hopital.dart';
@@ -32,7 +33,7 @@ class ManageFacilities extends StatelessWidget {
         centerTitle: false,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            PageNavigator(ctx: context).nextPageOnly(page: const Settings());
             // Get.to(() => const Settings(),
             //     duration: const Duration(
             //       milliseconds: 800,
