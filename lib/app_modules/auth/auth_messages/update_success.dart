@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mboacare/app_modules/med_user/med_dashboard.dart';
 
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 
 import 'package:mboacare/services/auth_provider/loginProvider.dart';
+import 'package:mboacare/utils/router.dart';
 import 'package:mboacare/widgets/custom_btn.dart';
 import 'package:provider/provider.dart';
 
@@ -40,7 +42,7 @@ class UpdateProfileSuccess extends StatelessWidget {
               height: 8,
             ),
             Text(
-              'Kindly  Logout and Login again for Account Updates!',
+              'Go to Home!',
               textAlign: TextAlign.center,
               style: AppTextStyles.bodyFour
                   .copyWith(fontSize: 16, fontWeight: FontWeight.bold),
@@ -48,25 +50,15 @@ class UpdateProfileSuccess extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            Consumer<LoginProvider>(builder: (
-              context,
-              auth,
-              child,
-            ) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (auth.reqMessage != '') {
-                  auth.clear();
-                }
-              });
-              return AppButton(
-                onPressed: () {
-                  auth.signOut(context: context);
-                },
-                title: "Logout",
-                enabled: true,
-                status: auth.isLoading,
-              );
-            }),
+            AppButton(
+              onPressed: () {
+                PageNavigator(ctx: context)
+                    .nextPage(page: const MedDashboard());
+              },
+              title: "Dashboard",
+              enabled: true,
+              status: false,
+            ),
           ],
         ),
       ),

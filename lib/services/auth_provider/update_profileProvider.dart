@@ -18,9 +18,14 @@ class UpdateProfileProvider extends ChangeNotifier {
   final phoneController = TextEditingController();
   String _reqMessage = "";
   bool _isLoading = false;
+  String phone = '';
 
   String get reqMessage => _reqMessage;
   bool get isLoading => _isLoading;
+  void setPhone(String value) {
+    phone = value;
+    notifyListeners();
+  }
 
   void clearInput() {
     phoneController.clear();
@@ -48,12 +53,14 @@ class UpdateProfileProvider extends ChangeNotifier {
     }
 
     final response = await request.send();
+    print(phone);
+    print(name);
 
     try {
       if (response.statusCode == 200 || response.statusCode == 201) {
         _isLoading = false;
         notifyListeners();
-        snackMessage(message: "Blog Added Successful!", context: context);
+        snackMessage(message: "Profile Updated Successful!", context: context);
         Get.to(() => const UpdateProfileSuccess(),
             duration: const Duration(
               milliseconds: 800,
@@ -66,15 +73,14 @@ class UpdateProfileProvider extends ChangeNotifier {
       } else {
         _isLoading = false;
         notifyListeners();
-        final errorMessage =
-            'Failed to add blog. Status Code: ${response.reasonPhrase}';
+        const errorMessage = 'failed to update profile! Image is required!';
         snackErrorMessage(message: errorMessage, context: context);
         notifyListeners();
       }
     } catch (e) {
       _isLoading = false;
       notifyListeners();
-      final errorMessage = 'Error adding blog: $e';
+      final errorMessage = 'Error in updating profile: $e';
       snackErrorMessage(message: errorMessage, context: context);
       notifyListeners();
     }
