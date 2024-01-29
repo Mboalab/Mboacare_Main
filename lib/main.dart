@@ -8,6 +8,7 @@ import 'package:mboacare/app_modules/med_user/screen/dashboard/home.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/edit_facilities_page.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/manageFacilities.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/profile/user_profile_page.dart';
+import 'package:mboacare/app_modules/notifications/delete_notification_provider.dart';
 import 'package:mboacare/app_modules/user/screens/inner_screen/aboutUs.dart';
 import 'package:mboacare/app_modules/user/user_dashboard.dart';
 import 'package:mboacare/global/theme/themeConstants.dart';
@@ -54,6 +55,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ChangeNotifierProvider(create: (_) => LocationProvider()),
       ChangeNotifierProvider(create: (_) => RegisterProvider()),
+      ChangeNotifierProvider(create: (_) => DeleteNotificationProvider()),
       ChangeNotifierProvider(create: (_) => ForgotPasswordProvider()),
       ChangeNotifierProvider(create: (_) => ChangePasswordProvider()),
       ChangeNotifierProvider(create: (_) => DeleteHospitalProvider()),

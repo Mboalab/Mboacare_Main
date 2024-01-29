@@ -64,7 +64,7 @@ class AwaitApprovalScreen extends StatelessWidget {
                 minimumSize: const Size(150, 45),
               ),
               child: const Text(
-                'Back to Home',
+                'Manage Hopsitals',
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w500,
