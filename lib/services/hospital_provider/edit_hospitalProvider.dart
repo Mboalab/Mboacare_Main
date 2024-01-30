@@ -203,7 +203,7 @@ class EditHospitalProvider extends ChangeNotifier {
     final url = Uri.parse(Apis.updateHospital);
     print(url);
     final request = http.MultipartRequest('PUT', url);
-
+    print(id);
     request.fields['name'] = hospitalName;
     request.fields['website'] = hospitalWeblink;
     request.fields['email'] = hospitalEmail;
@@ -250,7 +250,7 @@ class EditHospitalProvider extends ChangeNotifier {
     } catch (e) {
       _isLoading = false;
       notifyListeners();
-      final errorMessage = 'Error updating blog: $e';
+      final errorMessage = 'Error updating hospital: $e';
       snackErrorMessage(message: errorMessage, context: context);
       notifyListeners();
     }

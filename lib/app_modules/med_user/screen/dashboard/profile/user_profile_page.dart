@@ -110,7 +110,7 @@ class ProfilePage extends StatelessWidget {
                   Icons.edit_square,
                   size: 19,
                 ),
-                subtitle: provider.userPhone == ''
+                subtitle: provider.userPhone != null
                     ? Text(provider.userPhone)
                     : const Text('Update your profile'),
                 // onTap: () {

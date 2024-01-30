@@ -21,6 +21,7 @@ import 'package:mboacare/services/facilities_provider.dart';
 import 'package:mboacare/services/hospital_provider/delete_hospitalProvider.dart';
 import 'package:mboacare/services/hospital_provider/edit_hospitalProvider.dart';
 import 'package:mboacare/utils/constants.dart';
+import 'package:mboacare/utils/router.dart';
 import 'package:mboacare/widgets/check_list_item.dart';
 import 'package:mboacare/widgets/chips_items.dart';
 import 'package:mboacare/widgets/custom_btn.dart';
@@ -96,7 +97,8 @@ class _EditFacilitiesPageState extends State<EditFacilitiesPage> {
         centerTitle: false,
         leading: IconButton(
           onPressed: () {
-            Get.to(() => const ManageFacilities());
+            PageNavigator(ctx: context)
+                .nextPageOnly(page: const ManageFacilities());
           },
           icon: const Icon(
             Icons.arrow_back_rounded,
@@ -510,7 +512,7 @@ class _EditFacilitiesPageState extends State<EditFacilitiesPage> {
                                 provider.hospitalFacilities.toString();
                             String hospitalType =
                                 provider.hospitalTypeController.text;
-                            String id = widget.id.toString();
+                            String id = 'VEZHY8wWyztzhPNEPtdK';
 
                             hospital.editHospital(
                                 hospitalName,

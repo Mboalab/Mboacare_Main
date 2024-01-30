@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/settings.dart';
 import 'package:mboacare/global/styles/colors.dart';
 import 'package:mboacare/services/auth_provider/update_profileProvider.dart';
@@ -69,6 +70,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
         child: Form(
           key: provider.profileFormKey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: height * 0.04),
               Center(
@@ -120,8 +123,30 @@ class _UpdateProfileState extends State<UpdateProfile> {
               blogTextFormField(
                   'Full Name', 'Enter full name', provider.nameController),
               SizedBox(height: height * 0.02),
-              blogTextFormField('Phone Number', 'Enter valid phone number',
-                  provider.phoneController),
+              const Text(
+                'Phone Number',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+              ),
+              SizedBox(
+                height: 100.0,
+                child: IntlPhoneField(
+                  controller: provider.phoneController,
+                  initialCountryCode: 'CM',
+                  initialValue: 'CM',
+                  onChanged: (phone) {
+                    provider.setPhone(phone.completeNumber);
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Colors.grey, width: 1.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
+                  ),
+                ),
+              ),
               SizedBox(height: height * 0.08),
               Consumer<UpdateProfileProvider>(builder: (
                 context,
@@ -137,11 +162,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   onPressed: () {
                     if (provider.profileFormKey.currentState!.validate()) {
                       String name = provider.nameController.text;
-                      String phone = provider.phoneController.text;
+                      String phone = provider.phone;
 
                       profile.updateProfile(
-                        name,
                         phone,
+                        name,
                         _selectedImage,
                         context,
                       );

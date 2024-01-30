@@ -8,6 +8,7 @@ class Apis {
       "https://us-central1-mboacare-api-v1.cloudfunctions.net/api";
   static const String logoUrl =
       'https://drive.google.com/drive/u/3/folders/159jj3T0pfMzCQsfMf-WtX9oMiefDf-gp';
+  static const String linkIn = 'https://www.linkedin.com/company/mboalab/';
 
   /*----------------------------------Auth endpoints--------------------------------------------------- */
 
