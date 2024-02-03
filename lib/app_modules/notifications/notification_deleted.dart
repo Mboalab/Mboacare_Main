@@ -39,7 +39,7 @@ class DeleteNotificationSuccessful extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               //call the routing here
-              Get.to(() => const NotificationsPage());
+              Get.to(() => NotificationsPage());
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.buttonColor,

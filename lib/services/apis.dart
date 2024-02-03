@@ -29,10 +29,9 @@ class Apis {
 /*----------------------------------notification endpoints--------------------------------------------------- */
   static const String allNotification =
       "$baseUrl/notification/all-notifications";
-  static const String singleNotification =
-      "$baseUrl/notification/delete-notification/title";
+
   static const String deleteNotification =
-      "$baseUrl/notification/delete-notification/title";
+      "$baseUrl/notification/delete-notification/";
 
   // --------------------------Hospital endpoints--------------------------
   static const allHospitals = '$baseUrl/hospital/all-hospital';

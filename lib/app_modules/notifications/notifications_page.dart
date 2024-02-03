@@ -15,8 +15,8 @@ import 'package:provider/provider.dart';
 import '../../model/notification_data.dart';
 
 class NotificationsPage extends StatefulWidget {
-  const NotificationsPage({this.title, Key? key}) : super(key: key);
-  final String? title;
+  const NotificationsPage({this.id, Key? key}) : super(key: key);
+  final String? id;
 
   @override
   State<NotificationsPage> createState() => _NotificationsPageState();
@@ -167,9 +167,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                   MaterialStateProperty.all(AppColors.cardbg),
                             ),
                             onPressed: () {
-                              // print(widget.title);
+                              print(widget.id);
                               notification.deleteTheNotification(
-                                  notificationTitle: widget.title.toString(),
+                                  notificationId: widget.id.toString(),
                                   context: context);
                             },
                             child: const Text(
