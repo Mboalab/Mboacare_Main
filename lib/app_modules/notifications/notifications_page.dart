@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 import '../../model/notification_data.dart';
 
 class NotificationsPage extends StatefulWidget {
-  const NotificationsPage({this.id = '2', Key? key}) : super(key: key);
+  const NotificationsPage({this.id, Key? key}) : super(key: key);
   final String? id;
 
   @override
