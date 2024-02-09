@@ -67,7 +67,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void navigate() {
     Future.delayed(const Duration(seconds: 5), () {
       Get.to(
-        () => const DashboardScreen(userName: 'Mboacare'),
+        () => DashboardScreen(
+          userName: 'Mboacare',
+        ),
         duration: const Duration(milliseconds: 1200),
         curve: Curves.easeIn,
         transition: Transition.fadeIn,

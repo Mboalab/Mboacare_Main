@@ -33,11 +33,11 @@ class Apis {
   static const String deleteNotification =
       "$baseUrl/notification/delete-notification/";
 
-  // --------------------------Hospital endpoints--------------------------
+  // --------------------------Hospital endpoints--------------------------ng
   static const allHospitals = '$baseUrl/hospital/all-hospital';
   static const addHospital = '$baseUrl/hospital/add-hospital';
   static const updateHospital = '$baseUrl/hospital/update-hospital';
-  static const searchHospitals = '$baseUrl/hospital/search?q=Wunmi';
+  static const searchHospitals = '$baseUrl/hospital/search';
   static const deleteHospital = '$baseUrl/hospital/delete-hospital/';
   static const myHospitals = '$baseUrl/hospital/my-hospitals?q=';
 }

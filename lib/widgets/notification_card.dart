@@ -10,11 +10,9 @@ class NotificationCard extends StatelessWidget {
   final String title;
   final String pubDate;
   final Function() tap;
-  final Function() onLongPress;
 
   NotificationCard({
     Key? key,
-    required this.onLongPress,
     required this.content,
     required this.pubDate,
     required this.title,
@@ -24,7 +22,6 @@ class NotificationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: onLongPress,
       onTap: tap,
       child: Card(
         child: Container(

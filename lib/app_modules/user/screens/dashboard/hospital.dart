@@ -50,7 +50,8 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
   }
 
   Future<void> _searchForHospitals(String name, String location) async {
-    final hospitals = await ApiServices().searchHospital();
+    final hospitals =
+        await ApiServices().searchHospital(_searchController.text);
 
     setState(() {
       filteredHospitals = hospitals
