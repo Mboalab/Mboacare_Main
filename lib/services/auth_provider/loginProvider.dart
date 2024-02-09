@@ -191,7 +191,10 @@ class LoginProvider extends ChangeNotifier {
     _loading = true;
     snackMessage(message: "Logout Successful!", context: context);
     notifyListeners();
-    Get.to(() => const DashboardScreen(userName: ''),
+    Get.to(
+        () => const DashboardScreen(
+              userName: '',
+            ),
         duration: const Duration(
           milliseconds: 800,
         ),
