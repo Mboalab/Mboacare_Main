@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/profile/update_profile.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/profile/user_password_update.dart';
+import 'package:mboacare/model/user_model.dart';
 import 'package:mboacare/services/auth_provider/loginProvider.dart';
 
 import 'package:mboacare/global/styles/colors.dart';
@@ -9,8 +10,8 @@ import 'package:mboacare/global/styles/colors.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
-
+  ProfilePage({super.key, this.userModel});
+  UserModel? userModel;
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<LoginProvider>(context);
@@ -45,7 +46,8 @@ class ProfilePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CircleAvatar(
-                          backgroundImage: NetworkImage(provider.profileImage),
+                          backgroundImage:
+                              NetworkImage(userModel!.photoURL.toString()),
                           radius: 45,
                           //child: Container( child: Image.network(provider.profileImage)),
                         ),
@@ -91,7 +93,9 @@ class ProfilePage extends StatelessWidget {
                   Icons.edit_square,
                   size: 19,
                 ),
-                subtitle: Text(provider.userName),
+                subtitle: userModel?.displayName.toString() != null
+                    ? Text(userModel!.displayName.toString())
+                    : const Text('Update your Name'),
                 // onTap: () {
                 //   showEditDialog(
                 //       context, user.displayName, 'name', userDataProvider);
@@ -110,8 +114,8 @@ class ProfilePage extends StatelessWidget {
                   Icons.edit_square,
                   size: 19,
                 ),
-                subtitle: provider.userPhone != null
-                    ? Text(provider.userPhone)
+                subtitle: userModel!.phoneNumber != null
+                    ? Text(userModel!.phoneNumber.toString())
                     : const Text('Update your profile'),
                 // onTap: () {
                 //   showEditDialog(
@@ -133,7 +137,7 @@ class ProfilePage extends StatelessWidget {
                   Icons.edit_square,
                   size: 19,
                 ),
-                subtitle: Text(provider.userEmail),
+                subtitle: Text(userModel!.email.toString()),
                 // onTap: () {
                 //   showEditDialog(
                 //       context, user.email, 'email', userDataProvider);

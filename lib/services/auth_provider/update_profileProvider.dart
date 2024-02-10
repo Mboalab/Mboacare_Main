@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -11,6 +11,7 @@ import 'package:mboacare/utils/snack_succ.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateProfileProvider extends ChangeNotifier {
+  // final auth = FirebaseAuth.instance;
   Future<SharedPreferences> _pref = SharedPreferences.getInstance();
   final profileFormKey = GlobalKey<FormState>();
 
@@ -19,6 +20,9 @@ class UpdateProfileProvider extends ChangeNotifier {
   String _reqMessage = "";
   bool _isLoading = false;
   String phone = '';
+
+  String user_name = '';
+  String user_phone = '';
 
   String get reqMessage => _reqMessage;
   bool get isLoading => _isLoading;
@@ -39,6 +43,9 @@ class UpdateProfileProvider extends ChangeNotifier {
     SharedPreferences pref = await _pref;
     String id = pref.getString('uid') ?? '';
     print(id);
+    user_name = pref.getString('name') ?? "";
+    user_phone = pref.getString('phone') ?? "";
+    print(user_name);
     final url = Uri.parse(Apis.updateProfile);
     print(url);
     final request = http.MultipartRequest('PUT', url);
@@ -61,13 +68,15 @@ class UpdateProfileProvider extends ChangeNotifier {
         _isLoading = false;
         notifyListeners();
         snackMessage(message: "Profile Updated Successful!", context: context);
+        pref.setString('name', name);
+        pref.setString('phone', phone);
+        pref.commit();
         Get.to(() => const UpdateProfileSuccess(),
             duration: const Duration(
               milliseconds: 800,
             ),
             curve: Curves.easeInCirc,
             transition: Transition.fadeIn);
-        notifyListeners();
         clearInput();
         notifyListeners();
       } else {

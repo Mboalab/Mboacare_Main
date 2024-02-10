@@ -1,36 +1,26 @@
 class UserModel {
-  final String uid;
-  final String email;
-  final bool emailVerified;
+  String? uid;
+  String? email;
+  bool? emailVerified;
+  String? displayName;
+  String? photoURL;
   String? phoneNumber;
-  final String displayName;
-  final String? photoURL;
 
   UserModel({
-    required this.uid,
-    required this.email,
-    required this.emailVerified,
-    this.phoneNumber,
-    required this.displayName,
+    this.uid,
+    this.email,
+    this.emailVerified,
+    this.displayName,
     this.photoURL,
+    this.phoneNumber,
   });
 
-  UserModel copyWith({
-    String? uid,
-    String? email,
-    bool? emailVerified,
-    String? phoneNumber,
-    String? displayName,
-    String? password,
-    String? photoURL,
-  }) {
-    return UserModel(
-      uid: uid ?? this.uid,
-      email: email ?? this.email,
-      emailVerified: emailVerified ?? this.emailVerified,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
-      displayName: displayName ?? this.displayName,
-      photoURL: photoURL ?? this.photoURL,
-    );
+  UserModel.fromJson(Map<String, dynamic> json) {
+    uid = json['uid'];
+    email = json['email'];
+    emailVerified = json['emailVerified'];
+    displayName = json['displayName'];
+    photoURL = json['photoURL'];
+    phoneNumber = json['phoneNumber'];
   }
 }
