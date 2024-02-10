@@ -13,10 +13,12 @@ import 'package:mboacare/services/databaseProvider.dart';
 import 'package:mboacare/utils/snack_error.dart';
 import 'package:mboacare/utils/snack_succ.dart';
 import 'package:mboacare/utils/validations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../global/styles/assets_string.dart';
 
 class LoginProvider extends ChangeNotifier {
+  Future<SharedPreferences> _pref = SharedPreferences.getInstance();
   final auth = FirebaseAuth.instance;
   final googleSignIn = GoogleSignIn();
 
@@ -29,6 +31,8 @@ class LoginProvider extends ChangeNotifier {
   String userEmail = '';
   String userName = '';
   String userPhone = '';
+  String user_name = '';
+  String user_phone = '';
   String profileImage = "";
   String uid = '';
   String email = "";
@@ -68,7 +72,7 @@ class LoginProvider extends ChangeNotifier {
       required BuildContext context}) async {
     _loading = true;
     notifyListeners();
-
+    SharedPreferences pref = await _pref;
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -88,19 +92,22 @@ class LoginProvider extends ChangeNotifier {
         // notifyListeners();
         log(user.toString());
         userEmail = user.email!;
-        userName = user.displayName ?? 'MboaUser';
+        String name = user.displayName.toString();
         profileImage = user.photoURL ?? Apis.logoUrl;
-        userPhone = user.phoneNumber ?? 'Update Phone';
+        String phone = user.phoneNumber.toString();
         uid = user.uid;
         DatabaseProvider().saveEmail(userEmail);
-        DatabaseProvider().saveName(userName);
+        DatabaseProvider().saveName(name);
         DatabaseProvider().saveUserID(uid);
-        print(userEmail);
-        print(userName);
-        print(uid);
+        DatabaseProvider().savePhone(phone);
+
         clearInput();
         snackMessage(message: "Login Successful!", context: context);
+        user_name = pref.getString('name') ?? "";
+        user_phone = pref.getString('phone') ?? "";
+        print(user_name);
         notifyListeners();
+
         Get.to(() => const MedDashboard(),
             duration: const Duration(
               milliseconds: 800,

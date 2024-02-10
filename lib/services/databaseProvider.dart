@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-
 class DatabaseProvider extends ChangeNotifier {
   Future<SharedPreferences> _pref = SharedPreferences.getInstance();
-
 
   String _name = '';
   String _phone = '';
   String _userEmail = '';
   String _uid = '';
-
 
   String get name => _name;
   String get phone => _phone;
@@ -43,7 +39,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   //Getting name
-  Future<String> getName() async {
+  getName() async {
     SharedPreferences value = await _pref;
     if (value.containsKey('name')) {
       String data = value.getString('name') as String;
@@ -58,7 +54,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   //Getting phone
-  Future<String> getPhone() async {
+  getPhone() async {
     SharedPreferences value = await _pref;
     if (value.containsKey('phone')) {
       String data = value.getString('phone') as String;
@@ -101,6 +97,7 @@ class DatabaseProvider extends ChangeNotifier {
       return '';
     }
   }
+
   void logout(BuildContext context) async {
     final value = await _pref;
     value.clear();
