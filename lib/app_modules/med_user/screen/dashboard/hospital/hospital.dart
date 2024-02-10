@@ -9,9 +9,6 @@ import 'package:mboacare/model/search_hospital_model.dart';
 import 'package:mboacare/services/appService.dart';
 import 'package:mboacare/utils/app_dropdown.dart';
 import 'package:mboacare/widgets/chip_widget.dart';
-//import 'package:mboacare/app_modules/user/screens/inner_screen/hospitaldetails.dart';
-import 'package:provider/provider.dart';
-import 'dart:developer' as devtools show log;
 
 class HospitalDashboard extends StatefulWidget {
   const HospitalDashboard({super.key});
