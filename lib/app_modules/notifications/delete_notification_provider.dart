@@ -21,8 +21,7 @@ class DeleteNotificationProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   void deleteTheNotification(
-      {required String notificationTitle,
-      required BuildContext context}) async {
+      {required String notificationId, required BuildContext context}) async {
     _isLoading = true;
     notifyListeners();
 
@@ -33,7 +32,7 @@ class DeleteNotificationProvider extends ChangeNotifier {
     };
 
     http.Response req = await http.delete(
-      Uri.parse("$url$notificationTitle"),
+      Uri.parse("$url$notificationId"),
       headers: headers,
     );
 

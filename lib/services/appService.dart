@@ -17,8 +17,6 @@ import 'auth_provider/loginProvider.dart';
 class ApiServices {
    Future<SharedPreferences> _pref = SharedPreferences.getInstance();
   Future<List<BlogItem>> fetchBlogData() async {
-    
-    
     String url = Apis.allBlog;
 
     Map<String, String> headers = {
@@ -46,11 +44,11 @@ class ApiServices {
     return [];
   }
 
-  Future<List<BlogItem>> myBlogData({ required BuildContext context}) async {
+  Future<List<BlogItem>> myBlogData({required BuildContext context}) async {
     final provider = Provider.of<LoginProvider>(context);
 
     String myEmail = provider.userEmail;
-    
+
     String url = Apis.myBlog;
     String myUrl = "$url$myEmail";
 
@@ -80,6 +78,7 @@ class ApiServices {
     } catch (e) {}
     return [];
   }
+
   Future<List<Notify>> fetchNotifications() async {
     String url = Apis.allNotification;
 
@@ -132,8 +131,8 @@ class ApiServices {
     return [];
   }
 
-  Future<List<SearchHospitalModel>> searchHospital() async {
-    final apiUrl = Uri.parse(Apis.searchHospitals);
+  Future<List<SearchHospitalModel>> searchHospital(String searchParam) async {
+    final apiUrl = Uri.parse("${Apis.searchHospitals}?q=$searchParam");
 
     final response = await http.get(apiUrl, headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -163,11 +162,12 @@ class ApiServices {
     }
   }
 
-  Future<List<HospitalModel>> myHospitalData({ required BuildContext context}) async {
+  Future<List<HospitalModel>> myHospitalData(
+      {required BuildContext context}) async {
     final provider = Provider.of<LoginProvider>(context);
 
     String myEmail = provider.userEmail;
-    
+
     String url = Apis.myHospitals;
     String myUrl = "$url$myEmail";
 

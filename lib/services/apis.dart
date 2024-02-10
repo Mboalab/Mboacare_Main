@@ -30,16 +30,15 @@ class Apis {
 /*----------------------------------notification endpoints--------------------------------------------------- */
   static const String allNotification =
       "$baseUrl/notification/all-notifications";
-  static const String singleNotification =
-      "$baseUrl/notification/delete-notification/title";
-  static const String deleteNotification =
-      "$baseUrl/notification/delete-notification/title";
 
-  // --------------------------Hospital endpoints--------------------------
+  static const String deleteNotification =
+      "$baseUrl/notification/delete-notification/";
+
+  // --------------------------Hospital endpoints--------------------------ng
   static const allHospitals = '$baseUrl/hospital/all-hospital';
   static const addHospital = '$baseUrl/hospital/add-hospital';
   static const updateHospital = '$baseUrl/hospital/update-hospital';
-  static const searchHospitals = '$baseUrl/hospital/search?q=Wunmi';
+  static const searchHospitals = '$baseUrl/hospital/search';
   static const deleteHospital = '$baseUrl/hospital/delete-hospital/';
   static const myHospitals = '$baseUrl/hospital/my-hospitals?q=';
 }
