@@ -2,9 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mboacare/model/user_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mboacare/model/hospital_model/hospital_model.dart';
 import 'package:mboacare/model/search_hospital_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 import '../model/blog_data.dart';
@@ -13,6 +15,7 @@ import 'apis.dart';
 import 'auth_provider/loginProvider.dart';
 
 class ApiServices {
+   Future<SharedPreferences> _pref = SharedPreferences.getInstance();
   Future<List<BlogItem>> fetchBlogData() async {
     
     
@@ -227,4 +230,31 @@ class ApiServices {
 
   //   return filteredHospitals;
   // }
+
+  Future<UserModel?> getAccount() async {
+    UserModel? items;
+    String url = Apis.getUser;
+    SharedPreferences prefs = await _pref;
+    String email = prefs.getString('userEmail') ?? '';
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Charset': 'utf-8',
+    };
+    final body = {
+      "email": email,
+    };
+    http.Response req = await http.post(Uri.parse(url), body:json.encode(body), headers: headers);
+
+    try {
+      if (req.statusCode == 200 || req.statusCode == 201) {
+        final data = json.decode(req.body);
+        print(data);
+        items = UserModel.fromJson(data);
+
+      }
+    } catch (e) {
+      print(e);
+    }
+    return items;
+  }
 }
