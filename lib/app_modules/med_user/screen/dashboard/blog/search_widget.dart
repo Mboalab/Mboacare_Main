@@ -106,7 +106,7 @@ class _SearchWidgetState extends State<SearchWidget> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           if (searchText.text.isNotEmpty)

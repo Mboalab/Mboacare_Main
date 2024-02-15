@@ -103,7 +103,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                     },
                     onChanged: (value) {
                       //print('Search text changed: $value');
-                      _searchForHospitals(value, hospName);
+                      _searchForHospitals(value, _selectedFilter);
                     },
                     decoration: InputDecoration(
                       filled: true,
@@ -158,7 +158,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                                 TextSpan(
                                   text: 'Connecting Hospitals Globally.',
                                   style: AppTextStyles.headerTwo.copyWith(
-                                    fontSize: 28.0,
+                                    fontSize: 24.0,
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.primaryColor,
                                     fontFamily: 'Inter',
@@ -451,50 +451,43 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                   fit: StackFit.expand,
                   children: [
                     ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image(
-                          image: NetworkImage(hospital.hospitalImage!),
-                        )
-                        // hospital
-                        //             .hospitalImage ==
-                        //         ''
-                        //     ? Image(
-                        //         image: NetworkImage(
-                        //             hospital
-                        //                 .hospitalImage!),
-                        //         fit: BoxFit.cover,
-                        //       )
-                        //     : Image(
-                        //         image: AssetImage(
-                        //             ImageAssets
-                        //                 .myHospital),
-                        //         fit: BoxFit.cover,
-                        //       ),
-                        ),
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image(
+                        image: NetworkImage(hospital.hospitalImage!),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
                     Positioned(
                       right: 2,
                       top: 2,
-                      child: IconButton(
-                        style: ButtonStyle(
-                          fixedSize: MaterialStateProperty.all(
-                            const Size(2.0, 10.0),
-                          ),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                          side: MaterialStateProperty.all(
-                            const BorderSide(
-                              width: 2.0,
-                              color: AppColors.primaryColor,
-                            ),
-                          ),
-                        ),
-                        onPressed: null,
-                        icon: const Icon(
-                          Icons.star_border_rounded,
-                          color: AppColors.primaryColor,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0, top: 8.0),
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 2, color: AppColors.primaryColor),
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.transparent),
+                          child: IconButton.filledTonal(
+                              onPressed: () {
+                                setState(() {
+                                  starToggle = !starToggle;
+                                });
+                              },
+                              icon: starToggle == false
+                                  ? const Icon(
+                                      Icons.star_border,
+                                      size: 20,
+                                      color: AppColors.primaryColor,
+                                    )
+                                  : const Icon(
+                                      Icons.star,
+                                      size: 20,
+                                      color: AppColors.primaryColor,
+                                    )),
                         ),
                       ),
                     )
@@ -520,6 +513,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                       ),
                     ),
                   ),
+
                   //   IconButton(
                   //     onPressed: () {
                   //       Navigator.push(
