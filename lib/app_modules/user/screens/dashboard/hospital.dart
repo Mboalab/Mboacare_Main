@@ -43,6 +43,9 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
     super.dispose();
   }
 
+  var hospName;
+  var hospLocation;
+
   Future<void> _refreshData() async {
     Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
@@ -100,7 +103,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                     },
                     onChanged: (value) {
                       //print('Search text changed: $value');
-                      _searchForHospitals(value, _selectedFilter);
+                      _searchForHospitals(value, hospName);
                     },
                     decoration: InputDecoration(
                       filled: true,
@@ -155,7 +158,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                                 TextSpan(
                                   text: 'Connecting Hospitals Globally.',
                                   style: AppTextStyles.headerTwo.copyWith(
-                                    fontSize: 24.0,
+                                    fontSize: 28.0,
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.primaryColor,
                                     fontFamily: 'Inter',
