@@ -10,8 +10,6 @@ import 'dart:convert';
 
 import 'package:mboacare/services/apis.dart';
 
-
-
 class SearchWidget extends StatefulWidget {
   const SearchWidget({Key? key}) : super(key: key);
 
@@ -203,7 +201,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                           }),
                     );
                   } else {
-                    return const Center(
+                    return Center(
                         child: SpinKitCircle(
                       color: AppColors.buttonColor,
                     ));
