@@ -14,15 +14,34 @@ import 'package:mboacare/global/styles/colors.dart';
 import 'package:mboacare/global/theme/themeScreen.dart';
 import 'package:mboacare/services/auth_provider/loginProvider.dart';
 import 'package:mboacare/services/auth_provider/registerProvider.dart';
+import 'package:mboacare/services/auth_provider/update_profileProvider.dart';
 import 'package:mboacare/widgets/settings_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:mboacare/services/auth_provider/user_provider.dart';
 
-class Settings extends StatelessWidget {
+class Settings extends StatefulWidget {
   const Settings({super.key});
+
+  @override
+  State<Settings> createState() => _SettingsState();
+}
+
+class _SettingsState extends State<Settings> {
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      final userModel = Provider.of<UserProvider>(context, listen: false);
+
+      userModel.getUserData();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<LoginProvider>(context);
+    final provider1 = Provider.of<UpdateProfileProvider>(context);
+    final userModel = Provider.of<UserProvider>(context);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -48,15 +67,15 @@ class Settings extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            provider.userName ?? 'Mboa User',
+                            userModel.data?.displayName ?? "MboaCare User",
                             style: GoogleFonts.quicksand(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.textColor2),
                           ),
-                          Padding(padding: EdgeInsets.only(bottom: 5)),
+                          const Padding(padding: EdgeInsets.only(bottom: 5)),
                           Text(
-                            provider.userEmail ?? 'mboauser@gmail.com',
+                            userModel.data?.email ?? 'mboauser@gmail.com',
                             style: GoogleFonts.quicksand(
                               fontSize: 15,
                             ),
@@ -92,7 +111,7 @@ class Settings extends StatelessWidget {
                   ),
                   onTap: () {
                     Get.to(
-                      () => const ProfilePage(),
+                      () =>  ProfilePage(userModel: userModel.data,),
                       duration: const Duration(milliseconds: 800),
                       curve: Curves.easeInCirc,
                       transition: Transition.leftToRight,
