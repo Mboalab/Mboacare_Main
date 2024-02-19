@@ -53,11 +53,12 @@ class _SettingsState extends State<Settings> {
                 height: 25,
               ),
               Padding(
-                padding: EdgeInsets.only(left: 20),
+                padding: const EdgeInsets.only(left: 20),
                 child: Row(
                   children: [
                     CircleAvatar(
-                      backgroundImage: NetworkImage(provider.profileImage),
+                      backgroundImage: NetworkImage(
+                          userModel.data?.photoURL ?? provider.profileImage),
                       radius: 45,
                       //child: Container( child: Image.network(provider.profileImage)),
                     ),
@@ -111,7 +112,9 @@ class _SettingsState extends State<Settings> {
                   ),
                   onTap: () {
                     Get.to(
-                      () =>  ProfilePage(userModel: userModel.data,),
+                      () => ProfilePage(
+                        userModel: userModel.data,
+                      ),
                       duration: const Duration(milliseconds: 800),
                       curve: Curves.easeInCirc,
                       transition: Transition.leftToRight,

@@ -26,6 +26,7 @@ import 'package:mboacare/services/auth_provider/registerProvider.dart';
 import 'package:mboacare/app_modules/splashscreen/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mboacare/services/auth_provider/user_provider.dart';
+import 'package:mboacare/services/map_services/map_provider.dart';
 import 'package:provider/provider.dart';
 import 'services/blog_provider/add_blogProvider.dart';
 import 'services/hospital_provider/add_hospital_provider.dart';
@@ -60,6 +61,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => DeleteHospitalProvider()),
       ChangeNotifierProvider(create: (_) => EditHospitalProvider()),
       // Add other providers here if needed.
+      //ChangeNotifierProvider(create: (_) => MapProvider()),
     ],
     child: const MyApp(),
   ));
