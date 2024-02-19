@@ -8,8 +8,8 @@ class AddHospitalModel {
   String? email;
   String? website;
   String? placeAddress;
-  String? latitude;
-  String? longitude;
+  double? latitude;
+  double? longitude;
   List<String>? serviceType;
   List<String>? facilitiesType;
   String? hospitalType;

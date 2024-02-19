@@ -3,7 +3,7 @@ class HospitalModel {
   String? website;
   String? hospitalType;
   List<String>? facilitiesType;
-  String? latitude;
+  double? latitude;
   String? placeAddress;
   String? hospitalOwner;
   String? hospitalSize;
@@ -13,7 +13,7 @@ class HospitalModel {
   String? userEmail;
   String? id;
   String? email;
-  String? longitude;
+  double? longitude;
   bool? isApprove;
 
   HospitalModel(
@@ -39,7 +39,7 @@ class HospitalModel {
     website = json['website'];
     hospitalType = json['hospitalType'];
     facilitiesType = json['facilitiesType'].cast<String>();
-    latitude = json['latitude'];
+    latitude = double.parse(json['latitude']);
     placeAddress = json['placeAddress'];
     hospitalOwner = json['hospitalOwner'];
     hospitalSize = json['hospitalSize'];
@@ -49,7 +49,7 @@ class HospitalModel {
     userEmail = json['userEmail'];
     id = json['id'];
     email = json['email'];
-    longitude = json['longitude'];
+    longitude = double.parse(json['longitude']);
     isApprove = json['isApprove'];
   }
 }

@@ -1,9 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/model/hospital_model/hospital_model.dart';
+import 'package:mboacare/services/map_services/map_provider.dart';
 import 'package:mboacare/widgets/chip_widget.dart';
 import 'package:mboacare/global/styles/colors.dart';
 import 'package:mboacare/model/hospital_data.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 import 'dart:developer' as devtools show log;
@@ -17,6 +24,9 @@ class HospitalDetailsPage extends StatefulWidget {
 }
 
 class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
+
   String email = 'Email';
 
   String phone = 'Phone';
@@ -56,6 +66,7 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
         .toList();
 
     final bedCapacity = widget.hospital.hospitalSize;
+
     return Scaffold(
       appBar: AppBar(
           backgroundColor: AppColors.navbar,
@@ -75,6 +86,18 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
             style: AppTextStyles.bodyFour
                 .copyWith(fontSize: 18, color: AppColors.secondaryTextColor),
           )),
+      floatingActionButton: FloatingActionButton.extended(
+        foregroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.primaryColor,
+        onPressed: () {
+          MapsLauncher.launchCoordinates(
+              widget.hospital.latitude as double,
+              widget.hospital.longitude as double,
+              widget.hospital.placeAddress);
+        },
+        label: const Text('Locate Hospital!'),
+        icon: const Icon(Icons.location_on_outlined),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -89,6 +112,9 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                           borderRadius: BorderRadius.circular(15.0),
                           image: widget.hospital.hospitalImage != ''
                               ? DecorationImage(
+                                  colorFilter: ColorFilter.mode(
+                                      Colors.black45, BlendMode.darken),
+                                  opacity: 1.0,
                                   fit: BoxFit.cover,
                                   image: NetworkImage(
                                     widget.hospital.hospitalImage!,
@@ -104,7 +130,7 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                   ),
                   Positioned(
                       bottom: 20,
-                      left: MediaQuery.sizeOf(context).width * .3,
+                      left: MediaQuery.sizeOf(context).width * .1,
                       child: widget.hospital.website != ''
                           ? InkWell(
                               onTap: () {
@@ -140,9 +166,9 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
               ),
               Text(
                 widget.hospital.name!,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.text,
+                style: GoogleFonts.quicksand(
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.secondaryTextColor,
                   fontSize: 30,
                 ),
                 textAlign: TextAlign.center,
@@ -150,16 +176,16 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
               const SizedBox(
                 height: 10,
               ),
-              const Align(
+              Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 30),
+                    padding: EdgeInsets.only(left: 10),
                     child: Text(
                       'Email',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.text),
+                      style: GoogleFonts.quicksand(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                      ),
                     ),
                   )),
               const SizedBox(height: 10),
@@ -176,11 +202,7 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                     enabled: false,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.email_outlined),
-                      prefixIconColor: AppColors.text,
                       hintText: email,
-                      hintStyle: const TextStyle(color: AppColors.text),
-                      labelStyle:
-                          const TextStyle(color: AppColors.primaryColor),
                       border: const OutlineInputBorder(
                         borderSide:
                             BorderSide(color: AppColors.primaryColor, width: 2),
@@ -192,16 +214,16 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
               const SizedBox(
                 height: 10,
               ),
-              const Align(
+              Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 30),
+                    padding: EdgeInsets.only(left: 10),
                     child: Text(
                       'Phone',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.text),
+                      style: GoogleFonts.quicksand(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                      ),
                     ),
                   )),
               const SizedBox(height: 10),
@@ -220,11 +242,7 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                     enabled: false,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.phone),
-                      prefixIconColor: AppColors.text,
                       hintText: phone,
-                      hintStyle: const TextStyle(color: AppColors.text),
-                      labelStyle:
-                          const TextStyle(color: AppColors.primaryColor),
                       border: const OutlineInputBorder(
                         borderSide:
                             BorderSide(color: AppColors.primaryColor, width: 2),
@@ -236,61 +254,71 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
               const SizedBox(
                 height: 10,
               ),
-              const Align(
+              Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 30),
+                    padding: EdgeInsets.only(left: 10),
                     child: Text(
                       'Address',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.text),
+                      style: GoogleFonts.quicksand(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                      ),
                     ),
                   )),
               const SizedBox(height: 10),
               // Address Box
-              InkWell(
-                onTap: () async {
-                  String query = Uri.encodeComponent(address);
-                  final Uri mapAddress = Uri.parse(
-                      "https://www.google.com/maps/search/?api=1&query=$query");
-                  if (await url_launcher.canLaunchUrl(mapAddress)) {
-                    await url_launcher.launchUrl(mapAddress);
-                  }
-                },
-                child: SizedBox(
-                  width: 350,
-                  height: 50,
-                  child: TextField(
-                    enabled: false,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.location_on_outlined),
-                      prefixIconColor: AppColors.text,
-                      hintText: address,
-                      hintStyle: const TextStyle(color: AppColors.text),
-                      labelStyle:
-                          const TextStyle(color: AppColors.primaryColor),
-                      border: const OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: AppColors.primaryColor, width: 2),
-                      ),
+              SizedBox(
+                width: 350,
+                height: 50,
+                child: TextField(
+                  enabled: false,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.location_on_outlined),
+                    hintText: address,
+                    border: const OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: AppColors.primaryColor, width: 2),
                     ),
                   ),
                 ),
               ),
               const SizedBox(
+                height: 10,
+              ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: Container(
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(10.0)),
+                  height: MediaQuery.of(context).size.height * 0.25,
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  child: GoogleMap(
+                    mapType: MapType.hybrid,
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(widget.hospital.latitude as double,
+                          widget.hospital.longitude as double),
+                      zoom: 18.4746,
+                    ),
+                    onMapCreated: (GoogleMapController controller) {
+                      _controller.complete(controller);
+                    },
+                  ),
+                ),
+              ),
+
+              const SizedBox(
                 height: 20,
               ),
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10.0),
                   child: Text(
                     'Services And Facilities',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.text,
+                    style: GoogleFonts.quicksand(
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.secondaryTextColor,
                       fontSize: 20,
                     ),
                     textAlign: TextAlign.center,
@@ -300,15 +328,15 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
               const SizedBox(
                 height: 10,
               ),
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                   child: Text(
                     'Services Offered : ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: AppColors.text,
+                    style: GoogleFonts.quicksand(
+                      fontWeight: FontWeight.w400,
                       fontSize: 16,
                     ),
                     textAlign: TextAlign.center,
@@ -316,26 +344,28 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Wrap(
                     runSpacing: 5,
                     spacing: 5,
                     children: specalities.map((item) {
-                      return ChipWidget(item);
+                      return Align(
+                          alignment: Alignment.centerLeft,
+                          child: ChipWidget(item));
                     }).toList()),
               ),
               const SizedBox(
                 height: 10,
               ),
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                   child: Text(
                     'Facilities : ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: AppColors.text,
+                    style: GoogleFonts.quicksand(
+                      fontWeight: FontWeight.w400,
                       fontSize: 16,
                     ),
                     textAlign: TextAlign.center,
@@ -343,27 +373,29 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                 ),
               ),
               Padding(
-                  padding: const EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: facilities.isNotEmpty
                       ? Wrap(
                           runSpacing: 5,
                           spacing: 5,
                           children: facilities.map((item) {
-                            return ChipWidget(item);
+                            return Align(
+                                alignment: Alignment.centerLeft,
+                                child: ChipWidget(item));
                           }).toList())
                       : Container()),
               const SizedBox(
                 height: 10,
               ),
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                   child: Text(
                     'Emergency Services : ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: AppColors.text,
+                    style: GoogleFonts.quicksand(
+                      fontWeight: FontWeight.w400,
                       fontSize: 16,
                     ),
                     textAlign: TextAlign.center,
@@ -383,15 +415,14 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
               const SizedBox(
                 height: 10,
               ),
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Text(
                     'Bed Capacity : ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: AppColors.text,
+                    style: GoogleFonts.quicksand(
+                      fontWeight: FontWeight.w400,
                       fontSize: 16,
                     ),
                     textAlign: TextAlign.center,
@@ -399,14 +430,13 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 35),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Align(
                     alignment: Alignment.centerLeft,
                     child: ChipWidget(bedCapacity ?? '')),
               ),
-              const SizedBox(
-                height: 30,
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height * .1,
               )
             ],
           ),

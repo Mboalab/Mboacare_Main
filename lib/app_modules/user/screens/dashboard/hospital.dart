@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:mboacare/app_modules/med_user/screen/inner_screen/hospitaldetails.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
@@ -7,16 +6,9 @@ import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/model/hospital_model/hospital_model.dart';
 import 'package:mboacare/model/search_hospital_model.dart';
 import 'package:mboacare/services/appService.dart';
-import 'package:mboacare/utils/app_dropdown.dart';
 import 'package:mboacare/widgets/chip_widget.dart';
 import 'package:mboacare/widgets/shimmer_top.dart';
-//import 'package:mboacare/app_modules/user/screens/inner_screen/hospitaldetails.dart';
-import 'package:provider/provider.dart';
-import '../../../../model/hospital_data.dart';
 import '../../../../global/styles/colors.dart';
-import 'dart:developer' as devtools show log;
-
-import '../../../../services/hospital_provider.dart';
 
 class HospitalDashboard extends StatefulWidget {
   const HospitalDashboard({super.key});
@@ -31,7 +23,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
 
   final TextEditingController _searchController = TextEditingController();
   String _selectedFilter = 'View All'; // Initialize with 'View All'
-  String dropdownValue = dropdownItems.first; // Initialize with 'View All'
+  // String dropdownValue = dropdownItems.first; // Initialize with 'View All'
 
   final FocusNode _searchFocusNode = FocusNode();
   bool starToggle = false;
@@ -193,52 +185,52 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 16.0),
-                          // Hospital filter dropdown menu
-                          DropdownMenu<String>(
-                              controller: dropdownController,
-                              inputDecorationTheme: const InputDecorationTheme(
-                                filled: true,
-                                fillColor: AppColors.navbarColor,
-                                border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12.0)),
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              enableFilter: true,
-                              menuStyle: const MenuStyle(
-                                backgroundColor:
-                                    MaterialStatePropertyAll<Color>(
-                                        AppColors.navbarColor),
-                              ),
-                              label: const Text('Filter'),
-                              leadingIcon:
-                                  const Icon(Icons.filter_list_outlined),
-                              trailingIcon: const Icon(
-                                  Icons.keyboard_arrow_down_outlined),
-                              selectedTrailingIcon:
-                                  const Icon(Icons.keyboard_arrow_up_outlined),
-                              onSelected: (String? newValue) {
-                                // setState(() {
-                                //   dropdownValue = newValue!;
-                                //   hospitalProvider.setSelectedFilter(dropdownValue);
-                                //   Future.delayed(const Duration(milliseconds: 500))
-                                //       .then((_) {
-                                //     hospitalProvider.updateFilteredHospitalsDropdown;
-                                //     hospitalProvider.filterHospitals(_selectedFilter);
-                                //   });
-                                // });
-                              },
-                              dropdownMenuEntries: dropdownItems
-                                  .map<DropdownMenuEntry<String>>(
-                                      (String value) {
-                                return DropdownMenuEntry<String>(
-                                  value: value,
-                                  label: value,
-                                );
-                              }).toList()),
+                          // const SizedBox(height: 16.0),
+                          // // Hospital filter dropdown menu
+                          // DropdownMenu<String>(
+                          //     controller: dropdownController,
+                          //     inputDecorationTheme: const InputDecorationTheme(
+                          //       filled: true,
+                          //       fillColor: AppColors.navbarColor,
+                          //       border: OutlineInputBorder(
+                          //         borderRadius:
+                          //             BorderRadius.all(Radius.circular(12.0)),
+                          //         borderSide: BorderSide.none,
+                          //       ),
+                          //     ),
+                          //     width: MediaQuery.of(context).size.width * 0.9,
+                          //     enableFilter: true,
+                          //     menuStyle: const MenuStyle(
+                          //       backgroundColor:
+                          //           MaterialStatePropertyAll<Color>(
+                          //               AppColors.navbarColor),
+                          //     ),
+                          //     label: const Text('Filter'),
+                          //     leadingIcon:
+                          //         const Icon(Icons.filter_list_outlined),
+                          //     trailingIcon: const Icon(
+                          //         Icons.keyboard_arrow_down_outlined),
+                          //     selectedTrailingIcon:
+                          //         const Icon(Icons.keyboard_arrow_up_outlined),
+                          //     onSelected: (String? newValue) {
+                          //       // setState(() {
+                          //       //   dropdownValue = newValue!;
+                          //       //   hospitalProvider.setSelectedFilter(dropdownValue);
+                          //       //   Future.delayed(const Duration(milliseconds: 500))
+                          //       //       .then((_) {
+                          //       //     hospitalProvider.updateFilteredHospitalsDropdown;
+                          //       //     hospitalProvider.filterHospitals(_selectedFilter);
+                          //       //   });
+                          //       // });
+                          //     },
+                          //     dropdownMenuEntries: dropdownItems
+                          //         .map<DropdownMenuEntry<String>>(
+                          //             (String value) {
+                          //       return DropdownMenuEntry<String>(
+                          //         value: value,
+                          //         label: value,
+                          //       );
+                          //     }).toList()),
                           SizedBox(height: 16.0),
 
                           // Hospitals list
