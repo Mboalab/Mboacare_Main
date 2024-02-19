@@ -105,7 +105,7 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
               Stack(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Container(
                       height: 200,
                       decoration: BoxDecoration(
