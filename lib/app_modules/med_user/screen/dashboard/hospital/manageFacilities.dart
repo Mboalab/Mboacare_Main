@@ -3,12 +3,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/edit_facilities_page.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/settings.dart';
-import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/colors.dart';
+
 import 'package:mboacare/model/hospital_model/hospital_model.dart';
 import 'package:mboacare/services/appService.dart';
 import 'package:mboacare/utils/router.dart';
-import 'package:mboacare/widgets/manageFaciltiesCard.dart';
+
 import 'package:get/get.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/add_hopital.dart';
 import 'package:mboacare/widgets/manage_card.dart';
@@ -18,9 +18,8 @@ class ManageFacilities extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final size = MediaQuery.sizeOf(context);
     return Scaffold(
-      backgroundColor: AppColors.whiteColor,
+      //  backgroundColor: AppColors.whiteColor,
       appBar: AppBar(
         backgroundColor: AppColors.whiteColor,
         titleSpacing: 0.0,
@@ -34,12 +33,6 @@ class ManageFacilities extends StatelessWidget {
         leading: IconButton(
           onPressed: () {
             PageNavigator(ctx: context).nextPageOnly(page: const Settings());
-            // Get.to(() => const Settings(),
-            //     duration: const Duration(
-            //       milliseconds: 800,
-            //     ),
-            //     curve: Curves.easeInCirc,
-            //     transition: Transition.fadeIn);
           },
           icon: const Icon(
             Icons.arrow_back_rounded,
@@ -106,7 +99,7 @@ class ManageFacilities extends StatelessWidget {
             }
             final data = snapshot.data;
             return ListView.builder(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 shrinkWrap: false,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -148,44 +141,4 @@ class ManageFacilities extends StatelessWidget {
   }
 }
 
-// SafeArea(
-//           child: SingleChildScrollView(
-//         physics: null,
-//         child: Column(
-//           children: [
-//             Row(
-//               children: [
-//                 IconButton(
-//                     onPressed: () {
-//                       Get.to(() => const Settings());
-//                     },
-//                     icon: Icon(Icons.arrow_back)),
-//                 Text(
-//                   'Manage Facilities',
-//                   style: AppTextStyles.bodyOne.copyWith(fontSize: 18),
-//                 )
-//               ],
-//             ),
-//             const SizedBox(
-//               height: 20,
-//             ),
-//             ManageFacilitiesCard(
-//               onTap: () {
-//                 Navigator.pushNamed(context, '/editFacilities');
-//               },
-//               nameOfHospital: 'Central Park Hospital',
-//               locationOfHospital: 'London, UK',
-//             ),
-//             const SizedBox(
-//               height: 30,
-//             ),
-//             ManageFacilitiesCard(
-//               onTap: () {
-//                 Navigator.pushNamed(context, '/editFacilities');
-//               },
-//               nameOfHospital: 'OakVille Hospital',
-//               locationOfHospital: 'Cape Town, South-Africa',
-//             ),
-//           ],
-//         ),
-//       )),
+//

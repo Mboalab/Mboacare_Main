@@ -49,7 +49,6 @@ class _EditBlogState extends State<EditBlog> {
     var height = MediaQuery.of(context).size.height;
     var provider = Provider.of<EditBlogProvider>(context);
     return Scaffold(
-      backgroundColor: AppColors.whiteColor,
       appBar: AppBar(
         backgroundColor: AppColors.whiteColor,
         titleSpacing: 0.0,
