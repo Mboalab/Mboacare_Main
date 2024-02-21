@@ -126,8 +126,8 @@ class ManageFacilities extends StatelessWidget {
                               image: hospital.hospitalImage,
                               hospitalSize: hospital.hospitalSize,
                               hospitalType: hospital.hospitalType,
-                              lat: hospital.latitude,
-                              lng: hospital.longitude),
+                              lat: hospital.latitude.toString(),
+                              lng: hospital.longitude.toString()),
                           duration: const Duration(
                             milliseconds: 800,
                           ),

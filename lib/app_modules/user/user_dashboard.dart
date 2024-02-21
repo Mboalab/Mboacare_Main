@@ -8,7 +8,7 @@ import 'package:mboacare/app_modules/user/screens/dashboard/blog_page.dart';
 import 'package:mboacare/global/styles/colors.dart';
 import 'package:mboacare/services/map_services/permision.dart';
 import '../../global/styles/assets_string.dart';
-import '../../widgets/drawer_widget.dart';
+
 import '../../widgets/myBottomBar.dart';
 import 'screens/dashboard/home.dart';
 import 'screens/dashboard/hospital.dart';
@@ -51,12 +51,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: AppColors.registerCard,
-        title: Image.asset(
-          ImageAssets.logo,
-          width: 30,
-          height: 30,
-        ),
-        centerTitle: true,
         actions: [
           InkWell(
             onTap: () {
@@ -69,25 +63,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           )
         ],
-        leading: Builder(
-          builder: (context) {
-            return GestureDetector(
-              onTap: () {
-                Scaffold.of(context).openDrawer();
-              },
-              child: const Padding(
-                padding: EdgeInsets.only(left: 15),
-                child: Icon(
-                  Icons.menu,
-                  color: AppColors.primaryColor,
-                  weight: 28.0,
-                ),
-              ),
-            );
-          },
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset(
+            ImageAssets.logo,
+            width: 20,
+            height: 20,
+          ),
         ),
       ),
-      drawer: DrawerWidget(),
       body: _pages[_currentIndex],
       bottomNavigationBar: SizedBox(
         height: 80,
