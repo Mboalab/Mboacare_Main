@@ -76,15 +76,11 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
         title: 'Mboacare',
         debugShowCheckedModeBanner: false,
-        // themeMode: Provider.of<ThemeProvider>(context).themeMode,
         theme: Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
             ? ThemeData.dark().copyWith(
-                // colorScheme: ,
                 scaffoldBackgroundColor: DarkThemeColors.background,
                 cardColor: DarkThemeColors.cardBackground,
                 primaryColor: DarkThemeColors.primaryText,
-                //accentColor: DarkThemeColors.accentColor,
-                //buttonColor: DarkThemeColors.buttonBackground,
                 textTheme: const TextTheme(
                   headlineSmall: TextStyle(
                     color: DarkThemeColors.primaryText,
@@ -95,15 +91,6 @@ class MyApp extends StatelessWidget {
                 ),
               )
             : ThemeData.light(),
-        // theme: ThemeData.light(),
-        // darkTheme: ThemeData.dark(),
-        //notifier.darkTheme ? themeLight : themeDark,
-        //     ThemeData(
-        //   colorScheme:
-        //       ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
-        //   useMaterial3: true,
-        // ),
-        // Add supported locales and localizations delegates
         supportedLocales: const [
           Locale('en', 'US'), // English
           Locale('hi', 'IN'), // Hindi
@@ -127,14 +114,14 @@ class MyApp extends StatelessWidget {
         },
         home: const SplashScreen(),
         routes: {
-          ('/home'): (context) => Home(),
-          ('/aboutUs'): (context) => AboutUs(),
-          ('/themeScreen'): (context) => ThemeScreen(),
+          ('/home'): (context) => const Home(),
+          ('/aboutUs'): (context) => const AboutUs(),
+          ('/themeScreen'): (context) => const ThemeScreen(),
           ('/profilePage'): (context) => ProfilePage(),
-          ('/resetPassword'): (context) => CheckMailScreen(),
-          ('/forgotPassword'): (context) => ForgotPasswordScreen(),
-          ('/editFacilities'): (context) => EditFacilitiesPage(),
-          ('/manageFacilities'): (context) => ManageFacilities(),
+          ('/resetPassword'): (context) => const CheckMailScreen(),
+          ('/forgotPassword'): (context) => const ForgotPasswordScreen(),
+          ('/editFacilities'): (context) => const EditFacilitiesPage(),
+          ('/manageFacilities'): (context) => const ManageFacilities(),
         });
   }
 }

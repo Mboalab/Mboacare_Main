@@ -24,7 +24,6 @@ class _MyBlogState extends State<MyBlog> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteColor,
       appBar: AppBar(
         backgroundColor: AppColors.whiteColor,
         titleSpacing: 0.0,
@@ -136,8 +135,6 @@ class _MyBlogState extends State<MyBlog> {
                   );
                 });
           })),
-
-    
     );
   }
 }
