@@ -95,7 +95,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 subtitle: userModel?.displayName.toString() != null
                     ? Text(userModel!.displayName.toString())
-                    : const Text('Update your Name'),
+                    : const Text('Update your Profile'),
                 // onTap: () {
                 //   showEditDialog(
                 //       context, user.displayName, 'name', userDataProvider);

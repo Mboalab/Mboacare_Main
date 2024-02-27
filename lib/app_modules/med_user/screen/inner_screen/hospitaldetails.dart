@@ -268,17 +268,25 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                   )),
               const SizedBox(height: 10),
               // Address Box
-              SizedBox(
-                width: 350,
-                height: 50,
-                child: TextField(
-                  enabled: false,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.location_on_outlined),
-                    hintText: address,
-                    border: const OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: AppColors.primaryColor, width: 2),
+              InkWell(
+                onTap: () {
+                  MapsLauncher.launchCoordinates(
+                      widget.hospital.latitude as double,
+                      widget.hospital.longitude as double,
+                      widget.hospital.placeAddress);
+                },
+                child: SizedBox(
+                  width: 350,
+                  height: 50,
+                  child: TextField(
+                    enabled: false,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.location_on_outlined),
+                      hintText: address,
+                      border: const OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.primaryColor, width: 2),
+                      ),
                     ),
                   ),
                 ),
@@ -294,7 +302,7 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                   height: MediaQuery.of(context).size.height * 0.25,
                   width: MediaQuery.of(context).size.width * 0.95,
                   child: GoogleMap(
-                    mapType: MapType.hybrid,
+                    mapType: MapType.normal,
                     initialCameraPosition: CameraPosition(
                       target: LatLng(widget.hospital.latitude as double,
                           widget.hospital.longitude as double),
