@@ -115,6 +115,9 @@ Load one of the `.apk` files listed above. Which file to load depends on what ki
   - Users are able to search for names of hospital.
 - Filtering and Sorting
   - Hospitals are filtered based on the services and facilities.
+- Dark mode: Enable dark mode in settings.
+- Health Tips and Articles: Provide a section with informative articles and health tips related to various medical conditions and wellness.
+- Geolocation: Search and view medical facilities, get directions based on location.(Google Map)
 
   
 # Coding Guidelines
@@ -163,15 +166,12 @@ Load one of the `.apk` files listed above. Which file to load depends on what ki
 # **What's Ahead: Future Features:**
 - AI recommendations: Personalized hospital suggestions on the dashboard.
 - Bookmark feature: Save and organize facilities on hospital details page for easy access.
-- Dark mode: Enable dark mode in settings.
 - Track history: Save booked appointment records.
 - Refer: Share users' medical history.
-- Geolocation: Search and view medical facilities, get directions based on location.(Google Map)
 - Telemedicine Integration: Incorporate telemedicine capabilities, allowing users to have virtual consultations with doctors.
 - Real-Time Availability: Display real-time availability of appointments, allowing users to book slots instantly.
 - Ratings and Reviews: Implement a robust rating and review system for users to share their experiences and help others make informed decisions.
 - Multilingual Support: Offer language options for users to access the app in their preferred language.
-- Health Tips and Articles: Provide a section with informative articles and health tips related to various medical conditions and wellness.
 - Community Forum: Create a platform for users to engage in discussions, ask questions, and share healthcare-related information.
 
 *"Our progress is on track, and the collaboration between design and development is really paying off.*
@@ -179,5 +179,11 @@ Load one of the `.apk` files listed above. Which file to load depends on what ki
 
 ## ✍️ Contributors <a name = "contributors"></a>:
 
+- [Godwill](https://github.com/godsakani)
+- [Carla Ejemeh](https://github.com/Sparklinglily)
 - [Anisha](https://github.com/AnishaSingh0118)
 - [Deborah](https://github.com/dearlydebbie)
+
+## ✍️ Project Mentor <a name = "project mentor"></a>:
+
+- [Petra](https://github.com/PetraAG)
