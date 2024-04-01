@@ -41,6 +41,9 @@ class Apis {
   static const searchHospitals = '$baseUrl/hospital/search';
   static const deleteHospital = '$baseUrl/hospital/delete-hospital/';
   static const myHospitals = '$baseUrl/hospital/my-hospitals?q=';
+
+  // --------------------------chat endpoints--------------------------ng'
+  static const chatApiKey = "";
 }
 
-String mapKey = 'AIzaSyBkuwcKikuNtM-07vxwHHHl9M-icIBst5w';
+String mapKey = '';
