@@ -56,7 +56,7 @@ class TopBlogCard extends StatelessWidget {
                   height: 150.0,
                   width: width * 0.8,
                   decoration: BoxDecoration(
-                    color: AppColors.navbar,
+                    // color: AppColors.navbar,
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(15.0),
                         topRight: Radius.circular(15.0)),
@@ -82,7 +82,7 @@ class TopBlogCard extends StatelessWidget {
                       bottomLeft: Radius.circular(15.0),
                       bottomRight: Radius.circular(15.0),
                     ),
-                    color: Color(0XFFF5F5F5),
+                    //  color: Color(0XFFF5F5F5),
                   ),
                   height: 115.0,
                   width: width * 0.8,
@@ -118,7 +118,7 @@ class TopBlogCard extends StatelessWidget {
                                 Text(
                                   authorName,
                                   style: AppTextStyles.bodyOne.copyWith(
-                                      color: Colors.black,
+                                      //   color: Colors.black,
                                       fontWeight: FontWeight.w500),
                                 ),
                                 Text(

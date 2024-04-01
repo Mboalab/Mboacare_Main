@@ -49,8 +49,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: AppColors.registerCard,
+        elevation: 1,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         actions: [
           InkWell(
             onTap: () {

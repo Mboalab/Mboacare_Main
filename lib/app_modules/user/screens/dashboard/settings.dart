@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
 import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/global/styles/colors.dart';
 import 'package:mboacare/services/auth_provider/registerProvider.dart';
+import 'package:mboacare/services/chat_provider/settings_provider.dart';
+import 'package:mboacare/services/hive/settings.dart';
+import 'package:mboacare/widgets/chat/settings_tile.dart';
 import 'package:mboacare/widgets/settings_widget.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../services/hive/boxes.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -17,125 +23,284 @@ class SettingsPage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           //physics: null,
-          child: Column(
-            //mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 25,
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage(ImageAssets.profile),
-                      radius: 45,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 18.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Janet Dolittle',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.textColor2),
-                          ),
-                          Padding(padding: EdgeInsets.only(bottom: 5)),
-                          Text(
-                            'janetdolittle@mail.org',
-                            style: TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
+          child: ValueListenableBuilder<Box<Settings>>(
+              valueListenable: Boxes.getSettings().listenable(),
+              builder: (context, box, child) {
+                if (box.isEmpty) {
+                  return Column(
+                    //mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 25,
                       ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Divider(
-                //height: 5,
-                color: AppColors.dividerColor,
-                endIndent: 2,
-                indent: 2,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              // SettingsPageListTiles(
-              //     icon: const Icon(
-              //       Iconsax.profile_add,
-              //       color: AppColors.textColor2,
-              //       size: iconSize,
-              //     ),
-              //     title: 'Account',
-              //     subtitle: 'Profile',
-              //     trailingIcon: const Icon(
-              //       Icons.arrow_forward_ios_outlined,
-              //     ),
-              //     onTap: () {
-              //       Navigator.pushNamed(context, '/profilePage');
-              //     }),
-              SettingsPageListTiles(
-                  icon: const Icon(
-                    Iconsax.global_edit,
-                    color: AppColors.textColor2,
-                    size: iconSize,
-                  ),
-                  title: 'Language',
-                  subtitle: 'English',
-                  trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const LanguageDialog();
-                        });
-                  }),
-              SettingsPageListTiles(
-                  icon: const Icon(
-                    Iconsax.moon,
-                    color: AppColors.textColor2,
-                    size: iconSize,
-                  ),
-                  title: 'Theme',
-                  subtitle: 'System',
-                  trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/themeScreen');
-                  }),
-              // SettingsPageListTiles(
-              //     icon: SvgPicture.asset(
-              //       ImageAssets.hospital,
-              //       color: AppColors.textColor2,
-              //       // size: iconSize,
-              //     ),
-              //     title: 'Facilities',
-              //     subtitle: 'Manage Facilities',
-              //     trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
-              //     onTap: () {
-              //       Navigator.pushNamed(context, '/facilities');
-              //     }),
-              SettingsPageListTiles(
-                  icon: const Icon(
-                    Iconsax.info_circle,
-                    color: AppColors.textColor2,
-                    size: iconSize,
-                  ),
-                  title: 'About Us',
-                  subtitle: 'Contact us',
-                  trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/aboutUs');
-                  }),
-            ],
-          ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundImage: AssetImage(ImageAssets.profile),
+                              radius: 45,
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 18.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Janet Dolittle',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.textColor2),
+                                  ),
+                                  Padding(padding: EdgeInsets.only(bottom: 5)),
+                                  Text(
+                                    'janetdolittle@mail.org',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Divider(
+                        //height: 5,
+                        color: AppColors.dividerColor,
+                        endIndent: 2,
+                        indent: 2,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      // SettingsPageListTiles(
+                      //     icon: const Icon(
+                      //       Iconsax.profile_add,
+                      //       color: AppColors.textColor2,
+                      //       size: iconSize,
+                      //     ),
+                      //     title: 'Account',
+                      //     subtitle: 'Profile',
+                      //     trailingIcon: const Icon(
+                      //       Icons.arrow_forward_ios_outlined,
+                      //     ),
+                      //     onTap: () {
+                      //       Navigator.pushNamed(context, '/profilePage');
+                      //     }),
+                      SettingsPageListTiles(
+                          icon: const Icon(
+                            Iconsax.global_edit,
+                            color: AppColors.textColor2,
+                            size: iconSize,
+                          ),
+                          title: 'Language',
+                          subtitle: 'English',
+                          trailingIcon:
+                              const Icon(Icons.arrow_forward_ios_outlined),
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const LanguageDialog();
+                                });
+                          }),
+                      // SettingsPageListTiles(
+                      //     icon: const Icon(
+                      //       Iconsax.moon,
+                      //       color: AppColors.textColor2,
+                      //       size: iconSize,
+                      //     ),
+                      //     title: 'Theme',
+                      //     subtitle: 'System',
+                      //     trailingIcon:
+                      //         const Icon(Icons.arrow_forward_ios_outlined),
+                      //     onTap: () {
+                      //       Navigator.pushNamed(context, '/themeScreen');
+                      //     }),
+                      // SettingsPageListTiles(
+                      //     icon: SvgPicture.asset(
+                      //       ImageAssets.hospital,
+                      //       color: AppColors.textColor2,
+                      //       // size: iconSize,
+                      //     ),
+                      //     title: 'Facilities',
+                      //     subtitle: 'Manage Facilities',
+                      //     trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
+                      //     onTap: () {
+                      //       Navigator.pushNamed(context, '/facilities');
+                      //     }),
+                      SettingsTile(
+                          icon: Icons.light_mode,
+                          title: 'Theme',
+                          value: false,
+                          onChanged: (value) {
+                            final settingProvider =
+                                context.read<SettingsProvider>();
+                            settingProvider.toggleDarkMode(
+                              value: value,
+                            );
+                          }),
+                      SettingsPageListTiles(
+                          icon: const Icon(
+                            Iconsax.info_circle,
+                            color: AppColors.textColor2,
+                            size: iconSize,
+                          ),
+                          title: 'About Us',
+                          subtitle: 'Contact us',
+                          trailingIcon:
+                              const Icon(Icons.arrow_forward_ios_outlined),
+                          onTap: () {
+                            Navigator.pushNamed(context, '/aboutUs');
+                          }),
+                    ],
+                  );
+                } else {
+                  final settings = box.getAt(0);
+                  return Column(
+                    //mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundImage: AssetImage(ImageAssets.profile),
+                              radius: 45,
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 18.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Janet Dolittle',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.textColor2),
+                                  ),
+                                  Padding(padding: EdgeInsets.only(bottom: 5)),
+                                  Text(
+                                    'janetdolittle@mail.org',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Divider(
+                        //height: 5,
+                        color: AppColors.dividerColor,
+                        endIndent: 2,
+                        indent: 2,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      // SettingsPageListTiles(
+                      //     icon: const Icon(
+                      //       Iconsax.profile_add,
+                      //       color: AppColors.textColor2,
+                      //       size: iconSize,
+                      //     ),
+                      //     title: 'Account',
+                      //     subtitle: 'Profile',
+                      //     trailingIcon: const Icon(
+                      //       Icons.arrow_forward_ios_outlined,
+                      //     ),
+                      //     onTap: () {
+                      //       Navigator.pushNamed(context, '/profilePage');
+                      //     }),
+                      SettingsPageListTiles(
+                          icon: const Icon(
+                            Iconsax.global_edit,
+                            color: AppColors.textColor2,
+                            size: iconSize,
+                          ),
+                          title: 'Language',
+                          subtitle: 'English',
+                          trailingIcon:
+                              const Icon(Icons.arrow_forward_ios_outlined),
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const LanguageDialog();
+                                });
+                          }),
+                      // SettingsPageListTiles(
+                      //     icon: const Icon(
+                      //       Iconsax.moon,
+                      //       color: AppColors.textColor2,
+                      //       size: iconSize,
+                      //     ),
+                      //     title: 'Theme',
+                      //     subtitle: 'System',
+                      //     trailingIcon:
+                      //         const Icon(Icons.arrow_forward_ios_outlined),
+                      //     onTap: () {
+                      //       Navigator.pushNamed(context, '/themeScreen');
+                      //     }),
+                      // SettingsPageListTiles(
+                      //     icon: SvgPicture.asset(
+                      //       ImageAssets.hospital,
+                      //       color: AppColors.textColor2,
+                      //       // size: iconSize,
+                      //     ),
+                      //     title: 'Facilities',
+                      //     subtitle: 'Manage Facilities',
+                      //     trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
+                      //     onTap: () {
+                      //       Navigator.pushNamed(context, '/facilities');
+                      //     }),
+
+                      SettingsTile(
+                          icon: settings!.isDarkTheme
+                              ? Iconsax.moon
+                              : Icons.light_mode,
+                          title: 'Theme',
+                          value: settings.isDarkTheme,
+                          onChanged: (value) {
+                            final settingProvider =
+                                context.read<SettingsProvider>();
+                            settingProvider.toggleDarkMode(
+                              value: value,
+                            );
+                          }),
+
+                      SettingsPageListTiles(
+                          icon: const Icon(
+                            Iconsax.info_circle,
+                            color: AppColors.textColor2,
+                            size: iconSize,
+                          ),
+                          title: 'About Us',
+                          subtitle: 'Contact us',
+                          trailingIcon:
+                              const Icon(Icons.arrow_forward_ios_outlined),
+                          onTap: () {
+                            Navigator.pushNamed(context, '/aboutUs');
+                          }),
+                    ],
+                  );
+                }
+              }),
         ),
       ),
     );

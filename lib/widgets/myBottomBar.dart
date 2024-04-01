@@ -13,7 +13,7 @@ class MyBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: AppColors.registerCard,
+      backgroundColor: Theme.of(context).bottomAppBarTheme.color,
       currentIndex: index,
       onTap: tap,
       selectedItemColor: AppColors.buttonColor,

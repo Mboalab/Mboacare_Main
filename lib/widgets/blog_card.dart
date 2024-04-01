@@ -21,7 +21,7 @@ class BottomBlogCard extends StatelessWidget {
     return GestureDetector(
       onTap: tap,
       child: Card(
-        color: const Color(0XFFF5F5F5),
+        // color: const Color(0XFFF5F5F5),
         elevation: 0.5,
         child: SizedBox(
           height: 120,
