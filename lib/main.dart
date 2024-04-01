@@ -16,6 +16,8 @@ import 'package:mboacare/global/theme/themeScreen.dart';
 import 'package:mboacare/services/auth_provider/chagePasswordProvider.dart';
 import 'package:mboacare/services/auth_provider/update_profileProvider.dart';
 import 'package:mboacare/services/blog_provider/delete_blogProvider.dart';
+import 'package:mboacare/services/chat_provider/chat_provider.dart';
+import 'package:mboacare/services/chat_provider/settings_provider.dart';
 import 'package:mboacare/services/databaseProvider.dart';
 import 'package:mboacare/services/auth_provider/forgotPasswordProvider.dart';
 import 'package:mboacare/services/auth_provider/loginProvider.dart';
@@ -28,6 +30,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:mboacare/services/auth_provider/user_provider.dart';
 import 'package:mboacare/services/map_services/map_provider.dart';
 import 'package:provider/provider.dart';
+import 'global/theme/theme.dart';
 import 'services/blog_provider/add_blogProvider.dart';
 import 'services/hospital_provider/add_hospital_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -37,6 +40,7 @@ import 'services/locale_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await ChatProvider.initHive();
   await Firebase.initializeApp();
   runApp(MultiProvider(
     providers: [
@@ -61,36 +65,56 @@ void main() async {
       ChangeNotifierProvider(create: (_) => DeleteHospitalProvider()),
       ChangeNotifierProvider(create: (_) => EditHospitalProvider()),
       // Add other providers here if needed.
-      //ChangeNotifierProvider(create: (_) => MapProvider()),
+      ChangeNotifierProvider(create: (_) => ChatProvider()),
+      ChangeNotifierProvider(create: (_) => SettingsProvider()),
     ],
     child: const MyApp(),
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+  @override
+  void initState() {
+    setTheme();
+    super.initState();
+  }
+
+  void setTheme() {
+    final settingsProvider = context.read<SettingsProvider>();
+    settingsProvider.getSavedSettings();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
         title: 'Mboacare',
         debugShowCheckedModeBanner: false,
-        theme: Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
-            ? ThemeData.dark().copyWith(
-                scaffoldBackgroundColor: DarkThemeColors.background,
-                cardColor: DarkThemeColors.cardBackground,
-                primaryColor: DarkThemeColors.primaryText,
-                textTheme: const TextTheme(
-                  headlineSmall: TextStyle(
-                    color: DarkThemeColors.primaryText,
-                  ),
-                  bodyMedium: TextStyle(
-                    color: DarkThemeColors.secondaryText,
-                  ),
-                ),
-              )
-            : ThemeData.light(),
+        theme: context.watch<SettingsProvider>().isDarkMode
+            ? darkTheme
+            : lightTheme,
+        // theme: Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+        //     ? ThemeData.dark().copyWith(
+        //         scaffoldBackgroundColor: DarkThemeColors.background,
+        //         cardColor: DarkThemeColors.cardBackground,
+        //         primaryColor: DarkThemeColors.primaryText,
+        //         textTheme: const TextTheme(
+        //           headlineSmall: TextStyle(
+        //             color: DarkThemeColors.primaryText,
+        //           ),
+        //           bodyMedium: TextStyle(
+        //             color: DarkThemeColors.secondaryText,
+        //           ),
+        //         ),
+        //       )
+        //     : ThemeData.light(),
         supportedLocales: const [
           Locale('en', 'US'), // English
           Locale('hi', 'IN'), // Hindi
