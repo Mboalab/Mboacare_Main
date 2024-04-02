@@ -69,22 +69,21 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
 
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: AppColors.navbar,
+          backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
             icon: const Icon(
               Icons.arrow_back_rounded,
-              color: AppColors.secondaryTextColor,
+              // color: AppColors.secondaryTextColor,
               size: 25.0,
             ),
           ),
           titleSpacing: 0.0,
           title: Text(
             'Hospital Details',
-            style: AppTextStyles.bodyFour
-                .copyWith(fontSize: 18, color: AppColors.secondaryTextColor),
+            style: AppTextStyles.bodyFour.copyWith(fontSize: 18),
           )),
       floatingActionButton: FloatingActionButton.extended(
         foregroundColor: AppColors.whiteColor,
@@ -326,7 +325,6 @@ class _HospitalDetailsPageState extends State<HospitalDetailsPage> {
                     'Services And Facilities',
                     style: GoogleFonts.quicksand(
                       fontWeight: FontWeight.w500,
-                      color: AppColors.secondaryTextColor,
                       fontSize: 20,
                     ),
                     textAlign: TextAlign.center,

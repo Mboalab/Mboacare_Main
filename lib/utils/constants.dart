@@ -9,24 +9,29 @@ final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 final SharedPreference sharedPreference = SharedPreference();
 
 class AppStrings {
-  static String welcome ="Welcome back";
-  static String remember ="Remember Me";
-  static String sign ="Sign in";
-  static String signUp ="Sign up";
-  static String doNotHaveAccount ="Don't have an account? ";
-  static String signInWithGoogle ="Sign in with Google";
-  static String forgot ="Forgot password";
-  static String enterPassword ="Enter your password";
-  static String email ="Email *";
-  static String back ="Back";
-  static String information ="Hospital Information";
-  static String password ="Password *";
-  static String enterEmail ="Enter your email";
-  static String details ="Welcome back! Please enter your details.";
-  static String photoType ="SVG, PNG, JPG or GIF (max. 800x400px)";
-  static String uploadImage ="Click to upload your hospital image";
-
+  static String welcome = "Welcome back";
+  static String remember = "Remember Me";
+  static String sign = "Sign in";
+  static String signUp = "Sign up";
+  static String doNotHaveAccount = "Don't have an account? ";
+  static String signInWithGoogle = "Sign in with Google";
+  static String forgot = "Forgot password";
+  static String enterPassword = "Enter your password";
+  static String email = "Email *";
+  static String back = "Back";
+  static String information = "Hospital Information";
+  static String password = "Password *";
+  static String enterEmail = "Enter your email";
+  static String details = "Welcome back! Please enter your details.";
+  static String photoType = "SVG, PNG, JPG or GIF (max. 800x400px)";
+  static String uploadImage = "Click to upload your hospital image";
+  static const String chatHistoryBox = 'chat_history';
+  static const String userBox = 'user_box';
+  static const String settingsBox = 'settings';
+  static const String mboacareDB = 'mboacare.db';
+  static const String chatMessagesBox = 'chat_messages_';
 }
+
 class AppFontSizes {
   static double fontSize125 = 125.0;
   static double fontSize64 = 64.0;

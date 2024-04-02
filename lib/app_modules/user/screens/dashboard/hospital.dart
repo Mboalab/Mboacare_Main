@@ -6,9 +6,11 @@ import 'package:mboacare/global/styles/assets_string.dart';
 import 'package:mboacare/model/hospital_model/hospital_model.dart';
 import 'package:mboacare/model/search_hospital_model.dart';
 import 'package:mboacare/services/appService.dart';
+import 'package:mboacare/utils/router.dart';
 import 'package:mboacare/widgets/chip_widget.dart';
 import 'package:mboacare/widgets/shimmer_top.dart';
 import '../../../../global/styles/colors.dart';
+import '../chat/chat_screen.dart';
 
 class HospitalDashboard extends StatefulWidget {
   const HospitalDashboard({super.key});
@@ -75,63 +77,75 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
           _searchFocusNode.unfocus();
         },
         child: Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              leading: Image.asset(
-                ImageAssets.logo,
-              ),
-              backgroundColor: AppColors.navbarColor,
-              titleSpacing: 0,
-              title: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  height: 50, // Set the height of the search bar
-                  child: TextField(
-                    style: const TextStyle(color: Colors.grey),
-                    controller: _searchController,
-                    focusNode: _searchFocusNode,
-                    onTap: () {
-                      _searchFocusNode.requestFocus();
-                    },
-                    onChanged: (value) {
-                      //print('Search text changed: $value');
-                      _searchForHospitals(value, _selectedFilter);
-                    },
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: AppColors.colorWhite,
-                      labelText: 'Search Hospitals',
-                      labelStyle: const TextStyle(
-                          decorationColor: Colors.grey, color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: const BorderSide(
-                          color: AppColors.navbarColor,
-                          width: 1.0,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: const BorderSide(
-                          color: AppColors.primaryColor,
-                          width: 1.0,
-                        ),
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.search,
-                        size: iconSize,
-                        color: AppColors.primaryColor,
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 12.0,
-                        horizontal: 12.0,
-                      ),
-                    ),
-                  ),
-                ),
+            // appBar: AppBar(
+            //   elevation: 0,
+            //   leading: Image.asset(
+            //     ImageAssets.logo,
+            //   ),
+            //   // backgroundColor: AppColors.navbarColor,
+            //   titleSpacing: 0,
+            //   title: Padding(
+            //     padding: const EdgeInsets.all(16.0),
+            //     child:
+            //      SizedBox(
+            //       height: 50, // Set the height of the search bar
+            //       child: TextField(
+            //         style: const TextStyle(color: Colors.grey),
+            //         controller: _searchController,
+            //         focusNode: _searchFocusNode,
+            //         onTap: () {
+            //           _searchFocusNode.requestFocus();
+            //         },
+            //         onChanged: (value) {
+            //           //print('Search text changed: $value');
+            //           _searchForHospitals(value, _selectedFilter);
+            //         },
+            //         decoration: InputDecoration(
+            //           // filled: true,
+            //           // fillColor: AppColors.colorWhite,
+            //           labelText: 'Search Hospitals',
+            //           labelStyle: const TextStyle(
+            //               decorationColor: Colors.grey, color: Colors.grey),
+            //           border: OutlineInputBorder(
+            //             borderRadius: BorderRadius.circular(10.0),
+            //           ),
+            //           enabledBorder: OutlineInputBorder(
+            //             borderRadius: BorderRadius.circular(10.0),
+            //             borderSide: BorderSide(
+            //               color: Theme.of(context).textTheme.bodyLarge!.color!,
+            //               width: 1.0,
+            //             ),
+            //           ),
+            //           focusedBorder: OutlineInputBorder(
+            //             borderRadius: BorderRadius.circular(10.0),
+            //             borderSide: const BorderSide(
+            //               color: AppColors.primaryColor,
+            //               width: 1.0,
+            //             ),
+            //           ),
+            //           prefixIcon: const Icon(
+            //             Icons.search,
+            //             size: iconSize,
+            //             color: AppColors.primaryColor,
+            //           ),
+            //           contentPadding: const EdgeInsets.symmetric(
+            //             vertical: 12.0,
+            //             horizontal: 12.0,
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            floatingActionButton: FloatingActionButton(
+              foregroundColor: AppColors.whiteColor,
+              backgroundColor: AppColors.primaryColor,
+              onPressed: () {
+                PageNavigator(ctx: context).nextPage(page: const ChatScreen());
+              },
+              child: const Icon(
+                Icons.message,
+                size: 30.0,
               ),
             ),
             body: RefreshIndicator(
@@ -143,6 +157,56 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+                          TextField(
+                            style: const TextStyle(color: Colors.grey),
+                            controller: _searchController,
+                            focusNode: _searchFocusNode,
+                            onTap: () {
+                              _searchFocusNode.requestFocus();
+                            },
+                            onChanged: (value) {
+                              //print('Search text changed: $value');
+                              _searchForHospitals(value, _selectedFilter);
+                            },
+                            decoration: InputDecoration(
+                              // filled: true,
+                              // fillColor: AppColors.colorWhite,
+                              labelText: 'Search Hospitals',
+                              labelStyle: const TextStyle(
+                                  decorationColor: Colors.grey,
+                                  color: Colors.grey),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .color!,
+                                  width: 1.0,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                borderSide: const BorderSide(
+                                  color: AppColors.primaryColor,
+                                  width: 1.0,
+                                ),
+                              ),
+                              prefixIcon: const Icon(
+                                Icons.search,
+                                size: iconSize,
+                                color: AppColors.primaryColor,
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 12.0,
+                                horizontal: 12.0,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20.0),
                           RichText(
                             textAlign: TextAlign.center,
                             text: TextSpan(
@@ -306,7 +370,7 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
                     color: AppColors.primaryColor,
                   ),
                 ),
-                color: Colors.white,
+                //color: Colors.white,
                 shadowColor: AppColors.primaryColor,
                 surfaceTintColor: Colors.white,
                 child: Column(
