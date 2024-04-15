@@ -39,10 +39,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
     var height = MediaQuery.of(context).size.height;
     var provider = Provider.of<UpdateProfileProvider>(context);
     return Scaffold(
-      backgroundColor: AppColors.whiteColor,
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
-        titleSpacing: 0.0,
         title: Text(
           'Update Profile',
           style: GoogleFonts.inter(
@@ -52,7 +49,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
         centerTitle: false,
         leading: IconButton(
           onPressed: () {
-            Get.to(() => const Settings(),
+            Get.to(() => const SettingsAdmin(),
                 duration: const Duration(
                   milliseconds: 800,
                 ),

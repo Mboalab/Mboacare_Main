@@ -25,7 +25,6 @@ class _MyBlogState extends State<MyBlog> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
         titleSpacing: 0.0,
         title: Text(
           'Manage Blogs',
@@ -36,7 +35,7 @@ class _MyBlogState extends State<MyBlog> {
         centerTitle: false,
         leading: IconButton(
           onPressed: () {
-            Get.to(() => const Settings(),
+            Get.to(() => const SettingsAdmin(),
                 duration: const Duration(
                   milliseconds: 800,
                 ),

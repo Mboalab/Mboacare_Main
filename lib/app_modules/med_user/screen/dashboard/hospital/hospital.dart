@@ -65,176 +65,170 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // Unfocus the search field when tapping outside
-        _searchFocusNode.unfocus();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          leading: Image.asset(
-            ImageAssets.logo,
-          ),
-          backgroundColor: AppColors.navbarColor,
-          titleSpacing: 0,
-          title: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SizedBox(
-              height: 50,
-              child: TextField(
-                controller: _searchController,
-                focusNode: _searchFocusNode,
-                onTap: () {
-                  _searchFocusNode.requestFocus();
-                },
-                onChanged: (value) {
-                  //print('Search text changed: $value');
-                  _searchForHospitals(value, _selectedFilter);
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: AppColors.colorWhite,
-                  labelText: 'Search Hospitals',
-                  // labelStyle: const TextStyle(color: AppColors.primaryColor),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+    return Scaffold(
+      appBar: AppBar(
+        leading: Image.asset(
+          ImageAssets.logo,
+        ),
+        // backgroundColor: AppColors.navbarColor,
+        titleSpacing: 0,
+        title: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SizedBox(
+            height: 50,
+            child: TextField(
+              controller: _searchController,
+              focusNode: _searchFocusNode,
+              onTap: () {
+                _searchFocusNode.requestFocus();
+              },
+              onChanged: (value) {
+                //print('Search text changed: $value');
+                _searchForHospitals(value, _selectedFilter);
+              },
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: AppColors.colorWhite,
+                labelText: 'Search Hospitals',
+                // labelStyle: const TextStyle(color: AppColors.primaryColor),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(
+                    color: AppColors.navbarColor,
+                    width: 1.0,
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(
-                      color: AppColors.navbarColor,
-                      width: 1.0,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(
-                      color: AppColors.primaryColor,
-                      width: 1.0,
-                    ),
-                  ),
-                  prefixIcon: const Icon(
-                    Icons.search,
-                    size: iconSize,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(
                     color: AppColors.primaryColor,
+                    width: 1.0,
                   ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 12.0,
-                    horizontal: 12.0,
-                  ),
+                ),
+                prefixIcon: const Icon(
+                  Icons.search,
+                  size: iconSize,
+                  color: AppColors.primaryColor,
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 12.0,
+                  horizontal: 12.0,
                 ),
               ),
             ),
           ),
         ),
-        body: RefreshIndicator(
-          backgroundColor: Colors.white,
-          onRefresh: _refreshData,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Connecting Hospitals Globally',
-                          style: AppTextStyles.headerTwo.copyWith(
-                            fontSize: 28.0,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primaryColor,
-                            fontFamily: 'Inter',
-                          ),
+      ),
+      body: RefreshIndicator(
+        backgroundColor: Colors.white,
+        onRefresh: _refreshData,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Connecting Hospitals Globally',
+                        style: AppTextStyles.headerTwo.copyWith(
+                          fontSize: 28.0,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primaryColor,
+                          fontFamily: 'Inter',
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 16.0),
-                  Text(
-                    'Effortlessly Access a Network of Hospitals Worldwide',
-                    style: AppTextStyles.bodyOne.copyWith(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.secondaryTextColor,
-                      fontFamily:
-                          'Inter', // Replace with the appropriate font family
-                    ),
-                    // textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  'Effortlessly Access a Network of Hospitals Worldwide',
+                  style: AppTextStyles.bodyOne.copyWith(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.secondaryTextColor,
+                    fontFamily:
+                        'Inter', // Replace with the appropriate font family
                   ),
-                  SizedBox(height: 16.0),
+                  // textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16.0),
 
-                  // Filter Tabs
-                  // SingleChildScrollView(
-                  //   scrollDirection: Axis.horizontal,
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       _buildFilterTab('View All'),
-                  //       _buildFilterTab('Surgery'),
-                  //       _buildFilterTab('Paediatrics'),
-                  //       _buildFilterTab('Internal Medicine'),
-                  //       _buildFilterTab('Obstetrics & Gynaecology'),
-                  //       _buildFilterTab('Cardiology'),
-                  //       _buildFilterTab('Oncology'),
-                  //       _buildFilterTab('Neurology'),
-                  //     ],
-                  //   ),
-                  // ),
-                  const SizedBox(height: 16.0),
-                  // Hospital filter dropdown menu
-                  // DropdownMenu<String>(
-                  //     controller: dropdownController,
-                  //     inputDecorationTheme: const InputDecorationTheme(
-                  //       filled: true,
-                  //       fillColor: AppColors.navbarColor,
-                  //       border: OutlineInputBorder(
-                  //         borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                  //         borderSide: BorderSide.none,
-                  //       ),
-                  //     ),
-                  //     width: MediaQuery.of(context).size.width * 0.9,
-                  //     enableFilter: true,
-                  //     menuStyle: const MenuStyle(
-                  //       backgroundColor: MaterialStatePropertyAll<Color>(
-                  //           AppColors.navbarColor),
-                  //     ),
-                  //     label: const Text('Filter'),
-                  //     leadingIcon: const Icon(Icons.filter_list_outlined),
-                  //     trailingIcon:
-                  //         const Icon(Icons.keyboard_arrow_down_outlined),
-                  //     selectedTrailingIcon:
-                  //         const Icon(Icons.keyboard_arrow_up_outlined),
-                  //     onSelected: (String? newValue) {
-                  //       // setState(() {
-                  //       //   dropdownValue = newValue!;
-                  //       //   hospitalProvider.setSelectedFilter(dropdownValue);
-                  //       //   Future.delayed(const Duration(milliseconds: 500))
-                  //       //       .then((_) {
-                  //       //     hospitalProvider.updateFilteredHospitalsDropdown;
-                  //       //     hospitalProvider.filterHospitals(_selectedFilter);
-                  //       //   });
-                  //       // });
-                  //     },
-                  //     dropdownMenuEntries: dropdownItems
-                  //         .map<DropdownMenuEntry<String>>((String value) {
-                  //       return DropdownMenuEntry<String>(
-                  //         value: value,
-                  //         label: value,
-                  //       );
-                  //     }).toList()),
-                  SizedBox(height: 16.0),
+                // Filter Tabs
+                // SingleChildScrollView(
+                //   scrollDirection: Axis.horizontal,
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       _buildFilterTab('View All'),
+                //       _buildFilterTab('Surgery'),
+                //       _buildFilterTab('Paediatrics'),
+                //       _buildFilterTab('Internal Medicine'),
+                //       _buildFilterTab('Obstetrics & Gynaecology'),
+                //       _buildFilterTab('Cardiology'),
+                //       _buildFilterTab('Oncology'),
+                //       _buildFilterTab('Neurology'),
+                //     ],
+                //   ),
+                // ),
+                const SizedBox(height: 16.0),
+                // Hospital filter dropdown menu
+                // DropdownMenu<String>(
+                //     controller: dropdownController,
+                //     inputDecorationTheme: const InputDecorationTheme(
+                //       filled: true,
+                //       fillColor: AppColors.navbarColor,
+                //       border: OutlineInputBorder(
+                //         borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                //         borderSide: BorderSide.none,
+                //       ),
+                //     ),
+                //     width: MediaQuery.of(context).size.width * 0.9,
+                //     enableFilter: true,
+                //     menuStyle: const MenuStyle(
+                //       backgroundColor: MaterialStatePropertyAll<Color>(
+                //           AppColors.navbarColor),
+                //     ),
+                //     label: const Text('Filter'),
+                //     leadingIcon: const Icon(Icons.filter_list_outlined),
+                //     trailingIcon:
+                //         const Icon(Icons.keyboard_arrow_down_outlined),
+                //     selectedTrailingIcon:
+                //         const Icon(Icons.keyboard_arrow_up_outlined),
+                //     onSelected: (String? newValue) {
+                //       // setState(() {
+                //       //   dropdownValue = newValue!;
+                //       //   hospitalProvider.setSelectedFilter(dropdownValue);
+                //       //   Future.delayed(const Duration(milliseconds: 500))
+                //       //       .then((_) {
+                //       //     hospitalProvider.updateFilteredHospitalsDropdown;
+                //       //     hospitalProvider.filterHospitals(_selectedFilter);
+                //       //   });
+                //       // });
+                //     },
+                //     dropdownMenuEntries: dropdownItems
+                //         .map<DropdownMenuEntry<String>>((String value) {
+                //       return DropdownMenuEntry<String>(
+                //         value: value,
+                //         label: value,
+                //       );
+                //     }).toList()),
+                SizedBox(height: 16.0),
 
-                  // Hospitals list
-                  // Expanded(
-                  //   child: filteredHospitals.isEmpty
-                  //       ? _buildAllHospitals()
-                  //       : _buildFilteredHospitals(),
-                  // )
-                ]),
-          ),
+                // Hospitals list
+                // Expanded(
+                //   child: filteredHospitals.isEmpty
+                //       ? _buildAllHospitals()
+                //       : _buildFilteredHospitals(),
+                // )
+              ]),
         ),
       ),
     );

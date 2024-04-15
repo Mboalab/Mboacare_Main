@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mboacare/global/styles/appStyles.dart';
 
 import 'package:mboacare/widgets/image_stack.dart';
+import 'package:sizer/sizer.dart';
 
 import '../app_modules/user/screens/dashboard/blog_page.dart';
 import '../global/styles/colors.dart';
@@ -53,8 +54,8 @@ class TopBlogCard extends StatelessWidget {
             Stack(
               children: [
                 Container(
-                  height: 150.0,
-                  width: width * 0.8,
+                  height: 120.0.sp,
+                  width: width * 0.6.sp,
                   decoration: BoxDecoration(
                     // color: AppColors.navbar,
                     borderRadius: const BorderRadius.only(
@@ -84,11 +85,11 @@ class TopBlogCard extends StatelessWidget {
                     ),
                     //  color: Color(0XFFF5F5F5),
                   ),
-                  height: 115.0,
-                  width: width * 0.8,
+                  height: 80.0.sp,
+                  width: width * 0.5.sp,
                   alignment: Alignment.center,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(8.0.sp),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +102,7 @@ class TopBlogCard extends StatelessWidget {
                               fontWeight: FontWeight.w800,
                               fontSize: 16.0),
                         ),
-                        const SizedBox(height: 10.0),
+                        SizedBox(height: 5.0.sp),
                         Row(
                           children: [
                             CircleAvatar(
@@ -109,8 +110,8 @@ class TopBlogCard extends StatelessWidget {
                               backgroundImage: AssetImage(authorImage),
                               radius: 20.0,
                             ),
-                            const SizedBox(
-                              width: 10.0,
+                            SizedBox(
+                              width: 10.0.sp,
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

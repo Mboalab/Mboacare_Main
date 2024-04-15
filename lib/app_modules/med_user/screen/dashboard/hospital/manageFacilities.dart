@@ -21,7 +21,6 @@ class ManageFacilities extends StatelessWidget {
     return Scaffold(
       //  backgroundColor: AppColors.whiteColor,
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
         titleSpacing: 0.0,
         title: Text(
           'Manage Hospitals',
@@ -32,11 +31,11 @@ class ManageFacilities extends StatelessWidget {
         centerTitle: false,
         leading: IconButton(
           onPressed: () {
-            PageNavigator(ctx: context).nextPageOnly(page: const Settings());
+            PageNavigator(ctx: context)
+                .nextPageOnly(page: const SettingsAdmin());
           },
           icon: const Icon(
             Icons.arrow_back_rounded,
-            color: AppColors.secondaryTextColor,
             size: 25.0,
           ),
         ),
