@@ -50,7 +50,6 @@ class _EditBlogState extends State<EditBlog> {
     var provider = Provider.of<EditBlogProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
         titleSpacing: 0.0,
         title: Text(
           widget.title,

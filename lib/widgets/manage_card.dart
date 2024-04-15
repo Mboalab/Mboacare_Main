@@ -49,7 +49,6 @@ class ManageCard extends StatelessWidget {
                   height: 150.0,
                   width: width * 0.92,
                   decoration: BoxDecoration(
-                    color: AppColors.navbar,
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(15.0),
                         topRight: Radius.circular(15.0)),
@@ -70,7 +69,6 @@ class ManageCard extends StatelessWidget {
                       bottomLeft: Radius.circular(15.0),
                       bottomRight: Radius.circular(15.0),
                     ),
-                    color: Color(0XFFF5F5F5),
                   ),
                   height: 100.0,
                   width: width * 0.92,

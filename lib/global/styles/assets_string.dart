@@ -24,9 +24,9 @@ class ImageAssets {
   static String home = "$ICONS/home.svg";
   static String user1 = "$ICONS/unselected_user.svg";
   static String whatApp = "$ICONS/whatsapp.svg";
-   static String gmail = "$ICONS/gmail.svg";
-    static String instagram= "$ICONS/instagram.svg";
-     static String linkedin = "$ICONS/linkedin.svg";
+  static String gmail = "$ICONS/gmail.svg";
+  static String instagram = "$ICONS/twitter.svg";
+  static String linkedin = "$ICONS/linkedInc.svg";
   static String googleIcon = "$IMAGE_ASSETS/google-icon.png";
   static String emailIcon = "$IMAGE_ASSETS/email_Icon.png";
   static String makerIcon = "$IMAGE_ASSETS/marker_pin.png";

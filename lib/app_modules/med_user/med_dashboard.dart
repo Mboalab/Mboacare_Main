@@ -27,7 +27,7 @@ class _MedDashboardState extends State<MedDashboard> {
     const Home(),
     const HospitalDashboard(),
     const BlogPage(),
-    const Settings(),
+    const SettingsAdmin(),
   ];
 
   void _onTabTapped(int index) {
@@ -40,7 +40,7 @@ class _MedDashboardState extends State<MedDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.registerCard,
+        // backgroundColor: Colors.white,
         title: Image.asset(
           ImageAssets.logo,
           width: 30,

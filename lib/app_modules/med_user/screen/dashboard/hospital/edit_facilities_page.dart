@@ -86,7 +86,6 @@ class _EditFacilitiesPageState extends State<EditFacilitiesPage> {
     final provider = Provider.of<EditHospitalProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
         titleSpacing: 0.0,
         title: Text(
           widget.name.toString(),
@@ -103,7 +102,6 @@ class _EditFacilitiesPageState extends State<EditFacilitiesPage> {
           icon: const Icon(
             Icons.arrow_back_rounded,
             size: 25.0,
-            color: AppColors.secondaryTextColor,
           ),
         ),
         actions: [
@@ -113,7 +111,7 @@ class _EditFacilitiesPageState extends State<EditFacilitiesPage> {
               },
               icon: const Icon(
                 Icons.delete_outline_outlined,
-                color: Color.fromARGB(255, 225, 82, 82),
+                color: Colors.red,
               ))
         ],
       ),
@@ -258,49 +256,49 @@ class _EditFacilitiesPageState extends State<EditFacilitiesPage> {
                 EditTextForm(
                     hintText: widget.website.toString(),
                     controller: provider.hospitalWebsiteController),
-                SizedBox(height: AppFontSizes.fontSize20),
-                Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: AppFontSizes.fontSize4),
-                      child: Text(
-                        'Hospital Address *',
-                        style: GoogleFonts.inter(
-                          fontSize: AppFontSizes.fontSize14,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.primaryColor,
-                        ),
-                      ),
-                    )),
-                SizedBox(height: AppFontSizes.fontSize6),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() => EditSearch());
-                  },
-                  child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.borderColor),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Row(
-                      children: [
-                        Image.asset(ImageAssets.makerIcon,
-                            width: 22.0, height: 22.0),
-                        Text(
-                          isAddressAvailable
-                              ? "Add address"
-                              : widget.hospitalAddress.toString(),
-                          style: GoogleFonts.inter(
-                              color: AppColors.hintTextColor,
-                              fontSize: AppFontSizes.fontSize16,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // SizedBox(height: AppFontSizes.fontSize20),
+                // Align(
+                //     alignment: Alignment.centerLeft,
+                //     child: Padding(
+                //       padding: EdgeInsets.only(left: AppFontSizes.fontSize4),
+                //       child: Text(
+                //         'Hospital Address *',
+                //         style: GoogleFonts.inter(
+                //           fontSize: AppFontSizes.fontSize14,
+                //           fontWeight: FontWeight.w600,
+                //           color: AppColors.primaryColor,
+                //         ),
+                //       ),
+                //     )),
+                // SizedBox(height: AppFontSizes.fontSize6),
+                // GestureDetector(
+                //   onTap: () {
+                //     Get.to(() => EditSearch());
+                //   },
+                //   child: Container(
+                //     padding:
+                //         EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+                //     decoration: BoxDecoration(
+                //       border: Border.all(color: AppColors.borderColor),
+                //       borderRadius: BorderRadius.circular(8.0),
+                //     ),
+                //     child: Row(
+                //       children: [
+                //         Image.asset(ImageAssets.makerIcon,
+                //             width: 22.0, height: 22.0),
+                //         Text(
+                //           isAddressAvailable
+                //               ? "Add address"
+                //               : widget.hospitalAddress.toString(),
+                //           style: GoogleFonts.inter(
+                //               color: AppColors.hintTextColor,
+                //               fontSize: AppFontSizes.fontSize16,
+                //               fontWeight: FontWeight.w400),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 SizedBox(height: AppFontSizes.fontSize20),
                 Align(
                     alignment: Alignment.centerLeft,

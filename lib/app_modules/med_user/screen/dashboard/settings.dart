@@ -3,6 +3,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/blog/my_blog.dart';
 import 'package:mboacare/app_modules/med_user/screen/dashboard/hospital/manageFacilities.dart';
@@ -15,18 +17,22 @@ import 'package:mboacare/global/theme/themeScreen.dart';
 import 'package:mboacare/services/auth_provider/loginProvider.dart';
 import 'package:mboacare/services/auth_provider/registerProvider.dart';
 import 'package:mboacare/services/auth_provider/update_profileProvider.dart';
+import 'package:mboacare/services/chat_provider/settings_provider.dart';
+import 'package:mboacare/services/hive/boxes.dart';
+import 'package:mboacare/services/hive/settings.dart';
+import 'package:mboacare/widgets/chat/settings_tile.dart';
 import 'package:mboacare/widgets/settings_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:mboacare/services/auth_provider/user_provider.dart';
 
-class Settings extends StatefulWidget {
-  const Settings({super.key});
+class SettingsAdmin extends StatefulWidget {
+  const SettingsAdmin({super.key});
 
   @override
-  State<Settings> createState() => _SettingsState();
+  State<SettingsAdmin> createState() => _SettingsAdminState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsAdminState extends State<SettingsAdmin> {
   @override
   void initState() {
     super.initState();
@@ -46,193 +52,394 @@ class _SettingsState extends State<Settings> {
       body: SafeArea(
         child: SingleChildScrollView(
           //physics: null,
-          child: Column(
-            //mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 25,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          userModel.data?.photoURL ?? provider.profileImage),
-                      radius: 45,
-                      //child: Container( child: Image.network(provider.profileImage)),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 18.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            userModel.data?.displayName ?? "MboaCare User",
-                            style: GoogleFonts.quicksand(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.textColor2),
-                          ),
-                          const Padding(padding: EdgeInsets.only(bottom: 5)),
-                          Text(
-                            userModel.data?.email ?? 'mboauser@gmail.com',
-                            style: GoogleFonts.quicksand(
-                              fontSize: 15,
+          child: ValueListenableBuilder<Box<Settings>>(
+              valueListenable: Boxes.getSettings().listenable(),
+              builder: (context, box, child) {
+                if (box.isEmpty) {
+                  return Column(
+                    //mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  userModel.data?.photoURL ??
+                                      provider.profileImage),
+                              radius: 45,
+                              //child: Container( child: Image.network(provider.profileImage)),
                             ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 18.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    userModel.data?.displayName ??
+                                        "MboaCare User",
+                                    style: GoogleFonts.quicksand(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.textColor2),
+                                  ),
+                                  const Padding(
+                                      padding: EdgeInsets.only(bottom: 5)),
+                                  Text(
+                                    userModel.data?.email ??
+                                        'mboauser@gmail.com',
+                                    style: GoogleFonts.quicksand(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Divider(
+                        //height: 5,
+                        color: AppColors.dividerColor,
+                        endIndent: 2,
+                        indent: 2,
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      SettingsPageListTiles(
+                          icon: const Icon(
+                            Iconsax.profile_add,
+                            color: AppColors.textColor2,
+                            size: iconSize,
                           ),
-                        ],
+                          title: 'Account',
+                          subtitle: 'Profile',
+                          trailingIcon: const Icon(
+                            Icons.arrow_forward_ios_outlined,
+                          ),
+                          onTap: () {
+                            Get.to(
+                              () => ProfilePage(
+                                userModel: userModel.data,
+                              ),
+                              duration: const Duration(milliseconds: 800),
+                              curve: Curves.easeInCirc,
+                              transition: Transition.leftToRight,
+                            );
+                          }),
+                      SettingsPageListTiles(
+                          icon: const Icon(
+                            Iconsax.global_edit,
+                            color: AppColors.textColor2,
+                            size: iconSize,
+                          ),
+                          title: 'Language',
+                          subtitle: 'English',
+                          trailingIcon:
+                              const Icon(Icons.arrow_forward_ios_outlined),
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const LanguageDialog();
+                                });
+                          }),
+                      SettingsTile(
+                          icon: Icons.light_mode,
+                          title: 'Theme',
+                          value: false,
+                          onChanged: (value) {
+                            final settingProvider =
+                                context.read<SettingsProvider>();
+                            settingProvider.toggleDarkMode(
+                              value: value,
+                            );
+                          }),
+                      SettingsPageListTiles(
+                          icon: SvgPicture.asset(
+                            ImageAssets.hospital,
+                            color: AppColors.textColor2,
+                            // size: iconSize,
+                          ),
+                          title: 'Facilities',
+                          subtitle: 'Manage Facilities',
+                          trailingIcon:
+                              const Icon(Icons.arrow_forward_ios_outlined),
+                          onTap: () {
+                            Get.to(
+                              () => const ManageFacilities(),
+                              duration: const Duration(milliseconds: 800),
+                              curve: Curves.easeInCirc,
+                              transition: Transition.leftToRight,
+                            );
+                          }),
+                      SettingsPageListTiles(
+                          icon: SvgPicture.asset(
+                            ImageAssets.blog,
+                            color: AppColors.textColor2,
+                            // size: iconSize,
+                          ),
+                          title: 'Blog',
+                          subtitle: 'Manage Blogs',
+                          trailingIcon:
+                              const Icon(Icons.arrow_forward_ios_outlined),
+                          onTap: () {
+                            Get.to(
+                              () => const MyBlog(),
+                              duration: const Duration(milliseconds: 800),
+                              curve: Curves.easeInCirc,
+                              transition: Transition.leftToRight,
+                            );
+                          }),
+                      SettingsPageListTiles(
+                          icon: const Icon(
+                            Iconsax.info_circle,
+                            color: AppColors.textColor2,
+                            size: iconSize,
+                          ),
+                          title: 'About Us',
+                          subtitle: 'Contact us',
+                          trailingIcon:
+                              const Icon(Icons.arrow_forward_ios_outlined),
+                          onTap: () {
+                            Get.to(
+                              () => const AboutUs(),
+                              duration: const Duration(milliseconds: 800),
+                              curve: Curves.easeInCirc,
+                              transition: Transition.leftToRight,
+                            );
+                          }),
+                      Signout(
+                          icon: const Icon(Iconsax.logout,
+                              color: AppColors.textColor2, size: iconSize),
+                          title: 'Signout',
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const SignoutDialog();
+                                });
+                          }),
+                      // DeleteAccount(
+                      //     //iconColor: Colors.redAccent,
+                      //     icon: const Icon(
+                      //       Iconsax.trash,
+                      //       size: iconSize,
+                      //       color: Colors.redAccent,
+                      //     ),
+                      //     //color: AppColors.textColor2, size: 25),
+                      //     title: 'Delete Account',
+                      //     onTap: () {
+                      //       showDialog(
+                      //           context: context,
+                      //           builder: (BuildContext context) {
+                      //             return const DeleteAccountDialog();
+                      //           });
+                      //     }),
+                    ],
+                  );
+                } else {
+                  final settings = box.getAt(0);
+                  return Column(
+                    //mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 25,
                       ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Divider(
-                //height: 5,
-                color: AppColors.dividerColor,
-                endIndent: 2,
-                indent: 2,
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              SettingsPageListTiles(
-                  icon: const Icon(
-                    Iconsax.profile_add,
-                    color: AppColors.textColor2,
-                    size: iconSize,
-                  ),
-                  title: 'Account',
-                  subtitle: 'Profile',
-                  trailingIcon: const Icon(
-                    Icons.arrow_forward_ios_outlined,
-                  ),
-                  onTap: () {
-                    Get.to(
-                      () => ProfilePage(
-                        userModel: userModel.data,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  userModel.data?.photoURL ??
+                                      provider.profileImage),
+                              radius: 45,
+                              //child: Container( child: Image.network(provider.profileImage)),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 18.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    userModel.data?.displayName ??
+                                        "MboaCare User",
+                                    style: GoogleFonts.quicksand(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.textColor2),
+                                  ),
+                                  const Padding(
+                                      padding: EdgeInsets.only(bottom: 5)),
+                                  Text(
+                                    userModel.data?.email ??
+                                        'mboauser@gmail.com',
+                                    style: GoogleFonts.quicksand(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                      duration: const Duration(milliseconds: 800),
-                      curve: Curves.easeInCirc,
-                      transition: Transition.leftToRight,
-                    );
-                  }),
-              SettingsPageListTiles(
-                  icon: const Icon(
-                    Iconsax.global_edit,
-                    color: AppColors.textColor2,
-                    size: iconSize,
-                  ),
-                  title: 'Language',
-                  subtitle: 'English',
-                  trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const LanguageDialog();
-                        });
-                  }),
-              SettingsPageListTiles(
-                  icon: const Icon(
-                    Iconsax.moon,
-                    color: AppColors.textColor2,
-                    size: iconSize,
-                  ),
-                  title: 'Theme',
-                  subtitle: 'System',
-                  trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
-                  onTap: () {
-                    Get.to(
-                      () => const ThemeScreen(),
-                      duration: const Duration(milliseconds: 800),
-                      curve: Curves.easeInCirc,
-                      transition: Transition.leftToRight,
-                    );
-                  }),
-              SettingsPageListTiles(
-                  icon: SvgPicture.asset(
-                    ImageAssets.hospital,
-                    color: AppColors.textColor2,
-                    // size: iconSize,
-                  ),
-                  title: 'Facilities',
-                  subtitle: 'Manage Facilities',
-                  trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
-                  onTap: () {
-                    Get.to(
-                      () => const ManageFacilities(),
-                      duration: const Duration(milliseconds: 800),
-                      curve: Curves.easeInCirc,
-                      transition: Transition.leftToRight,
-                    );
-                  }),
-              SettingsPageListTiles(
-                  icon: SvgPicture.asset(
-                    ImageAssets.blog,
-                    color: AppColors.textColor2,
-                    // size: iconSize,
-                  ),
-                  title: 'Blog',
-                  subtitle: 'Manage Blogs',
-                  trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
-                  onTap: () {
-                    Get.to(
-                      () => const MyBlog(),
-                      duration: const Duration(milliseconds: 800),
-                      curve: Curves.easeInCirc,
-                      transition: Transition.leftToRight,
-                    );
-                  }),
-              SettingsPageListTiles(
-                  icon: const Icon(
-                    Iconsax.info_circle,
-                    color: AppColors.textColor2,
-                    size: iconSize,
-                  ),
-                  title: 'About Us',
-                  subtitle: 'Contact us',
-                  trailingIcon: const Icon(Icons.arrow_forward_ios_outlined),
-                  onTap: () {
-                    Get.to(
-                      () => const AboutUs(),
-                      duration: const Duration(milliseconds: 800),
-                      curve: Curves.easeInCirc,
-                      transition: Transition.leftToRight,
-                    );
-                  }),
-              Signout(
-                  icon: const Icon(Iconsax.logout,
-                      color: AppColors.textColor2, size: iconSize),
-                  title: 'Signout',
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const SignoutDialog();
-                        });
-                  }),
-              DeleteAccount(
-                  //iconColor: Colors.redAccent,
-                  icon: const Icon(
-                    Iconsax.trash,
-                    size: iconSize,
-                    color: Colors.redAccent,
-                  ),
-                  //color: AppColors.textColor2, size: 25),
-                  title: 'Delete Account',
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const DeleteAccountDialog();
-                        });
-                  }),
-            ],
-          ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Divider(
+                        //height: 5,
+                        color: AppColors.dividerColor,
+                        endIndent: 2,
+                        indent: 2,
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      SettingsPageListTiles(
+                          icon: const Icon(
+                            Iconsax.profile_add,
+                            color: AppColors.textColor2,
+                            size: iconSize,
+                          ),
+                          title: 'Account',
+                          subtitle: 'Profile',
+                          trailingIcon: const Icon(
+                            Icons.arrow_forward_ios_outlined,
+                          ),
+                          onTap: () {
+                            Get.to(
+                              () => ProfilePage(
+                                userModel: userModel.data,
+                              ),
+                              duration: const Duration(milliseconds: 800),
+                              curve: Curves.easeInCirc,
+                              transition: Transition.leftToRight,
+                            );
+                          }),
+                      SettingsPageListTiles(
+                          icon: const Icon(
+                            Iconsax.global_edit,
+                            color: AppColors.textColor2,
+                            size: iconSize,
+                          ),
+                          title: 'Language',
+                          subtitle: 'English',
+                          trailingIcon:
+                              const Icon(Icons.arrow_forward_ios_outlined),
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const LanguageDialog();
+                                });
+                          }),
+                      SettingsTile(
+                          icon: settings!.isDarkTheme
+                              ? Iconsax.moon
+                              : Icons.light_mode,
+                          title: 'Theme',
+                          value: settings.isDarkTheme,
+                          onChanged: (value) {
+                            final settingProvider =
+                                context.read<SettingsProvider>();
+                            settingProvider.toggleDarkMode(
+                              value: value,
+                            );
+                          }),
+                      SettingsPageListTiles(
+                          icon: SvgPicture.asset(
+                            ImageAssets.hospital,
+                            color: AppColors.textColor2,
+                            // size: iconSize,
+                          ),
+                          title: 'Facilities',
+                          subtitle: 'Manage Facilities',
+                          trailingIcon:
+                              const Icon(Icons.arrow_forward_ios_outlined),
+                          onTap: () {
+                            Get.to(
+                              () => const ManageFacilities(),
+                              duration: const Duration(milliseconds: 800),
+                              curve: Curves.easeInCirc,
+                              transition: Transition.leftToRight,
+                            );
+                          }),
+                      SettingsPageListTiles(
+                          icon: SvgPicture.asset(
+                            ImageAssets.blog,
+                            color: AppColors.textColor2,
+                            // size: iconSize,
+                          ),
+                          title: 'Blog',
+                          subtitle: 'Manage Blogs',
+                          trailingIcon:
+                              const Icon(Icons.arrow_forward_ios_outlined),
+                          onTap: () {
+                            Get.to(
+                              () => const MyBlog(),
+                              duration: const Duration(milliseconds: 800),
+                              curve: Curves.easeInCirc,
+                              transition: Transition.leftToRight,
+                            );
+                          }),
+                      SettingsPageListTiles(
+                          icon: const Icon(
+                            Iconsax.info_circle,
+                            color: AppColors.textColor2,
+                            size: iconSize,
+                          ),
+                          title: 'About Us',
+                          subtitle: 'Contact us',
+                          trailingIcon:
+                              const Icon(Icons.arrow_forward_ios_outlined),
+                          onTap: () {
+                            Get.to(
+                              () => const AboutUs(),
+                              duration: const Duration(milliseconds: 800),
+                              curve: Curves.easeInCirc,
+                              transition: Transition.leftToRight,
+                            );
+                          }),
+                      Signout(
+                          icon: const Icon(Iconsax.logout,
+                              color: AppColors.textColor2, size: iconSize),
+                          title: 'Signout',
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const SignoutDialog();
+                                });
+                          }),
+                      // DeleteAccount(
+                      //     //iconColor: Colors.redAccent,
+                      //     icon: const Icon(
+                      //       Iconsax.trash,
+                      //       size: iconSize,
+                      //       color: Colors.redAccent,
+                      //     ),
+                      //     //color: AppColors.textColor2, size: 25),
+                      //     title: 'Delete Account',
+                      //     onTap: () {
+                      //       showDialog(
+                      //           context: context,
+                      //           builder: (BuildContext context) {
+                      //             return const DeleteAccountDialog();
+                      //           });
+                      //     }),
+                    ],
+                  );
+                }
+              }),
         ),
       ),
     );
@@ -261,7 +468,6 @@ class _LanguageDialogState extends State<LanguageDialog> {
             height: MediaQuery.of(context).size.height * 0.45,
             //constraints: const BoxConstraints(maxHeight: 500, maxWidth: 500),
             decoration: BoxDecoration(
-              color: AppColors.googleButtonColor,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Column(

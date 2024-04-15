@@ -43,7 +43,7 @@ class Apis {
   static const myHospitals = '$baseUrl/hospital/my-hospitals?q=';
 
   // --------------------------chat endpoints--------------------------ng'
-  static const chatApiKey = "";
+  static const chatApiKey = "AIzaSyBjAHhfdCIMRlPFPOsEEbkgyo5BxSrLdjc";
 }
 
-String mapKey = '';
+String mapKey = 'AIzaSyBkuwcKikuNtM-07vxwHHHl9M-icIBst5w';

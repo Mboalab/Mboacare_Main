@@ -17,9 +17,7 @@ class ProfilePage extends StatelessWidget {
     final provider = Provider.of<LoginProvider>(context);
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColors.registerCard,
           leading: IconButton(
-              color: AppColors.secondaryTextColor,
               onPressed: () {
                 Navigator.pop(context);
               },
